@@ -1,0 +1,12 @@
+languaje: java
+script: mvn clean test
+notifications:
+  slack:
+    on_success: change
+  email:
+    recipients:
+      - joellasalas77@gmail.com
+    on_success: change
+    on_failure: always
+jdk:
+  - openjdk11
