@@ -6,6 +6,11 @@ notifications:
   email:
     recipients:
       - joellasalas77@gmail.com
+      - gabirel@live.com
+      - jessica_dlg@live.com.ar
+      - brianvt00@gmail.com
+      - xd_dany@me.com
+      - rodrigo.ivan.matto@gmail.com
     on_success: change
     on_failure: always
 jdk:
