@@ -32,6 +32,48 @@ public class RepositorioProductoTest extends SpringTest {
 
     }
 
+    @Test
+    @Rollback
+    @Transactional
+    public void queSePuedaListarTodosLosProductosActivos(){
+
+        List<Producto>productosEsperados = givenUnaListaDeProductosActivos();
+
+        List<Producto>productosObtenidos = whenListoLosProductosActivos();
+
+        thenMeTraeLaListaDeProductosActivos(productosEsperados,productosObtenidos);
+
+
+    }
+
+    private List<Producto> givenUnaListaDeProductosActivos() {
+        List<Producto>productosLista = new ArrayList<>();
+        Producto p1 = new Producto();
+        Producto p2 = new Producto();
+        Producto p3 = new Producto();
+        Producto p4 = new Producto();
+        p1.setActivo(true);
+        p2.setActivo(true);
+        p3.setActivo(false);
+        p4.setActivo(false);
+        session().save(p1);
+        session().save(p2);
+        session().save(p3);
+        session().save(p4);
+        productosLista.add(p1);
+        productosLista.add(p2);
+        return productosLista;
+    }
+
+    private List<Producto> whenListoLosProductosActivos() {
+        return repositorioProducto.listarProductosActivos();
+    }
+
+    private void thenMeTraeLaListaDeProductosActivos(List<Producto> productosEsperados, List<Producto> productosObtenidos) {
+        assertThat(productosEsperados).isEqualTo(productosObtenidos);
+        assertThat(productosObtenidos).hasSize(2);
+    }
+
     private List<Producto> givenUnaListaDeProductos() {
         List<Producto>productosLista = new ArrayList<>();
         Producto p1 = new Producto();

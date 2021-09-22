@@ -32,6 +32,14 @@
                         </div>
                         <!-- body o cuerpo -->
                         <div class="modal-body">
+                            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">Filtros</button>
+                            <div class="dropdown-menu">
+                                <!-- creamos otro div donde definimos que será el contenedor del menu con la clase dropdown-menu
+                                y agregamos los items que querramos definiendo que son items con la clase dropdown-item -->
+                                <a href="productos-activos" class="dropdown-item">Listar productos activos</a>
+                                <a href="#" class="dropdown-item">Listar productos inactivos</a>
+                                <a href="#" class="dropdown-item">Que se yo</a>
+                            </div>
                             <!-- todo lo del modal-body seria el contenido del modal -->
                             <c:forEach items="${listaProductos}" var="productos">
                                     <div class="card-header">
