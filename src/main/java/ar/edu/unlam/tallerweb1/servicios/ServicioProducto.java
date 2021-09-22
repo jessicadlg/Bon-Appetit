@@ -9,4 +9,6 @@ public interface ServicioProducto {
 
     List<Producto> listarProductos() throws ListaNoEncontrada;
 
+    List<Producto> listarProductosActivos() throws ListaNoEncontrada;
+
 }

@@ -32,4 +32,15 @@ public class ServicioProductoImpl implements ServicioProducto {
             throw new ListaNoEncontrada();
         }
     }
+
+    @Override
+    public List<Producto> listarProductosActivos() throws ListaNoEncontrada {
+
+        if(this.repositorioProducto.listarProductosActivos().size()>0){
+            return this.repositorioProducto.listarProductosActivos();
+        }else{
+            throw new ListaNoEncontrada();
+        }
+
+    }
 }

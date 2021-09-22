@@ -11,7 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -49,6 +48,67 @@ public class ControladorProductoTest {
 
 
     }
+
+    @Test
+    public void queSePuedanListarLosProductosActivos(){
+
+        givenQueExisteUnaListaDeProductosActivos();
+
+        whenListoLosProductosActivos();
+
+        thenMeTraeLaListaDeProductosActivos();
+
+    }
+
+    @Test
+    public void queCuandoListeLosProductosActivosYLaListaEsteVaciaNosDeElMensaje(){
+
+        givenQueExisteUnaListaDeProductosActivosVacia();
+
+        whenListoLosProductosActivos();
+
+        thenMeDiceQueNoHayProductosActivosPorListar();
+
+
+
+    }
+
+    private void givenQueExisteUnaListaDeProductosActivosVacia() {
+        List<Producto>productosActivoVacio = new ArrayList<>();
+        when(servicioProducto.listarProductosActivos()).thenThrow(ListaNoEncontrada.class);
+
+    }
+
+    private void thenMeDiceQueNoHayProductosActivosPorListar() {
+        assertThat(mav.getModel().get("msgError")).isEqualTo("No hay productos activos para mostrar");
+        assertThat(mav.getViewName()).isEqualTo("productos");
+    }
+
+    private void givenQueExisteUnaListaDeProductosActivos() {
+        List<Producto>productos = new ArrayList<Producto>();
+        Producto p1 = new Producto();
+        Producto p2 = new Producto();
+        Producto p3 = new Producto();
+        p1.setActivo(true);
+        p2.setActivo(true);
+        p3.setActivo(true);
+        productos.add(p1);
+        productos.add(p2);
+        productos.add(p3);
+        when(servicioProducto.listarProductosActivos()).thenReturn(productos);
+
+    }
+
+    private void whenListoLosProductosActivos() {
+        mav = controladorProducto.listarProductosActivos();
+    }
+
+    private void thenMeTraeLaListaDeProductosActivos() {
+        assertThat(mav.getModel().get("listaProductos")).isEqualTo(this.servicioProducto.listarProductosActivos());
+        assertThat(mav.getViewName()).isEqualTo("productos");
+    }
+
+
 
     private void givenQueLaListaDeProductosEstaVacia() {
         List<Producto>listaVacia = new ArrayList<>();
