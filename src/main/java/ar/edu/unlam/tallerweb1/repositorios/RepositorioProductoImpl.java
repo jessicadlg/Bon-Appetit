@@ -36,4 +36,12 @@ public class RepositorioProductoImpl implements RepositorioProducto {
                 .add(Restrictions.eq("activo",true)).list();
         return listaProductosActivos;
     }
+
+    @Override
+    public Producto buscarProductoPorNombre(String nombreProducto) {
+        final Session session = this.sessionFactory.getCurrentSession();
+        Producto productoBuscado = (Producto) session.createCriteria(Producto.class)
+                            .add(Restrictions.eq("nombre",nombreProducto)).uniqueResult();
+        return productoBuscado;
+    }
 }

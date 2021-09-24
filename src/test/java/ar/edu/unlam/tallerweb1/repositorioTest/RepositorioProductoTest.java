@@ -18,6 +18,8 @@ public class RepositorioProductoTest extends SpringTest {
     @Autowired
     private RepositorioProducto repositorioProducto;
 
+    private String nombreProducto = "Pizza";
+
     @Test
     @Rollback
     @Transactional
@@ -42,6 +44,38 @@ public class RepositorioProductoTest extends SpringTest {
         List<Producto>productosObtenidos = whenListoLosProductosActivos();
 
         thenMeTraeLaListaDeProductosActivos(productosEsperados,productosObtenidos);
+
+
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    public void queSePuedaBuscarUnProductoPorSuNombre(){
+
+        Producto productoEsperado =  givenQueUnProductoExiste();
+
+        Producto productoObtenido = whenBuscoUnProductoPorSuNombre();
+
+        thenMeTraeElProductoBuscado(productoEsperado,productoObtenido);
+
+
+    }
+
+    private Producto givenQueUnProductoExiste() {
+        Producto producto = new Producto();
+        producto.setNombre(nombreProducto);
+        session().save(producto);
+        return producto;
+    }
+
+    private Producto whenBuscoUnProductoPorSuNombre() {
+        return repositorioProducto.buscarProductoPorNombre(nombreProducto);
+    }
+
+    private void thenMeTraeElProductoBuscado(Producto productoEsperado, Producto productoObtenido) {
+        assertThat(productoObtenido).isNotNull();
+        assertThat(productoEsperado).isEqualTo(productoObtenido);
 
 
     }

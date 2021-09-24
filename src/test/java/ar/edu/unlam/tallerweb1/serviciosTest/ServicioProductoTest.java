@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.serviciosTest;
 
 import ar.edu.unlam.tallerweb1.Excepciones.ListaNoEncontrada;
+import ar.edu.unlam.tallerweb1.Excepciones.ProductoNoEncontrado;
 import ar.edu.unlam.tallerweb1.modelo.Producto;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioProducto;
 import ar.edu.unlam.tallerweb1.servicios.ServicioProducto;
@@ -24,6 +25,8 @@ public class ServicioProductoTest {
 
     private RepositorioProducto repositorioProducto = mock(RepositorioProducto.class);
     private ServicioProducto servicioProducto = new ServicioProductoImpl(repositorioProducto);
+    private String nombreProducto = "Pizza";
+    private Producto producto;
 
     List<Producto>listaDeProducto = new ArrayList<Producto>();
 
@@ -68,6 +71,42 @@ public class ServicioProductoTest {
 
     }
 
+    @Test
+    public void queSePuedaBuscarUnProductoPorNombre(){
+
+        givenUnaListaDeProductos();
+
+        whenBuscoUnProductoPorSuNombre();
+
+        thenMeDevuelveElProductoBuscado();
+
+
+    }
+
+    @Test(expected = ProductoNoEncontrado.class)
+    public void queCuandoBuscoUnProductoPorNombreYNoLoEncuentraLanzeUnProductoNoEncontradoException(){
+
+        givenUnProductoInexistente();
+
+        whenBuscoUnProductoPorSuNombre();
+
+
+
+    }
+
+    private void givenUnProductoInexistente() {
+        when(repositorioProducto.buscarProductoPorNombre(nombreProducto)).thenReturn(null);
+    }
+
+    private void whenBuscoUnProductoPorSuNombre() {
+         producto = servicioProducto.buscarProductoPorNombre(nombreProducto);
+    }
+
+    private void thenMeDevuelveElProductoBuscado() {
+        assertThat(producto).isNotNull();
+
+    }
+
     private void givenUnaListaDeProductosActivosVacia() {
         List<Producto>productos = new ArrayList<>();
         when(repositorioProducto.listarProductosActivos()).thenReturn(productos);
@@ -107,11 +146,13 @@ public class ServicioProductoTest {
         Producto p2 = new Producto();
         Producto p3 = new Producto();
         Producto p4 = new Producto();
+        p1.setNombre(nombreProducto);
         productos.add(p1);
         productos.add(p2);
         productos.add(p3);
         productos.add(p4);
         when(repositorioProducto.listarProductos()).thenReturn(productos);
+        when(repositorioProducto.buscarProductoPorNombre(nombreProducto)).thenReturn(p1);
 
     }
 
