@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladoresTest;
 
 import ar.edu.unlam.tallerweb1.Excepciones.ListaNoEncontrada;
+import ar.edu.unlam.tallerweb1.Excepciones.ProductoNoEncontrado;
 import ar.edu.unlam.tallerweb1.controladores.ControladorProducto;
 import ar.edu.unlam.tallerweb1.modelo.Producto;
 import ar.edu.unlam.tallerweb1.servicios.ServicioProducto;
@@ -19,6 +20,8 @@ public class ControladorProductoTest {
     private ModelAndView mav;
     private ServicioProducto servicioProducto;
     private ControladorProducto controladorProducto;
+    private String nombreProducto = "Pizza";
+    private List<Producto> productos;
 
     @Before
     public void init() {
@@ -73,8 +76,81 @@ public class ControladorProductoTest {
 
     }
 
+    @Test
+    public void queSePuedaBuscarUnProductoPorNombre(){
+
+        givenQueExisteUnaListaDeProductos();
+
+        whenBuscoUnProductoPorSuNombre();
+
+        thenMeDevuelveElProducto();
+
+    }
+
+    @Test
+    public void queCuandoUnProductoNoSeEncuentreMeDeElMensajeYMeListeTodosLosProductos(){
+
+        givenQueExisteUnProductoBuscado();
+
+        whenBuscoUnProductoPorSuNombre();
+
+        thenMeDiceQueNoSeEncontroElProductoYmeListaTodosLosProductos();
+
+    }
+
+    @Test
+    public void queCuandoNoEncuentreUnProductoYtampocoEncuentreLaListaDeProductosNosDeElMensajeDeAmbos(){
+
+        givenQueNoExisteNingunProductoNiListas();
+
+        whenBuscoUnProductoPorSuNombre();
+
+        thenNoMeListaNingunProductoYMeDaAmbosMensajes();
+
+
+
+    }
+
+    private void givenQueNoExisteNingunProductoNiListas() {
+        when(servicioProducto.buscarProductoPorNombre(nombreProducto)).thenThrow(ProductoNoEncontrado.class);
+        when(servicioProducto.listarProductos()).thenThrow(ListaNoEncontrada.class);
+
+
+    }
+
+    private void thenNoMeListaNingunProductoYMeDaAmbosMensajes() {
+        assertThat(mav.getModel().get("msgErrorProducto")).isEqualTo("No se encontro el producto buscado");
+        assertThat(mav.getModel().get("msgError")).isEqualTo("No hay productos");
+        assertThat(mav.getViewName()).isEqualTo("productos");
+    }
+
+    private void givenQueExisteUnProductoBuscado() {
+        productos = new ArrayList<>();
+        Producto p1 = new Producto();
+        Producto p2 = new Producto();
+        productos.add(p1);
+        productos.add(p2);
+        when(servicioProducto.buscarProductoPorNombre(nombreProducto)).thenThrow(ProductoNoEncontrado.class);
+        when(servicioProducto.listarProductos()).thenReturn(productos);
+    }
+
+    private void thenMeDiceQueNoSeEncontroElProductoYmeListaTodosLosProductos() {
+        assertThat(mav.getModel().get("msgErrorProducto")).isEqualTo("No se encontro el producto buscado");
+        assertThat(mav.getModel().get("listaProductos")).isEqualTo(this.servicioProducto.listarProductos());
+        assertThat(mav.getViewName()).isEqualTo("productos");
+    }
+
+    private void whenBuscoUnProductoPorSuNombre() {
+        mav = controladorProducto.buscarProductoPorNombre(nombreProducto);
+    }
+
+    private void thenMeDevuelveElProducto() {
+        assertThat(mav.getModel().get("productoBuscado")).isEqualTo(servicioProducto.buscarProductoPorNombre(nombreProducto));
+        assertThat(mav.getViewName()).isEqualTo("productos");
+
+    }
+
     private void givenQueExisteUnaListaDeProductosActivosVacia() {
-        List<Producto>productosActivoVacio = new ArrayList<>();
         when(servicioProducto.listarProductosActivos()).thenThrow(ListaNoEncontrada.class);
 
     }
@@ -85,7 +161,7 @@ public class ControladorProductoTest {
     }
 
     private void givenQueExisteUnaListaDeProductosActivos() {
-        List<Producto>productos = new ArrayList<Producto>();
+        List<Producto>productos = new ArrayList<>();
         Producto p1 = new Producto();
         Producto p2 = new Producto();
         Producto p3 = new Producto();
@@ -111,7 +187,6 @@ public class ControladorProductoTest {
 
 
     private void givenQueLaListaDeProductosEstaVacia() {
-        List<Producto>listaVacia = new ArrayList<>();
         when(servicioProducto.listarProductos()).thenThrow(ListaNoEncontrada.class);
     }
 
@@ -121,16 +196,18 @@ public class ControladorProductoTest {
     }
 
     private void givenQueExisteUnaListaDeProductos()  {
-        List<Producto> productos = new ArrayList<Producto>();
+        productos = new ArrayList<>();
         Producto p1 = new Producto();
         Producto p2 = new Producto();
         Producto p3 = new Producto();
         Producto p4 = new Producto();
+        p1.setNombre(nombreProducto);
         productos.add(p1);
         productos.add(p2);
         productos.add(p3);
         productos.add(p4);
         when(servicioProducto.listarProductos()).thenReturn(productos);
+        when(servicioProducto.buscarProductoPorNombre(nombreProducto)).thenReturn(p1);
     }
 
     private void whenListoLosProductos() {

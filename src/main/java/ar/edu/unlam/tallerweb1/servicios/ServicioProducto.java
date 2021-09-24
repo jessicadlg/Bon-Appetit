@@ -11,4 +11,5 @@ public interface ServicioProducto {
 
     List<Producto> listarProductosActivos() throws ListaNoEncontrada;
 
+    Producto buscarProductoPorNombre(String nombreProducto);
 }
