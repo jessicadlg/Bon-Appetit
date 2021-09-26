@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.servicios;
 import ar.edu.unlam.tallerweb1.Excepciones.ListaNoEncontrada;
 import ar.edu.unlam.tallerweb1.modelo.Producto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ServicioProducto {
@@ -12,4 +13,6 @@ public interface ServicioProducto {
     List<Producto> listarProductosActivos() throws ListaNoEncontrada;
 
     Producto buscarProductoPorNombre(String nombreProducto);
+
+    ArrayList<Producto> getProductos();
 }

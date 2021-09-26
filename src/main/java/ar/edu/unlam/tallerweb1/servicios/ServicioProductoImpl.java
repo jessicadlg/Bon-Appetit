@@ -51,4 +51,20 @@ public class ServicioProductoImpl implements ServicioProducto {
         }
         return this.repositorioProducto.buscarProductoPorNombre(nombreProducto);
     }
+
+    @Override
+    public ArrayList<Producto> getProductos() {
+        ArrayList<Producto> productos = new ArrayList<>();
+        Producto p1 = new Producto(1L,"Cafe Con Leche", 150.00);
+        Producto p2 = new Producto(2L,"Cafe Cortado", 150.00);
+        Producto p3 = new Producto(3L,"Tostado de Miga", 150.00);
+        Producto p4 = new Producto(4L,"Media Luna", 150.00);
+        Producto p5 = new Producto(5L,"Gaseosa Light", 150.00);
+        productos.add(p1);
+        productos.add(p2);
+        productos.add(p3);
+        productos.add(p4);
+        productos.add(p5);
+        return productos;
+    }
 }

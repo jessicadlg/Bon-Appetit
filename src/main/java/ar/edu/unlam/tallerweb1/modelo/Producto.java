@@ -11,6 +11,7 @@ public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Integer idProducto;
     private String nombre;
     private double precio;
     private String codigo;
@@ -19,6 +20,12 @@ public class Producto {
 
     public Producto(){
 
+    }
+
+    public Producto(Long id, String codigo, double precio){
+        this.id = id;
+        this.codigo = codigo;
+        this.precio = precio;
     }
 
     public Long getId() {
