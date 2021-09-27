@@ -47,7 +47,7 @@ public class ControladorPedidoTest {
     }
 
     private void thenElPedidoTieneDosProductos(ModelAndView modelAndView) {
-        assertThat(modelAndView.getViewName()).isEqualTo("pedido");
+        assertThat(modelAndView.getViewName()).isEqualTo("nuevoPedido");
         assertThat(modelAndView.getModel().get("pedido")).isNotNull();
         assertThat(modelAndView.getModel().get("productos")).isNotNull();
     }
@@ -66,7 +66,7 @@ public class ControladorPedidoTest {
 
     private void thenSeObtieneUnNuevoPedidoLaListaDeProductosYRedirigeACargarPedido(ModelAndView modelAndView) {
         assertThat(modelAndView.getViewName()).isEqualTo("nuevoPedido");
-        assertThat(modelAndView.getModel().get("pedidoNuevo")).isNotNull();
+        assertThat(modelAndView.getModel().get("pedido")).isNotNull();
         assertThat(modelAndView.getModel().get("productos")).isNotNull();
     }
 

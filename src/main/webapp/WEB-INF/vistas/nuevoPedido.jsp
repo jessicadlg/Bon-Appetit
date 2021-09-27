@@ -95,7 +95,7 @@
             <div>
                 <form action="http://localhost:8081/Bon_Appetit_war/pedido" method="get">
                     <div class="mb-3">
-                        <input type="hidden" value="${pedidoNuevo.numero}" name="pedido">
+                        <input type="hidden" value="${pedido.numero}" name="pedido">
                         <label for="formGroupExampleInput" class="form-label">Seleccione los Productos</label>
                         <select  name="producto" class="form-select" id="formGroupExampleInput">
                             <c:forEach items="${productos}" var="producto">
@@ -106,6 +106,34 @@
                     <button type="submit" class="btn btn-sm btn-outline-secondary">Agregar</button>
                 </form>
             </div>
+            <c:if test="${not empty pedido.productosPedidos}">
+                <h2>Productos Agregados</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                        <tr>
+                            <th scope="col">Codigo</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <c:forEach items="${pedido.productosPedidos}" var="producto">
+                            <tr>
+                                <td>${producto.codigo}</td>
+                                <td>${producto.precio}</td>
+                                <td></td>
+                                <td>
+                                    <button class="btn btn btn-outline-warning">Eliminar</button>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                    <h3>Total</h3>
+                </div>
+            </c:if>
         </main>
     </div>
 </div>

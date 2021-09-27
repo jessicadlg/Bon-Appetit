@@ -39,7 +39,7 @@ public class ControladorPedido {
         ModelMap modelMap = new ModelMap();
         Pedido pedidoNuevo = servicioPedido.crearPedido();
         ArrayList<Producto> productos = servicioProducto.getProductos();
-        modelMap.put("pedidoNuevo", pedidoNuevo);
+        modelMap.put("pedido", pedidoNuevo);
         modelMap.put("productos", productos);
         return new ModelAndView("nuevoPedido", modelMap);
     }
@@ -51,6 +51,6 @@ public class ControladorPedido {
         ArrayList<Producto> productos = servicioProducto.getProductos();
         modelMap.put("pedido", pedidoConProductoCargado);
         modelMap.put("productos", productos);
-        return new ModelAndView("pedido", modelMap);
+        return new ModelAndView("nuevoPedido", modelMap);
     }
 }
