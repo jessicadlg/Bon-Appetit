@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.Excepciones.ListaPedidosException;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
 import ar.edu.unlam.tallerweb1.modelo.Producto;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPedido;
@@ -29,7 +30,12 @@ public class ControladorPedido {
     @RequestMapping(method = RequestMethod.GET, path = "/pedidos")
     public ModelAndView verPedidos(){
         ModelMap modelMap = new ModelMap();
-        ArrayList<Pedido> pedidos = servicioPedido.getPedidos();
+        ArrayList<Pedido> pedidos = null;
+        try {
+            pedidos = servicioPedido.getPedidos();
+        } catch (ListaPedidosException e) {
+            e.printStackTrace();
+        }
         modelMap.put("pedidos", pedidos);
         return new ModelAndView("pedidos", modelMap);
     }

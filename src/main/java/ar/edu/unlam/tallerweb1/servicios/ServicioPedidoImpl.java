@@ -1,7 +1,12 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.Excepciones.ListaPedidosException;
+import ar.edu.unlam.tallerweb1.Excepciones.PedidoNoCreadoException;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
 import ar.edu.unlam.tallerweb1.modelo.Producto;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioPedido;
+import ar.edu.unlam.tallerweb1.repositorios.RepositorioProducto;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,32 +14,40 @@ import java.util.ArrayList;
 @Service
 @Transactional
 public class ServicioPedidoImpl implements ServicioPedido{
-    @Override
-    public ArrayList<Pedido> getPedidos() {
-        ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
-        Pedido p1 = new Pedido(1);
-        Pedido p2 = new Pedido(2);
-        Pedido p3 = new Pedido(3);
-        Pedido p4 = new Pedido(4);
-        Pedido p5 = new Pedido(5);
-        pedidos.add(p1);
-        pedidos.add(p2);
-        pedidos.add(p3);
-        pedidos.add(p4);
-        pedidos.add(p5);
-        return pedidos;
+
+    private RepositorioPedido repositorioPedido;
+    private RepositorioProducto repositorioProducto;
+
+    @Autowired
+    public ServicioPedidoImpl(RepositorioPedido repositorioPedido, RepositorioProducto repositorioProducto){
+        this.repositorioPedido = repositorioPedido;
+        this.repositorioProducto = repositorioProducto;
     }
 
     @Override
-    public Pedido crearPedido() {
-        return new Pedido(1);
+    public ArrayList<Pedido> getPedidos() throws ListaPedidosException {
+        ArrayList<Pedido> pedidos = repositorioPedido.getPedidos();
+        if(pedidos.size() > 0){
+            return pedidos;
+        }else{
+            throw new ListaPedidosException();
+        }
+    }
+
+    @Override
+    public Pedido crearPedido() throws PedidoNoCreadoException{
+        Pedido pedido = repositorioPedido.crearPedido();
+        if(pedido.getId() != null){
+            return pedido;
+        }else{
+            throw new PedidoNoCreadoException();
+        }
+
     }
 
     @Override
     public Pedido agregarProducto(Integer idPedido, Integer idProducto) {
-        Pedido pedido = new Pedido(1);
-        Producto p1  = new Producto(1L,"Cafe Con Leche", 150.00);
-        pedido.getProductosPedidos().add(p1);
+        Pedido pedido = repositorioPedido.agregarProducto(idPedido, idProducto);
         return pedido;
     }
 }

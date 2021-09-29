@@ -44,4 +44,9 @@ public class RepositorioProductoImpl implements RepositorioProducto {
                             .add(Restrictions.eq("nombre",nombreProducto)).uniqueResult();
         return productoBuscado;
     }
+
+    @Override
+    public Producto getProductoById(Integer idPedido) {
+        return null;
+    }
 }

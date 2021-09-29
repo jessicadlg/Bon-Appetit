@@ -1,9 +1,8 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+
+import ar.edu.unlam.tallerweb1.modelo.Pedido;
 
 @Entity
 public class Producto {
