@@ -40,13 +40,19 @@ public class RepositorioPedidoImpl implements RepositorioPedido{
     @Override
     public Pedido crearPedido() {
         Pedido pedidoNuevo = new Pedido();
-        this.sessionFactory.getCurrentSession().save(pedidoNuevo);
+        pedidoNuevo.setId(1L);
+        //this.sessionFactory.getCurrentSession().save(pedidoNuevo);
         //falta traer el pedido recien guardado para poder pasar el id
-        return null;
+        //PREGUNTAR COMO RECUPERAR EL ULTIMO OBJETO GUARDADO.
+        return pedidoNuevo;
     }
 
     @Override
     public Pedido agregarProducto(Integer idPedido, Integer idProducto) {
+        //Buscar el Pedido
+        //Buscar el producto
+        //Agregar el producto al pedido
+        //y devolver el pedido
         return new Pedido();
     }
 }
