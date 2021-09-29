@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="/WEB-INF/includes/header.jsp"/>
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
@@ -72,35 +73,50 @@
                 <c:forEach items="${listaProductos}" var="productos">
                     <div class="card-header">
                         <p>${productos.nombre}</p>
+                        <div class="row">
+                            <div class="col-6">
+                                <img class="img-thumbnail img-fluid" src="images/${productos.nombreImagen}" alt="..">
+                            </div>
+                            <div class="col-6 ml-auto display-4">
+                                <p>$${productos.precio}</p>
+                            </div>
+                        </div>
                     </div>
                 </c:forEach>
             </div>
-            <div class="accordion" id="accordionExample">
-                <div class="card">
-                    <div class="card-header" id="headingOne">
-                        <h2 class="mb-0">
-                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
-                                    data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                Categorias
-                            </button>
-                        </h2>
-                    </div>
-
-                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                         data-parent="#accordionExample">
-                        <div class="card-body">
-                            <div class="img-prod">
-                                <img class="img-logo" src="/images/aquarius.png" alt="..">
+            <c:forEach items="${listaCategorias}" var="categorias">
+                <div class="accordion" id="accordionExample">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
+                                        data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        ${categorias.nombreCategoria}
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
+                             data-parent="#accordionExample">
+                            <div class="card-body">
+                                <div class="img-prod">
+                                    <img class="img-logo" src="images/${c}" alt="..">
+                                </div>
+                                <div class="title-nombre">
+                                        <%--                                    <h4>${categorias.nombreCategoria}</h4>--%>
+                                        <%--                                    <c:forEach items="${categorias.listaProductos}" var="productos">--%>
+                                        <%--                                        <h4>${productos.nombre}</h4>--%>
+                                        <%--                                    </c:forEach>--%>
+                                    <h4>Yo puse mis productos aqui.jpg</h4>
+                                    <img src="images/gatito.jpg" alt="">
+                                </div>
+                                <small>Some placeholder content for the first accordion panel. This panel is shown by
+                                    default,
+                                    thanks to the</small>
                             </div>
-                            <div class="title-nombre">
-                                <h4>Aquarius</h4>
-                            </div>
-                            <small>Some placeholder content for the first accordion panel. This panel is shown by default,
-                            thanks to the</small>
                         </div>
                     </div>
                 </div>
-            </div>
+            </c:forEach>
         </div>
     </div>
 </div>
