@@ -1,25 +1,35 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.aspectj.apache.bcel.generic.ALOAD;
+
+import javax.persistence.*;
 
 @Entity
 public class Producto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID_PRODUCTO")
     private Long id;
     private String nombre;
     private double precio;
     private String codigo;
-    private int categoria;
+    @JoinColumn(name = "ID_CATEGORIA")
+    @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Categoria categoria;
     private boolean activo;
 
-    public Producto(){
+    private String nombreImagen;
+
+    public Producto() {
 
     }
+
+    public String getNombreImagen() {
+        return nombreImagen;
+    }
+
+    public void setNombreImagen(String nombreImagen) {this.nombreImagen = nombreImagen;}
 
     public Long getId() {
         return id;
@@ -53,11 +63,11 @@ public class Producto {
         this.codigo = codigo;
     }
 
-    public int getCategoria() {
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(int categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 
