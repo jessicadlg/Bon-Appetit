@@ -1,0 +1,163 @@
+/*:root {
+    --bs-body-font-family: Roboto Slab, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji;
+    --bs-body-font-size: 1rem;
+    --bs-body-font-weight: 400;
+    --bs-body-line-height: 1.5;
+    --bs-body-color: #212529;
+    --bs-body-bg: #fff;
+}*/
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+/*
+html {
+    scroll-padding-top: 4.5rem;
+}
+*/
+#mainNav {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    background-color: #212529;
+}
+
+#mainNav .navbar-toggler {
+    padding: 0.75rem;
+    font-size: 0.75rem;
+    font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+#mainNav .navbar-brand {
+    color: #ffc800;
+    font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-weight: 700;
+    letter-spacing: 0.0625em;
+    text-transform: uppercase;
+}
+
+#mainNav .navbar-brand img {
+    height: 1.5rem;
+}
+
+#mainNav .navbar-nav .nav-item .nav-link {
+    font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 0.95rem;
+    color: #fff;
+    letter-spacing: 0.0625em;
+}
+
+#mainNav .navbar-nav .nav-item .nav-link.active, #mainNav .navbar-nav .nav-item .nav-link:hover {
+    color: #ffc800;
+}
+
+.img-logo {
+    height: 3em;
+    width: auto;
+}
+
+/*.img-fondo{
+    padding-top: 10.5rem;
+    padding-bottom: 22rem;
+    text-align: center;
+    color: #000000;
+    background-image:url("/images/PORTADA-ANA-MARTORELL.jpg");
+    background-size:cover;
+    background-position: center center;
+    background-repeat:no-repeat;
+}*/
+/*
+body {
+    margin: 0;
+    font-family: var(--bs-body-font-family);
+    font-size: var(--bs-body-font-size);
+    font-weight: var(--bs-body-font-weight);
+    line-height: var(--bs-body-line-height);
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    text-align: center;
+    position: relative;
+    overflow-x: hidden;
+
+}*/
+
+header.masthead {
+    height: 90vh;
+    overflow: hidden;
+   padding-top: 10.5rem; /* */
+    padding-bottom: 22rem;
+    text-align: center;
+    color: #000000;
+    background-image: url("../images/PORTADA-ANA-MARTORELL.jpg");
+    background-attachment: fixed;
+    background-position: center center;
+}
+
+header.masthead .masthead-heading {
+    font-size: 3.25rem;
+    font-style: italic;
+    margin-top: 1rem;
+    margin-bottom: 5rem;
+    font-family: "Roboto Slab", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+p {
+    line-height: 1.75;
+}
+
+.btn-xl {
+    padding: 1.25rem 2.5rem;
+    font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+.btn-social {
+    height: 2.5rem;
+    width: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border-radius: 100%;
+}
+
+.link-dark {
+    color: #212529;
+}
+
+.link-white {
+    color: #fff;
+}
+.card-body .img-prod{
+    width: 80px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+.img-prod{
+    float: left!important;
+}
+
+.card-body .title-nombre{
+    color:#2aabd2 ;
+    margin: 0;
+    font-size: 16px;
+    /*margin-right: 10px;*/
+}
+.card-body .title-nombre small{
+    margin-left: 5px;
+    font-size: 13px;
+}
+.footer {
+    background: #000000;
+    text-align: center;
+    font-size: 0.9rem;
+    font-family: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
