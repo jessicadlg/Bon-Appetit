@@ -46,7 +46,7 @@ public class ServicioPedidoImpl implements ServicioPedido{
     }
 
     @Override
-    public Pedido agregarProducto(Integer idPedido, Integer idProducto) {
+    public Pedido agregarProducto(Long idPedido, Integer idProducto) {
         Pedido pedido = repositorioPedido.agregarProducto(idPedido, idProducto);
         return pedido;
     }

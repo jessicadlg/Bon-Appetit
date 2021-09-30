@@ -8,5 +8,5 @@ public interface RepositorioPedido {
 
     ArrayList<Pedido> getPedidos();
     Pedido crearPedido();
-    Pedido agregarProducto(Integer idPedido, Integer idProducto);
+    Pedido agregarProducto(Long idPedido, Integer idProducto);
 }

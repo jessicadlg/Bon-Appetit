@@ -11,5 +11,5 @@ public interface ServicioPedido {
 
     Pedido crearPedido() throws PedidoNoCreadoException;
 
-    Pedido agregarProducto(Integer idPedido, Integer idProducto);
+    Pedido agregarProducto(Long idPedido, Integer idProducto);
 }

@@ -58,11 +58,11 @@ public class ServicioPedidoTest {
 
     private void givenUnPedidoSinProductosCargados() {
         PEDIDO_CON_PRODUCTO_CARGADO.getProductosPedidos().add(new Producto());
-        when(repositorioPedido.agregarProducto(anyInt(), anyInt())).thenReturn(PEDIDO_CON_PRODUCTO_CARGADO);
+        when(repositorioPedido.agregarProducto(anyLong(), anyInt())).thenReturn(PEDIDO_CON_PRODUCTO_CARGADO);
     }
 
     private Pedido whenSeAgregaElProducto() {
-        return servicioPedido.agregarProducto(1,1);
+        return servicioPedido.agregarProducto(1L,1);
     }
 
     private void thenElPedidoTieneUnPedidoCargado(Pedido pedido) {

@@ -51,7 +51,7 @@ public class ControladorPedido {
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/pedido")
-    public ModelAndView agregarProducto(Integer pedido, Integer producto) {
+    public ModelAndView agregarProducto(Long pedido, Integer producto) {
         ModelMap modelMap = new ModelMap();
         Pedido pedidoConProductoCargado = servicioPedido.agregarProducto(pedido, producto);
         ArrayList<Producto> productos = servicioProducto.getProductos();

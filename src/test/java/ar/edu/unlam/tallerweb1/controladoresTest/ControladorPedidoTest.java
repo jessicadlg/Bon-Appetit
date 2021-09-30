@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -42,7 +43,7 @@ public class ControladorPedidoTest {
     }
 
     private void givenQueSeAgregaUnProductoAUnPedido() {
-        when(servicioPedido.agregarProducto(anyInt(), anyInt())).thenReturn(new Pedido());
+        when(servicioPedido.agregarProducto(anyLong(), anyInt())).thenReturn(new Pedido());
         when(servicioProducto.getProductos()).thenReturn(new ArrayList<Producto>());
     }
 
@@ -53,7 +54,7 @@ public class ControladorPedidoTest {
     }
 
     private ModelAndView whenCuandoLeAgregoUnProducto() {
-        return controladorPedido.agregarProducto(1,1);
+        return controladorPedido.agregarProducto(1L,1);
     }
 
     private void giveQueSeCreaUnPedidoNuevo() {

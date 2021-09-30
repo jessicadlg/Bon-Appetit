@@ -48,7 +48,7 @@ public class RepositorioPedidoImpl implements RepositorioPedido{
     }
 
     @Override
-    public Pedido agregarProducto(Integer idPedido, Integer idProducto) {
+    public Pedido agregarProducto(Long idPedido, Integer idProducto) {
         //Buscar el Pedido
         //Buscar el producto
         //Agregar el producto al pedido

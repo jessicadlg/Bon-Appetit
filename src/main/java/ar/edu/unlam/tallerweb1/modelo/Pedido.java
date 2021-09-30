@@ -8,7 +8,7 @@ public class Pedido {
 
     private Long id;
     private String estado;
-        private ArrayList<Producto> productosPedidos;
+    private ArrayList<Producto> productosPedidos;
 
     public Long getId() {
         return id;
