@@ -26,7 +26,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="http://localhost:8081/Bon_Appetit_war/mesas">
                     <span data-feather="users"></span>
                     Mesas
                 </a>

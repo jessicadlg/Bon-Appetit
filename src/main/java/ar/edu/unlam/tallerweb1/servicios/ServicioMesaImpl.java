@@ -4,6 +4,7 @@ import ar.edu.unlam.tallerweb1.Excepciones.ListaDeMesasNoEncontrada;
 import ar.edu.unlam.tallerweb1.Excepciones.ListaNoEncontrada;
 import ar.edu.unlam.tallerweb1.modelo.Mesa;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioMesa;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,7 @@ public class ServicioMesaImpl implements ServicioMesa{
 
     private RepositorioMesa repositorioMesa;
 
+    @Autowired
     public ServicioMesaImpl(RepositorioMesa repositorioMesa){
         this.repositorioMesa = repositorioMesa;
     }

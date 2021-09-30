@@ -9,6 +9,9 @@ import java.util.ArrayList;
 public class RepositorioMesaImpl implements RepositorioMesa{
     @Override
     public ArrayList<Mesa> getMesas() {
-        return null;
+        Mesa mesa = new Mesa(1L ,"Ocupada");
+        ArrayList<Mesa> mesas = new ArrayList<>();
+        mesas.add(mesa);
+        return mesas;
     }
 }
