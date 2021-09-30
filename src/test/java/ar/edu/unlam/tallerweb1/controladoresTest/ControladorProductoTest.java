@@ -1,14 +1,18 @@
 package ar.edu.unlam.tallerweb1.controladoresTest;
 
+import ar.edu.unlam.tallerweb1.Excepciones.ListaCategoriaNoEncontrada;
 import ar.edu.unlam.tallerweb1.Excepciones.ListaNoEncontrada;
 import ar.edu.unlam.tallerweb1.Excepciones.ProductoNoEncontrado;
 import ar.edu.unlam.tallerweb1.controladores.ControladorProducto;
+import ar.edu.unlam.tallerweb1.modelo.Categoria;
 import ar.edu.unlam.tallerweb1.modelo.Producto;
+import ar.edu.unlam.tallerweb1.servicios.ServicioCategoria;
 import ar.edu.unlam.tallerweb1.servicios.ServicioProducto;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +23,7 @@ public class ControladorProductoTest {
 
     private ModelAndView mav;
     private ServicioProducto servicioProducto;
+    private ServicioCategoria servicioCategoria;
     private ControladorProducto controladorProducto;
     private String nombreProducto = "Pizza";
     private List<Producto> productos;
@@ -26,7 +31,8 @@ public class ControladorProductoTest {
     @Before
     public void init() {
         servicioProducto = mock(ServicioProducto.class);
-        controladorProducto = new ControladorProducto(servicioProducto);
+        servicioCategoria = mock(ServicioCategoria.class);
+        controladorProducto = new ControladorProducto(servicioProducto,servicioCategoria);
     }
     
     @Test
@@ -107,7 +113,62 @@ public class ControladorProductoTest {
 
         thenNoMeListaNingunProductoYMeDaAmbosMensajes();
 
+    }
 
+    @Test
+    public void queSePuedaListarLasCategoriasDeProductos(){
+
+        givenQueExisteUnaListaDeCategorias();
+
+        whenListoLasCategorias();
+
+        thenMeDevuelveLaListaDeCategorias();
+
+    }
+
+    @Test
+    public void queCuandoNoExisteUnaListaDeCategoriasMandeElMsj(){
+
+        givenQueExisteUnaListaDeCategoriasVacia();
+
+        whenListoLasCategorias();
+
+        thenMeDevuelveElMensajeDeListaVacia();
+
+
+    }
+
+    private void givenQueExisteUnaListaDeCategoriasVacia() {
+        when(servicioCategoria.listarCategorias()).thenThrow(ListaCategoriaNoEncontrada.class);
+
+    }
+
+    private void thenMeDevuelveElMensajeDeListaVacia() {
+        assertThat(mav.getModel().get("categoriasNoEncontradas")).isEqualTo("No se encontro ninguna categoria por mostrar");
+        assertThat(mav.getViewName()).isEqualTo("productos");
+    }
+
+    private void givenQueExisteUnaListaDeCategorias() {
+        List<Categoria>listaCategorias = new ArrayList<>();
+        Categoria c1 = new Categoria();
+        Categoria c2 = new Categoria();
+        Categoria c3 = new Categoria();
+        Categoria c4 = new Categoria();
+        listaCategorias.add(c1);
+        listaCategorias.add(c2);
+        listaCategorias.add(c3);
+        listaCategorias.add(c4);
+        when(servicioCategoria.listarCategorias()).thenReturn(listaCategorias);
+
+    }
+
+    private void whenListoLasCategorias() {
+        mav = controladorProducto.listarProductos();
+    }
+
+    private void thenMeDevuelveLaListaDeCategorias() {
+        assertThat(mav.getModel().get("listaCategorias")).isEqualTo(servicioCategoria.listarCategorias());
+        assertThat(mav.getViewName()).isEqualTo("productos");
 
     }
 
