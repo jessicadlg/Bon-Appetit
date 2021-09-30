@@ -1,8 +1,10 @@
 package ar.edu.unlam.tallerweb1.AttributeModel;
 
-public class DatosLogin {
+public class DatosRegistro {
+
     private String email;
     private String password;
+    private String repitePassword;
 
     public String getEmail() {
         return email;
@@ -20,4 +22,11 @@ public class DatosLogin {
         this.password = password;
     }
 
+    public String getRepitePassword() {
+        return repitePassword;
+    }
+
+    public void setRepitePassword(String repitePassword) {
+        this.repitePassword = repitePassword;
+    }
 }

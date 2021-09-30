@@ -21,7 +21,12 @@ public class Usuario {
 	private String password;
 	private String rol;
 	private Boolean activo = false;
-	
+
+	public Usuario(){}
+	public Usuario(String email, String clave){
+		this.email = email;
+		this.password = clave;
+	}
 	public Long getId() {
 		return id;
 	}
