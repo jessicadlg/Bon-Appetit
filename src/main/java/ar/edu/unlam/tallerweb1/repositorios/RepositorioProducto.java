@@ -16,5 +16,5 @@ public interface RepositorioProducto {
 
     Producto buscarProductoPorId(Long idProducto);
 
-    void actualizarProducto(Producto producto);
+    Long actualizarProducto(Producto producto);
 }

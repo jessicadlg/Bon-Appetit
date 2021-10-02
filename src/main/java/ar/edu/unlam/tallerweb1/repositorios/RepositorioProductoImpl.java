@@ -7,7 +7,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -64,10 +63,19 @@ public class RepositorioProductoImpl implements RepositorioProducto {
         return productoBuscado;
     }
 
-    @Override
-    public void actualizarProducto(Producto producto) {
+   /* @Override
+    public Long darMeGusta(Producto idProducto) {
         final Session session = this.sessionFactory.getCurrentSession();
-        session.update(producto);
+        Producto productoEncontrado = buscarProductoPorId(pro);
+        actualizarProducto(productoEncontrado);
+        return productoEncontrado.getId();
+    }*/
+
+    @Override
+    public Long actualizarProducto(Producto producto) {
+        final Session session = this.sessionFactory.getCurrentSession();
+        session.save(producto);
+        return producto.getId();
     }
 
 

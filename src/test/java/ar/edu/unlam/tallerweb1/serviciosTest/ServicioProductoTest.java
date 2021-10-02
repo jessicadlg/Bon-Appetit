@@ -15,6 +15,7 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.mock;
 
@@ -137,9 +138,9 @@ public class ServicioProductoTest {
 
     private void givenQueExisteUnProducto() {
         Producto p1 = new Producto();
+        p1.setCantidadMeGusta(0);
         when(repositorioProducto.buscarProductoPorId(idProducto)).thenReturn(p1);
-        when(repositorioProducto.actualizarProducto(idProducto)).thenReturn(idProducto);
-
+        when(repositorioProducto.actualizarProducto(anyObject())).thenReturn(1L);
     }
 
     private void whenBuscoUnProductoPorId() {

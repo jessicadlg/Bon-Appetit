@@ -67,8 +67,7 @@ public class ServicioProductoImpl implements ServicioProducto {
         Producto productoEncontrado = buscarProductoPorId(idProducto);
         Integer cantidad = productoEncontrado.getCantidadMeGusta();
         productoEncontrado.setCantidadMeGusta(++cantidad);
-        this.repositorioProducto.actualizarProducto(productoEncontrado);
-        return productoEncontrado.getId();
+        return this.repositorioProducto.actualizarProducto(productoEncontrado);
     }
 
     @Override

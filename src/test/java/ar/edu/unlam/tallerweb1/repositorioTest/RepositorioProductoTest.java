@@ -4,6 +4,7 @@ import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.modelo.Categoria;
 import ar.edu.unlam.tallerweb1.modelo.Producto;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioProducto;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -20,6 +21,26 @@ public class RepositorioProductoTest extends SpringTest {
     private RepositorioProducto repositorioProducto;
 
     private String nombreProducto = "Pizza";
+
+   /* @Test
+    @Rollback
+    @Transactional
+    public void queSePuedaBuscarUnProductoPorId(){
+
+        Producto productoEsperado = givenQueUnosProductoExiste();
+
+        Producto productoObtenido = whenBuscoUnProductoPorId();
+
+        thenMeDevuelveElProductoBuscado(productoEsperado,productoObtenido);
+
+
+    }*/
+
+    private Producto givenQueUnosProductoExiste() {
+        Producto p1 = new Producto();
+        session().save(p1);
+        return p1;
+    }
 
     @Test
     @Rollback
@@ -78,32 +99,21 @@ public class RepositorioProductoTest extends SpringTest {
 
     }
 
-    @Test
-    @Rollback
-    @Transactional
-    public void queSePuedaBuscarUnProductoPorId(){
-
-        Producto productoEsperado = givenQueUnProductoExiste();
-
-        Producto productoObtenido = whenBuscoUnProductoPorId();
-
-        thenMeDevuelveElProductoBuscado(productoEsperado,productoObtenido);
 
 
-    }
-
-    @Test
+  /*  @Test
     @Rollback
     @Transactional
     public void queSePuedaDarMeGustaAUnProductoYQueDevuelvaElIdDelProducto(){
 
         Long idEsperado = givenQueUnProductoConMegusta();
         Producto productoObtenido = whenBuscoUnProductoPorId();
+        productoObtenido.setCantidadMeGusta(1);
         whenDoyMeGustaAlProducto(productoObtenido);
         thenMeDevuelveElIdDeEseProducto(idEsperado,productoObtenido);
 
     }
-
+    */
     private Long givenQueUnProductoConMegusta() {
         Producto p1 = new Producto();
         p1.setCantidadMeGusta(0);
@@ -149,7 +159,7 @@ public class RepositorioProductoTest extends SpringTest {
         assertThat(listaProductos).hasSize(cantidad);
     }
 
-    private Producto givenQueUnProductoExiste() {
+    private @NotNull Producto givenQueUnProductoExiste() {
         Producto producto = new Producto();
         producto.setNombre(nombreProducto);
         session().save(producto);

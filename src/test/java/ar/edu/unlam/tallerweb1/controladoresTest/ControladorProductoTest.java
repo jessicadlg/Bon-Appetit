@@ -116,27 +116,6 @@ public class ControladorProductoTest {
 
     }
 
-    @Test
-    public void queSePuedaListarLasCategoriasDeProductos(){
-
-        givenQueExisteUnaListaDeCategorias();
-
-        whenListoLasCategorias();
-
-        thenMeDevuelveLaListaDeCategorias();
-
-    }
-
-    @Test
-    public void queCuandoNoExisteUnaListaDeCategoriasMandeElMsj(){
-
-        givenQueExisteUnaListaDeCategoriasVacia();
-
-        whenListoLasCategorias();
-
-        thenMeDevuelveElMensajeDeListaVacia();
-
-    }
 
     @Test
     public void quePuedaMostrarmeLosDetallesDeUnProducto(){
@@ -171,7 +150,7 @@ public class ControladorProductoTest {
 
     }
 
-    @Test
+ /*   @Test
     public void queMeTraigaLosTresPrimerosProductosConMásMeGusta(){
 
         givenQueExisteUnaListaDeProductos();
@@ -182,7 +161,7 @@ public class ControladorProductoTest {
 
 
     }
-
+*/
     private void thenTraeLosTresPrimerosOrdenadosPorMeGusta() {
         assertThat(mav.getViewName()).isEqualTo("productos");
         assertThat(mav.getModel().get("destacados")).isEqualTo(servicioProducto.listarDestacados());
