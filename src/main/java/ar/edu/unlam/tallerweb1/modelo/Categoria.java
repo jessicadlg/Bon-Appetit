@@ -11,9 +11,6 @@ public class Categoria {
     @Column(name = "ID_CATEGORIA")
     private Long id;
     private String nombreCategoria;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_producto")
-    List<Producto> listaProductos;
 
     public Categoria(){}
 
@@ -33,11 +30,4 @@ public class Categoria {
         this.nombreCategoria = nombreCategoria;
     }
 
-    public List<Producto> getListaProductos() {
-        return listaProductos;
-    }
-
-    public void setListaProductos(List<Producto> listaProductos) {
-        this.listaProductos = listaProductos;
-    }
 }

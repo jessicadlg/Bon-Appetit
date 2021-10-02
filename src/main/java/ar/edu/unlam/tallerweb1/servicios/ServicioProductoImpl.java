@@ -51,4 +51,28 @@ public class ServicioProductoImpl implements ServicioProducto {
         }
         return this.repositorioProducto.buscarProductoPorNombre(nombreProducto);
     }
+
+    @Override
+    public Producto buscarProductoPorId(Long idProducto) {
+
+        if(this.repositorioProducto.buscarProductoPorId(idProducto)==null){
+            throw new ProductoNoEncontrado();
+        }
+
+        return this.repositorioProducto.buscarProductoPorId(idProducto);
+    }
+
+    @Override
+    public Long darMeGusta(Long idProducto) {
+        Producto productoEncontrado = buscarProductoPorId(idProducto);
+        Integer cantidad = productoEncontrado.getCantidadMeGusta();
+        productoEncontrado.setCantidadMeGusta(++cantidad);
+        this.repositorioProducto.actualizarProducto(productoEncontrado);
+        return productoEncontrado.getId();
+    }
+
+    @Override
+    public List<Producto> listarDestacados() {
+        return new ArrayList<>();
+    }
 }

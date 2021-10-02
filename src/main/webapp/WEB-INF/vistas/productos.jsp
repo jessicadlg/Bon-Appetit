@@ -77,21 +77,23 @@
                             <div class="col-6">
                                 <img class="img-thumbnail img-fluid" src="images/${productos.nombreImagen}" alt="..">
                             </div>
-                            <div class="col-6 ml-auto display-4">
+                            <div class="col-3 ml-auto display-4">
                                 <p>$${productos.precio}</p>
+                            </div>
+                            <div class="col-3">
+                                <a href="detalleProducto?id=${productos.id}" class="btn btn-success">Ver detalles</a>
                             </div>
                         </div>
                     </div>
-                </c:forEach>
+
             </div>
-            <c:forEach items="${listaCategorias}" var="categorias">
                 <div class="accordion" id="accordionExample">
                     <div class="card">
                         <div class="card-header" id="headingOne">
                             <h2 class="mb-0">
                                 <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse"
                                         data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                        ${categorias.nombreCategoria}
+                                        ${productos.categoria.nombreCategoria}
                                 </button>
                             </h2>
                         </div>
@@ -99,7 +101,7 @@
                              data-parent="#accordionExample">
                             <div class="card-body">
                                 <div class="img-prod">
-                                    <img class="img-logo" src="images/${c}" alt="..">
+                                  <%--  <img class="img-logo" src="images/" alt=".."> --%>
                                 </div>
                                 <div class="title-nombre">
                                         <%--                                    <h4>${categorias.nombreCategoria}</h4>--%>
@@ -107,7 +109,6 @@
                                         <%--                                        <h4>${productos.nombre}</h4>--%>
                                         <%--                                    </c:forEach>--%>
                                     <h4>Yo puse mis productos aqui.jpg</h4>
-                                    <img src="images/gatito.jpg" alt="">
                                 </div>
                                 <small>Some placeholder content for the first accordion panel. This panel is shown by
                                     default,

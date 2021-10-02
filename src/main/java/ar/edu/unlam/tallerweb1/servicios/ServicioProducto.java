@@ -12,4 +12,10 @@ public interface ServicioProducto {
     List<Producto> listarProductosActivos() throws ListaNoEncontrada;
 
     Producto buscarProductoPorNombre(String nombreProducto);
+
+    Producto buscarProductoPorId(Long idProducto);
+
+    Long darMeGusta(Long idProducto);
+
+    List<Producto> listarDestacados();
 }
