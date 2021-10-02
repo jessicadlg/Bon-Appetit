@@ -44,4 +44,13 @@ public class RepositorioProductoImpl implements RepositorioProducto {
                             .add(Restrictions.eq("nombre",nombreProducto)).uniqueResult();
         return productoBuscado;
     }
+
+    @Override
+    public List<Producto> buscarProductoPorCategoria(String nombreCategoria) {
+        final Session session = this.sessionFactory.getCurrentSession();
+        List<Producto> productosObtenidos = session.createCriteria(Producto.class)
+                .createAlias("categoria", "c")
+                .add(Restrictions.eq("c.nombreCategoria", nombreCategoria)).list();
+        return productosObtenidos;
+    }
 }

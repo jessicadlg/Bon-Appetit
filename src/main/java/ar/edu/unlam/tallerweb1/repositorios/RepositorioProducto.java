@@ -11,4 +11,6 @@ public interface RepositorioProducto {
     List<Producto> listarProductosActivos();
 
     Producto buscarProductoPorNombre(String nombreProducto);
+
+    List<Producto> buscarProductoPorCategoria(String nombreCategoria);
 }
