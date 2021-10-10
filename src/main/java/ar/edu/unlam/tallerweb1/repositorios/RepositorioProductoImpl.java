@@ -19,7 +19,6 @@ public class RepositorioProductoImpl implements RepositorioProducto {
         this.sessionFactory = sessionFactory;
     }
 
-
     @Override
     public List<Producto> listarProductos() {
         final Session session = this.sessionFactory.getCurrentSession();
