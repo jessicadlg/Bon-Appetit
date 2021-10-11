@@ -62,14 +62,6 @@ public class RepositorioProductoImpl implements RepositorioProducto {
         return productoBuscado;
     }
 
-   /* @Override
-    public Long darMeGusta(Producto idProducto) {
-        final Session session = this.sessionFactory.getCurrentSession();
-        Producto productoEncontrado = buscarProductoPorId(pro);
-        actualizarProducto(productoEncontrado);
-        return productoEncontrado.getId();
-    }*/
-
     @Override
     public Long actualizarProducto(Producto producto) {
         final Session session = this.sessionFactory.getCurrentSession();

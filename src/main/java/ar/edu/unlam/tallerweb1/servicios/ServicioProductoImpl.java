@@ -55,7 +55,7 @@ public class ServicioProductoImpl implements ServicioProducto {
     @Override
     public Producto buscarProductoPorId(Long idProducto) {
 
-        if(this.repositorioProducto.buscarProductoPorId(idProducto)==null){
+        if (this.repositorioProducto.buscarProductoPorId(idProducto) == null) {
             throw new ProductoNoEncontrado();
         }
 
@@ -72,6 +72,24 @@ public class ServicioProductoImpl implements ServicioProducto {
 
     @Override
     public List<Producto> listarDestacados() {
-        return new ArrayList<>();
+        List<Producto> destacados = new ArrayList<>();
+        List<Producto> listaProductos = this.repositorioProducto.listarProductos();
+        for (int i = 0; i < listaProductos.size(); i++) {
+            if (listaProductos.get(i).getCantidadMeGusta() > 3) {
+                destacados.add(listaProductos.get(i));
+                if (destacados.size() == 3) {
+                    break;
+                }
+            }
+        }
+        if (destacados.size() < 3) {
+            for (int i = 0; i < listaProductos.size(); i++) {
+                destacados.add(listaProductos.get((int) Math.random() * listaProductos.size()));
+                if (destacados.size() == 3) {
+                    break;
+                }
+            }
+        }
+        return destacados;
     }
 }

@@ -7,10 +7,8 @@ import ar.edu.unlam.tallerweb1.repositorios.RepositorioProducto;
 import ar.edu.unlam.tallerweb1.servicios.ServicioProducto;
 import ar.edu.unlam.tallerweb1.servicios.ServicioProductoImpl;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.assertj.core.api.Assertions.*;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,6 +121,85 @@ public class ServicioProductoTest {
 
     }
 
+    @Test
+    public void queMeTraigaLosTresPrimerosProductosConMasMeGusta(){
+
+        givenUnaListaDeProductosConMeGusta();
+
+        whenListoLosProductosDestacados();
+
+        thenMeTraeLosProductosDestacados();
+
+    }
+
+    private void givenUnaListaDeProductosConMeGusta() {
+        List<Producto> productos = new ArrayList<>();
+        Producto p1 = new Producto();
+        Producto p2 = new Producto();
+        Producto p3 = new Producto();
+        Producto p4 = new Producto();
+        Producto p5 = new Producto();
+        Producto p6 = new Producto();
+        p1.setCantidadMeGusta(1);
+        p2.setCantidadMeGusta(2);
+        p3.setCantidadMeGusta(3);
+        p4.setCantidadMeGusta(4);
+        p5.setCantidadMeGusta(5);
+        p6.setCantidadMeGusta(6);
+        p1.setNombre(nombreProducto);
+        productos.add(p1);
+        productos.add(p2);
+        productos.add(p3);
+        productos.add(p4);
+        productos.add(p5);
+        productos.add(p6);
+        when(repositorioProducto.listarProductos()).thenReturn(productos);
+    }
+
+    @Test
+    public void queMeTraigaUnaListaRandomComplementariaAlNoEncontrarProductosDestacados(){
+
+        givenQueExisteUnosProductosConPocosMeGusta();
+
+        whenListoLosProductosDestacados();
+
+        thenMeTraeLosProductosDestacados();
+
+    }
+
+    private void givenQueExisteUnosProductosConPocosMeGusta() {
+        List<Producto> productos = new ArrayList<Producto>();
+        Producto p1 = new Producto();
+        Producto p2 = new Producto();
+        Producto p3 = new Producto();
+        Producto p4 = new Producto();
+        Producto p5 = new Producto();
+        Producto p6 = new Producto();
+        p1.setCantidadMeGusta(1);
+        p2.setCantidadMeGusta(2);
+        p3.setCantidadMeGusta(3);
+        p4.setCantidadMeGusta(3);
+        p5.setCantidadMeGusta(2);
+        p6.setCantidadMeGusta(1);
+        productos.add(p1);
+        productos.add(p2);
+        productos.add(p3);
+        productos.add(p4);
+        productos.add(p5);
+        productos.add(p6);
+        when(repositorioProducto.listarProductos()).thenReturn(productos);
+
+    }
+
+    private void whenListoLosProductosDestacados() {
+        listaDeProducto = servicioProducto.listarDestacados();
+    }
+
+    private void thenMeTraeLosProductosDestacados() {
+        assertThat(listaDeProducto).isNotNull();
+        assertThat(listaDeProducto).hasSize(3);
+    }
+
     private void whenDoyMeGustaAUnProducto() {
         idObtenido = servicioProducto.darMeGusta(idProducto);
     }
@@ -210,7 +287,6 @@ public class ServicioProductoTest {
         productos.add(p4);
         when(repositorioProducto.listarProductos()).thenReturn(productos);
         when(repositorioProducto.buscarProductoPorNombre(nombreProducto)).thenReturn(p1);
-
     }
 
     private void whenListoLosProductos() throws ListaNoEncontrada {

@@ -29,7 +29,9 @@ public class Producto {
         return nombreImagen;
     }
 
-    public void setNombreImagen(String nombreImagen) {this.nombreImagen = nombreImagen;}
+    public void setNombreImagen(String nombreImagen) {
+        this.nombreImagen = nombreImagen;
+    }
 
     public Long getId() {
         return id;
@@ -79,7 +81,11 @@ public class Producto {
         this.activo = activo;
     }
 
-    public Integer getCantidadMeGusta() {return cantidadMeGusta;}
+    public Integer getCantidadMeGusta() {
+        return cantidadMeGusta;
+    }
 
-    public void setCantidadMeGusta(Integer cantidadMeGusta) {this.cantidadMeGusta = cantidadMeGusta;}
+    public void setCantidadMeGusta(Integer cantidadMeGusta) {
+        this.cantidadMeGusta = cantidadMeGusta;
+    }
 }
