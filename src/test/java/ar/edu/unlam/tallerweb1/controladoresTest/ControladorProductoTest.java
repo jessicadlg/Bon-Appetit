@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,8 +77,6 @@ public class ControladorProductoTest {
         whenListoLosProductosActivos();
 
         thenMeDiceQueNoHayProductosActivosPorListar();
-
-
 
     }
 
@@ -150,8 +147,8 @@ public class ControladorProductoTest {
 
     }
 
- /*   @Test
-    public void queMeTraigaLosTresPrimerosProductosConMásMeGusta(){
+   @Test
+    public void queMeTraigaLosTresPrimerosProductosConMasMeGusta(){
 
         givenQueExisteUnaListaDeProductos();
 
@@ -159,9 +156,8 @@ public class ControladorProductoTest {
 
         thenTraeLosTresPrimerosOrdenadosPorMeGusta();
 
-
     }
-*/
+
     private void thenTraeLosTresPrimerosOrdenadosPorMeGusta() {
         assertThat(mav.getViewName()).isEqualTo("productos");
         assertThat(mav.getModel().get("destacados")).isEqualTo(servicioProducto.listarDestacados());

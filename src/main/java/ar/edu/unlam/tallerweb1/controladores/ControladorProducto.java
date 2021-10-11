@@ -36,7 +36,9 @@ public class ControladorProducto {
 
         try {
             List<Producto> listaProductos = this.servicioProductos.listarProductos();
+            List<Producto> destacados = this.servicioProductos.listarDestacados();
             modelo.put("listaProductos", listaProductos);
+            modelo.put("destacados",destacados);
         } catch (ListaNoEncontrada e) {
             modelo.put("msgError", "No hay productos");
         }catch (ListaCategoriaNoEncontrada f) {
@@ -82,16 +84,13 @@ public class ControladorProducto {
 
     @RequestMapping("detalleProducto")
     public ModelAndView mostrarDetallesProducto(@RequestParam Long id) {
-
         ModelMap modelo = new ModelMap();
-
         try{
             Producto productoDetalle = servicioProductos.buscarProductoPorId(id);
             modelo.put("productoDetalles",productoDetalle);
         }catch (ProductoNoEncontrado e){
             modelo.put("productoNoEncontrado","No se encontro el producto");
         }
-
         return new ModelAndView("detalleProducto",modelo);
     }
 
@@ -103,16 +102,4 @@ public class ControladorProducto {
         return new ModelAndView("redirect:/detalleProducto?id=" + idProducto);
     }
 
-//    @RequestMapping("listar-categorias")
-//    public ModelAndView listarCategorias() {
-//        ModelMap modelo = new ModelMap();
-//
-//        try {
-//            List<Categoria> listaCategorias = servicioCategoria.listarCategorias();
-//            modelo.put("listaCategorias", listaCategorias);
-//        } catch (ListaCategoriaNoEncontrada e) {
-//        }
-//
-//        return new ModelAndView("redirect:/login?id=", modelo);
-//    }
 }

@@ -108,7 +108,7 @@ public class RepositorioProductoTest extends SpringTest {
         Long idEsperado = givenQueUnProductoConMegusta();
         Producto productoObtenido = whenBuscoUnProductoPorId(idEsperado);
         productoObtenido.setCantidadMeGusta(1);
-        whenDoyMeGustaAlProducto(productoObtenido);
+        Long idObtenido = whenDoyMeGustaAlProducto(productoObtenido);
         thenMeDevuelveElIdDeEseProducto(idEsperado, productoObtenido);
 
     }
@@ -121,14 +121,13 @@ public class RepositorioProductoTest extends SpringTest {
 
     }
 
-    private void whenDoyMeGustaAlProducto(Producto productoObtenido) {
-        repositorioProducto.actualizarProducto(productoObtenido);
+    private Long whenDoyMeGustaAlProducto(Producto productoObtenido) {
+       return repositorioProducto.actualizarProducto(productoObtenido);
     }
 
-    private void thenMeDevuelveElIdDeEseProducto(Long idEsperado, Producto producto) {
-        assertThat(idEsperado).isEqualTo(producto.getId());
-        assertThat(producto.getId()).isEqualTo(1L);
-        assertThat(producto.getCantidadMeGusta()).isEqualTo(1);
+    private void thenMeDevuelveElIdDeEseProducto(Long idEsperado, Producto productoObtenido) {
+        assertThat(idEsperado).isEqualTo(productoObtenido.getId());
+        assertThat(productoObtenido.getCantidadMeGusta()).isEqualTo(1);
     }
 
     private Producto whenBuscoUnProductoPorId(Long idProducto) {
