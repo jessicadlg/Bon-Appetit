@@ -4,6 +4,7 @@ import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.modelo.Categoria;
 import ar.edu.unlam.tallerweb1.modelo.Producto;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioProducto;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
@@ -11,6 +12,7 @@ import org.springframework.test.annotation.Rollback;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
 
 
@@ -24,13 +26,32 @@ public class RepositorioProductoTest extends SpringTest {
     @Test
     @Rollback
     @Transactional
-    public void queSePuedanListarTodasLasProductos (){
+    public void queSePuedaBuscarUnProductoPorId() {
 
-        List<Producto>productosEsperados = givenUnaListaDeProductos();
+        Long idProducto = givenQueExisteUnProducto();
 
-        List<Producto>productosObtenidos = whenListoLosProductos();
-        
-        thenMeTraeLaListaDeProductos(productosEsperados,productosObtenidos);
+        Producto productoObtenido = whenBuscoUnProductoPorId(idProducto);
+
+        thenMeDevuelveElProductoBuscado(idProducto, productoObtenido);
+
+    }
+
+    private Long givenQueExisteUnProducto() {
+        Producto p1 = new Producto();
+        return (Long) session().save(p1);
+
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    public void queSePuedanListarTodasLasProductos() {
+
+        List<Producto> productosEsperados = givenUnaListaDeProductos();
+
+        List<Producto> productosObtenidos = whenListoLosProductos();
+
+        thenMeTraeLaListaDeProductos(productosEsperados, productosObtenidos);
 
 
     }
@@ -38,13 +59,13 @@ public class RepositorioProductoTest extends SpringTest {
     @Test
     @Rollback
     @Transactional
-    public void queSePuedaListarTodosLosProductosActivos(){
+    public void queSePuedaListarTodosLosProductosActivos() {
 
-        List<Producto>productosEsperados = givenUnaListaDeProductosActivos();
+        List<Producto> productosEsperados = givenUnaListaDeProductosActivos();
 
-        List<Producto>productosObtenidos = whenListoLosProductosActivos();
+        List<Producto> productosObtenidos = whenListoLosProductosActivos();
 
-        thenMeTraeLaListaDeProductosActivos(productosEsperados,productosObtenidos);
+        thenMeTraeLaListaDeProductosActivos(productosEsperados, productosObtenidos);
 
 
     }
@@ -52,18 +73,92 @@ public class RepositorioProductoTest extends SpringTest {
     @Test
     @Rollback
     @Transactional
-    public void queSePuedaBuscarUnProductoPorSuNombre(){
+    public void queSePuedaBuscarUnProductoPorSuNombre() {
 
-        Producto productoEsperado =  givenQueUnProductoExiste();
+        Producto productoEsperado = givenQueUnProductoExiste();
 
         Producto productoObtenido = whenBuscoUnProductoPorSuNombre();
 
-        thenMeTraeElProductoBuscado(productoEsperado,productoObtenido);
+        thenMeTraeElProductoBuscado(productoEsperado, productoObtenido);
 
 
     }
 
-    private Producto givenQueUnProductoExiste() {
+    @Test
+    @Rollback
+    @Transactional
+    public void queMePuedaTraerLosProductosDeUnaCategoria() {
+
+        givenExisteUnProductoDeCategoria("Bebidas");
+
+        givenExisteUnProductoDeCategoria("Postres");
+
+        List<Producto> listaProductos = whenBuscoProductoDe("Bebidas");
+
+        thenMeDevuelve(listaProductos, 1);
+
+    }
+
+
+    @Test
+    @Rollback
+    @Transactional
+    public void queSePuedaDarMeGustaAUnProductoYQueDevuelvaElIdDelProducto() {
+
+        Long idEsperado = givenQueUnProductoConMegusta();
+        Producto productoObtenido = whenBuscoUnProductoPorId(idEsperado);
+        productoObtenido.setCantidadMeGusta(1);
+        whenDoyMeGustaAlProducto(productoObtenido);
+        thenMeDevuelveElIdDeEseProducto(idEsperado, productoObtenido);
+
+    }
+
+    private Long givenQueUnProductoConMegusta() {
+        Producto p1 = new Producto();
+        p1.setCantidadMeGusta(0);
+        return (Long) session().save(p1);
+
+
+    }
+
+    private void whenDoyMeGustaAlProducto(Producto productoObtenido) {
+        repositorioProducto.actualizarProducto(productoObtenido);
+    }
+
+    private void thenMeDevuelveElIdDeEseProducto(Long idEsperado, Producto producto) {
+        assertThat(idEsperado).isEqualTo(producto.getId());
+        assertThat(producto.getId()).isEqualTo(1L);
+        assertThat(producto.getCantidadMeGusta()).isEqualTo(1);
+    }
+
+    private Producto whenBuscoUnProductoPorId(Long idProducto) {
+        return repositorioProducto.buscarProductoPorId(idProducto);
+    }
+
+    private void thenMeDevuelveElProductoBuscado(Long idProducto, Producto productoObtenido) {
+        assertThat(productoObtenido).isNotNull();
+        assertThat(idProducto).isEqualTo(productoObtenido.getId());
+    }
+
+    private void givenExisteUnProductoDeCategoria(String nombreCategoria) {
+        Producto p1 = new Producto();
+        Categoria c1 = new Categoria();
+        c1.setNombreCategoria(nombreCategoria);
+        p1.setCategoria(c1);
+        session().save(c1);
+        session().save(p1);
+
+    }
+
+    private List<Producto> whenBuscoProductoDe(String nombreCategoria) {
+        return repositorioProducto.buscarProductoPorCategoria(nombreCategoria);
+    }
+
+    private void thenMeDevuelve(List<Producto> listaProductos, int cantidad) {
+        assertThat(listaProductos).hasSize(cantidad);
+    }
+
+    private @NotNull Producto givenQueUnProductoExiste() {
         Producto producto = new Producto();
         producto.setNombre(nombreProducto);
         session().save(producto);
@@ -82,7 +177,7 @@ public class RepositorioProductoTest extends SpringTest {
     }
 
     private List<Producto> givenUnaListaDeProductosActivos() {
-        List<Producto>productosLista = new ArrayList<>();
+        List<Producto> productosLista = new ArrayList<>();
         Producto p1 = new Producto();
         Producto p2 = new Producto();
         Producto p3 = new Producto();
@@ -110,7 +205,7 @@ public class RepositorioProductoTest extends SpringTest {
     }
 
     private List<Producto> givenUnaListaDeProductos() {
-        List<Producto>productosLista = new ArrayList<>();
+        List<Producto> productosLista = new ArrayList<>();
         Producto p1 = new Producto();
         Producto p2 = new Producto();
         Producto p3 = new Producto();

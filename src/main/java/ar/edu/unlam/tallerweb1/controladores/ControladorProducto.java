@@ -36,8 +36,6 @@ public class ControladorProducto {
 
         try {
             List<Producto> listaProductos = this.servicioProductos.listarProductos();
-            List<Categoria> listaCategorias = servicioCategoria.listarCategorias();
-            modelo.put("listaCategorias", listaCategorias);
             modelo.put("listaProductos", listaProductos);
         } catch (ListaNoEncontrada e) {
             modelo.put("msgError", "No hay productos");
@@ -82,6 +80,29 @@ public class ControladorProducto {
         return new ModelAndView("productos", modelo);
     }
 
+    @RequestMapping("detalleProducto")
+    public ModelAndView mostrarDetallesProducto(@RequestParam Long id) {
+
+        ModelMap modelo = new ModelMap();
+
+        try{
+            Producto productoDetalle = servicioProductos.buscarProductoPorId(id);
+            modelo.put("productoDetalles",productoDetalle);
+        }catch (ProductoNoEncontrado e){
+            modelo.put("productoNoEncontrado","No se encontro el producto");
+        }
+
+        return new ModelAndView("detalleProducto",modelo);
+    }
+
+    @RequestMapping("darMeGusta")
+    public ModelAndView darMeGusta(@RequestParam Long id) {
+
+        Long idProducto = servicioProductos.darMeGusta(id);
+
+        return new ModelAndView("redirect:/detalleProducto?id=" + idProducto);
+    }
+
 //    @RequestMapping("listar-categorias")
 //    public ModelAndView listarCategorias() {
 //        ModelMap modelo = new ModelMap();
@@ -92,6 +113,6 @@ public class ControladorProducto {
 //        } catch (ListaCategoriaNoEncontrada e) {
 //        }
 //
-//        return new ModelAndView("productos", modelo);
+//        return new ModelAndView("redirect:/login?id=", modelo);
 //    }
 }

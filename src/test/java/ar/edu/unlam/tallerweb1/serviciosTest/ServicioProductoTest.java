@@ -7,12 +7,15 @@ import ar.edu.unlam.tallerweb1.repositorios.RepositorioProducto;
 import ar.edu.unlam.tallerweb1.servicios.ServicioProducto;
 import ar.edu.unlam.tallerweb1.servicios.ServicioProductoImpl;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import static org.assertj.core.api.Assertions.*;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.mock;
 
@@ -22,6 +25,8 @@ public class ServicioProductoTest {
     private ServicioProducto servicioProducto = new ServicioProductoImpl(repositorioProducto);
     private String nombreProducto = "Pizza";
     private Producto producto;
+    private Long idProducto = 1L;
+    private Long idObtenido;
 
     List<Producto>listaDeProducto = new ArrayList<Producto>();
 
@@ -85,8 +90,65 @@ public class ServicioProductoTest {
 
         whenBuscoUnProductoPorSuNombre();
 
+    }
 
+    @Test
+    public void queSePuedaBuscarUnProductoPorId(){
 
+        givenQueExisteUnProducto();
+
+        whenBuscoUnProductoPorId();
+
+        thenMeDevuelveElProducto();
+
+    }
+
+    @Test(expected = ProductoNoEncontrado.class)
+    public void queCuandoBuscoUnProductoPorIdYNoExisteMeLanzeUnProductoNoEncontradoException(){
+
+        givenQueNoExisteUnProducto();
+
+        whenBuscoUnProductoPorId();
+
+    }
+
+    @Test
+    public void queSePuedaDarMeGustaAUnProducto(){
+
+        givenQueExisteUnProducto();
+
+        whenDoyMeGustaAUnProducto();
+
+        thenMeDevuelveElIdDeEseProducto();
+
+    }
+
+    private void whenDoyMeGustaAUnProducto() {
+        idObtenido = servicioProducto.darMeGusta(idProducto);
+    }
+
+    private void thenMeDevuelveElIdDeEseProducto() {
+        assertThat(idObtenido).isNotNull();
+        assertThat(idObtenido).isEqualTo(1L);
+    }
+
+    private void givenQueNoExisteUnProducto() {
+        when(repositorioProducto.buscarProductoPorId(1L)).thenThrow(ProductoNoEncontrado.class);
+    }
+
+    private void givenQueExisteUnProducto() {
+        Producto p1 = new Producto();
+        p1.setCantidadMeGusta(0);
+        when(repositorioProducto.buscarProductoPorId(idProducto)).thenReturn(p1);
+        when(repositorioProducto.actualizarProducto(anyObject())).thenReturn(1L);
+    }
+
+    private void whenBuscoUnProductoPorId() {
+        producto = servicioProducto.buscarProductoPorId(idProducto);
+    }
+
+    private void thenMeDevuelveElProducto() {
+        assertThat(producto).isNotNull();
     }
 
     private void givenUnProductoInexistente() {

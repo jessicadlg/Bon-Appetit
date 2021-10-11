@@ -26,7 +26,9 @@ public class RepositorioCategoriaImpl implements RepositorioCategoria{
     public List<Categoria> listarCategorias() {
         final Session session = this.sessionFactory.getCurrentSession();
         List<Categoria>listaCategoriasObtenidas = session.createCriteria(Categoria.class).list();
-                           //  .createAlias("fk_producto","productos").list();
+        // .createSQLQuery("select * from Categoria c join Producto p on c.ID_CATEGORIA=p.categoria_ID_CATEGORIA").list();
+        //List<Categoria>listaCategoriasObtenidas2 = session.createCriteria(Categoria.class)
+        //                      .createAlias("categoria.ID_CATEGORIA","join").list();
 
         return listaCategoriasObtenidas;
     }

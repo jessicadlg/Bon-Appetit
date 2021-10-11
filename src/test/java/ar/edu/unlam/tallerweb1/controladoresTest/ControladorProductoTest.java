@@ -27,6 +27,7 @@ public class ControladorProductoTest {
     private ControladorProducto controladorProducto;
     private String nombreProducto = "Pizza";
     private List<Producto> productos;
+    private Long idProducto = 1L;
 
     @Before
     public void init() {
@@ -115,28 +116,93 @@ public class ControladorProductoTest {
 
     }
 
+
     @Test
-    public void queSePuedaListarLasCategoriasDeProductos(){
+    public void quePuedaMostrarmeLosDetallesDeUnProducto(){
 
-        givenQueExisteUnaListaDeCategorias();
+        givenQueExisteUnProducto();
 
-        whenListoLasCategorias();
+        whenMuestroLosDetallesDeEseProducto();
 
-        thenMeDevuelveLaListaDeCategorias();
+        thenMeDevuelveLosDetallesDeEseProducto();
 
     }
 
     @Test
-    public void queCuandoNoExisteUnaListaDeCategoriasMandeElMsj(){
+    public void queCuandoBuscoUnProductoPorIdYNoExisteMeMandeElmsj(){
 
-        givenQueExisteUnaListaDeCategoriasVacia();
+        givenQueNoExisteUnDeterminadoProducto();
 
-        whenListoLasCategorias();
+        whenMuestroLosDetallesDeEseProducto();
 
-        thenMeDevuelveElMensajeDeListaVacia();
+        thenMeMandaElMsjDeQueNoExiste();
+
+    }
+
+    @Test
+    public void queSePuedaDarMeGustaAUnProducto(){
+
+        givenQueExisteUnProducto();
+
+        whenDoyMeGustaAUnProducto();
+
+        thenElProductoTieneUnMeGustaMas();
+
+    }
+
+ /*   @Test
+    public void queMeTraigaLosTresPrimerosProductosConMásMeGusta(){
+
+        givenQueExisteUnaListaDeProductos();
+
+        whenListoLosProductos();
+
+        thenTraeLosTresPrimerosOrdenadosPorMeGusta();
 
 
     }
+*/
+    private void thenTraeLosTresPrimerosOrdenadosPorMeGusta() {
+        assertThat(mav.getViewName()).isEqualTo("productos");
+        assertThat(mav.getModel().get("destacados")).isEqualTo(servicioProducto.listarDestacados());
+    }
+
+    private void whenDoyMeGustaAUnProducto() {
+        mav = controladorProducto.darMeGusta(idProducto);
+    }
+
+    private void thenElProductoTieneUnMeGustaMas() {
+        assertThat(mav.getViewName()).isEqualTo("redirect:/detalleProducto?id=" + idProducto);
+    }
+
+
+    private void givenQueNoExisteUnDeterminadoProducto() {
+        when(servicioProducto.buscarProductoPorId(1L)).thenThrow(ProductoNoEncontrado.class);
+
+    }
+
+    private void thenMeMandaElMsjDeQueNoExiste() {
+        assertThat(mav.getViewName()).isEqualTo("detalleProducto");
+        assertThat(mav.getModel().get("productoNoEncontrado")).isEqualTo("No se encontro el producto");
+    }
+
+    private void givenQueExisteUnProducto(){
+        Producto p1 = new Producto();
+        when(servicioProducto.buscarProductoPorId(1L)).thenReturn(p1);
+
+        when(servicioProducto.darMeGusta(1L)).thenReturn(1L);
+
+    }
+
+    private void whenMuestroLosDetallesDeEseProducto() {
+        mav = controladorProducto.mostrarDetallesProducto(1L);
+    }
+
+    private void thenMeDevuelveLosDetallesDeEseProducto() {
+        assertThat(mav.getViewName()).isEqualTo("detalleProducto");
+        assertThat(mav.getModel().get("productoDetalles")).isEqualTo(servicioProducto.buscarProductoPorId(1L));
+    }
+
 
     private void givenQueExisteUnaListaDeCategoriasVacia() {
         when(servicioCategoria.listarCategorias()).thenThrow(ListaCategoriaNoEncontrada.class);
@@ -258,17 +324,25 @@ public class ControladorProductoTest {
 
     private void givenQueExisteUnaListaDeProductos()  {
         productos = new ArrayList<>();
+        List<Producto> destacados = new ArrayList<>();
         Producto p1 = new Producto();
         Producto p2 = new Producto();
         Producto p3 = new Producto();
         Producto p4 = new Producto();
+        Producto destacado1 = new Producto();
+        Producto destacado2 = new Producto();
+        Producto destacado3 = new Producto();
         p1.setNombre(nombreProducto);
         productos.add(p1);
         productos.add(p2);
         productos.add(p3);
         productos.add(p4);
+        destacados.add(destacado1);
+        destacados.add(destacado2);
+        destacados.add(destacado3);
         when(servicioProducto.listarProductos()).thenReturn(productos);
         when(servicioProducto.buscarProductoPorNombre(nombreProducto)).thenReturn(p1);
+        when(servicioProducto.listarDestacados()).thenReturn(destacados);
     }
 
     private void whenListoLosProductos() {

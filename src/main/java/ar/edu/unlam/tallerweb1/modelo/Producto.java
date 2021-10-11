@@ -1,6 +1,5 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
-import org.aspectj.apache.bcel.generic.ALOAD;
 
 import javax.persistence.*;
 
@@ -18,6 +17,7 @@ public class Producto {
     @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Categoria categoria;
     private boolean activo;
+    private Integer cantidadMeGusta;
 
     private String nombreImagen;
 
@@ -78,4 +78,8 @@ public class Producto {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
+
+    public Integer getCantidadMeGusta() {return cantidadMeGusta;}
+
+    public void setCantidadMeGusta(Integer cantidadMeGusta) {this.cantidadMeGusta = cantidadMeGusta;}
 }

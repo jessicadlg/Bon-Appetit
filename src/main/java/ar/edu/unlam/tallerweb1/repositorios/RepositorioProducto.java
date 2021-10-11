@@ -13,4 +13,9 @@ public interface RepositorioProducto {
     Producto buscarProductoPorNombre(String nombreProducto);
 
     List<Producto> buscarProductoPorCategoria(String nombreCategoria);
+
+    Producto buscarProductoPorId(Long idProducto);
+
+    Long actualizarProducto(Producto producto);
+
 }
