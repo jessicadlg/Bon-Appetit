@@ -1,18 +1,12 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<!-- Bootstrap core CSS -->
-	    <link href="css/bootstrap.min.css" rel="stylesheet" >
-	    <!-- Bootstrap theme -->
-	    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
-	</head>
-	<body>
-		<div class = "container">
-			<h1>Bienvenidos a Taller Web 1</h1>
-		</div>
-		<!-- Placed at the end of the document so the pages load faster -->
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" ></script>
-		<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
-		<script src="js/bootstrap.min.js" type="text/javascript"></script>
-	</body>
-</html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<jsp:include page="/WEB-INF/includes/header.jsp"/>
+
+<!-- Masthead-->
+<header class="masthead">
+	<div class="masthead-heading">Bienvenido a Bon-Appetit!</div>
+		<div class="form-group m-5">
+		<a href="listarProductos" class="btn btn-dark btn-lg">Ver menú</a>
+		<a href="" class="btn btn-light btn-lg">Reservar mesa</a>
+	</div>
+</header>
+<jsp:include page="/WEB-INF/includes/footer.jsp"/>
