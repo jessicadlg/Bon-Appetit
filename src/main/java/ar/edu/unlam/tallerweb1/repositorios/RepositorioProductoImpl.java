@@ -46,9 +46,9 @@ public class RepositorioProductoImpl implements RepositorioProducto {
     @Override
     public List<Producto> buscarProductoPorCategoria(String nombreCategoria) {
         final Session session = this.sessionFactory.getCurrentSession();
-        List<Producto> productosObtenidos = session.createCriteria(Producto.class)
-                                        .createAlias("categoria", "c")
-                .add(Restrictions.eq("c.nombreCategoria", nombreCategoria)).list();
+        List<Producto> productosObtenidos =  session.createCriteria(Producto.class)
+                                            .createAlias("categoria", "c")
+                                            .add(Restrictions.eq("c.nombreCategoria", nombreCategoria)).list();
 
         return productosObtenidos;
     }
@@ -76,6 +76,4 @@ public class RepositorioProductoImpl implements RepositorioProducto {
         session.save(producto);
         return producto.getId();
     }
-
-
 }

@@ -231,5 +231,28 @@ public class RepositorioProductoTest extends SpringTest {
 
     }
 
+    @Test
+    @Rollback
+    @Transactional
+    public void queMePuedaTraerLosProductosDeUnaCategoria(){
+        givenExisteUnProductoDeCategoria("Bebidas");
+        givenExisteUnProductoDeCategoria("Postres");
+        List<Producto>listaProductos =  whenBuscoProductoDe("Bebidas");
+        thenMeDevuelve(listaProductos,1);
+    }
+    private void givenExisteUnProductoDeCategoria(String nombreCategoria) {
+        Producto p1 = new Producto();
+        Categoria c1 = new Categoria();
+        c1.setNombreCategoria(nombreCategoria);
+        p1.setCategoria(c1);
+        session().save(c1);
+        session().save(p1);
+    }
+    private List<Producto> whenBuscoProductoDe(String nombreCategoria) {
+        return repositorioProducto.buscarProductoPorCategoria(nombreCategoria);
+    }
+    private void thenMeDevuelve(List<Producto> listaProductos, int cantidad) {
+        assertThat(listaProductos).hasSize(cantidad);
+    }
 
 }
