@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <!-- Footer-->
-<footer class="container-fluid  footer p-5" >
+<footer class="container-fluid p-5 bg-dark" >
     <div class="container">
         <div class="row align-items-center">
             <div class="link-white col-lg-4 text-lg-start">Copyright &copy; Your Website 2021</div>

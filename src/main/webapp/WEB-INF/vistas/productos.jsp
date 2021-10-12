@@ -10,9 +10,9 @@
             <div class="col-md-8 ">
                 <h3 class="py-4 ">Nuestras Categorias</h3>
                 <!-- Content Row -->
-                <div class="row  d-flex">
+                <%--div class="row  d-flex">
                     <c:forEach items="${listaCategorias}" var="categorias">
-                        <!-- Border Bottom Utilities -->
+                        <-- Border Bottom Utilities -->
                         <div class="col-lg-6">
                             <div class="card mb-4 borde shadow h-100 ">
                                 <div class="card-body d-inline-flex">
@@ -52,54 +52,55 @@
                             </div>
                         </section>
                     </c:forEach>
-                </div>
+                </div>--%>
 
                 <%-- Desplegable--%>
-              <%--  <c:forEach items="${listaCategorias}" var="categorias">
+                <c:forEach items="${listaCategorias}" var="categorias">
                     <!-- <botones categorias > -->
                     <div class="card-header" id="headingThree">
                         <button class="btn btn-link collapsed fw-bolder" data-toggle="collapse"
-                                data-target="#${contador}" aria-expanded="false" aria-controls="${contador}">
+                                data-target="#${categorias.id}" aria-expanded="false" aria-controls="${categorias.id}">
                             <h3><a>${categorias.nombreCategoria}</a></h3>
                         </button>
                     </div>
-                    <c:forEach items="${listaProductos}" var="productos">
                         <!-- categoria desplegables de productos -->
-                        <div id="${contador}" class="collapse col-md-12 my-4 " aria-labelledby="headingThree"
+
+                    <div id="${categorias.id}" class="collapse col-md-12 my-4 " aria-labelledby="headingThree"
                              data-parent="#accordion">
                             <div class="row d-flex">
                                 <section class="col-md-6 p-2">
-                                    <div class="card" style="width: 18rem;">
-                                        <div class="card-body d-inline-flex">
-                                            <img src="images/${productos.nombreImagen}" alt="" class="rounded"
-                                                 width="100" height="100">
-                                            <div class="d-flex flex-column">
-                                                <h5 class="card-title text-center">${productos.nombre}</h5>
-                                                <!-- Product price-->
-                                                <span class="text-center p-1 ">$${productos.precio}</span>
-                                            </div>
+                                <c:forEach items="${listaProductos}" var="productos">
+                                    <c:if test="${productos.categoria.id == categorias.id}">
+                                        <div class="card" style="width: 18rem;">
+                                                <div class="card-body d-inline-flex">
+                                                    <img src="images/${productos.nombreImagen}" alt="" class="rounded"
+                                                         width="100" height="100">
+                                                    <div class="d-flex flex-column">
+                                                        <h5 class="card-title text-center">${productos.nombre}</h5>
+                                                        <!-- Product price-->
+                                                        <span class="text-center p-1 ">$${productos.precio}</span>
+                                                    </div>
+                                                </div>
+                                                <!-- accion ir a ver mas-->
+                                                <div class="card-footer pt-0 border-top-0 bg-transparent">
+                                                    <a class="btn btn-block btn-outline-dark mt-auto"
+                                                       href="detalleProducto?id=${productos.id}">Ir
+                                                        al producto</a>
+                                                </div>
                                         </div>
-                                        <!-- accion ir a ver mas-->
-                                        <div class="card-footer pt-0 border-top-0 bg-transparent">
-                                            <a class="btn btn-block btn-outline-dark mt-auto"
-                                               href="ir-a-detalle?id=${productos.id}">Ir
-                                                al producto</a>
-                                        </div>
-                                    </div>
+                                    </c:if>
+                                </c:forEach>
                                 </section>
                             </div>
                         </div>
-                    </c:forEach>
-                    ${contador}
-                </c:forEach>--%>
-
+                </c:forEach>
             </div>
             <div class="col-md-4 ">
                 <!-- seccion destacados-->
                 <section class="container">
                     <aside>
                         <h3 class="py-4">Destacados</h3>
-                        <c:forEach items="${listaProductos}" var="productos">
+                        <c:forEach items="${destacados}" var="productos">
                             <div class="row  justify-content-center">
                                 <div class="col mb-4">
                                     <div class="card h-100">
@@ -119,7 +120,7 @@
                                         <!-- accion ir a ver detalle-->
                                         <div class="card-footer p-2 pt-0 border-top-0 bg-transparent  mx-auto">
                                             <a class="btn btn-outline-success"
-                                               href="ir-a-detalle?id=${productos.id}">Ver detalle</a>
+                                               href="detalleProducto?id=${productos.id}">Ver detalle</a>
                                         </div>
                                     </div>
                                 </div>
@@ -127,7 +128,6 @@
                         </c:forEach>
                     </aside>
                 </section>
-
             </div>
         </div>
     </div>
