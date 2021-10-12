@@ -55,45 +55,47 @@
                 </div>--%>
 
                 <%-- Desplegable--%>
+                <div class="accordion" id="accordion">
                 <c:forEach items="${listaCategorias}" var="categorias">
-                    <!-- <botones categorias > -->
+                <!-- <botones categorias > -->
                     <div class="card-header" id="headingThree">
                         <button class="btn btn-link collapsed fw-bolder" data-toggle="collapse"
                                 data-target="#${categorias.id}" aria-expanded="false" aria-controls="${categorias.id}">
                             <h3><a>${categorias.nombreCategoria}</a></h3>
                         </button>
                     </div>
-                        <!-- categoria desplegables de productos -->
+                    <!-- categoria desplegables de productos -->
 
                     <div id="${categorias.id}" class="collapse col-md-12 my-4 " aria-labelledby="headingThree"
-                             data-parent="#accordion">
-                            <div class="row d-flex">
-                                <section class="col-md-6 p-2">
+                         data-parent="#accordion">
+                        <div class="row d-flex">
+                            <section class="col-md-6 p-2">
                                 <c:forEach items="${listaProductos}" var="productos">
                                     <c:if test="${productos.categoria.id == categorias.id}">
                                         <div class="card" style="width: 18rem;">
-                                                <div class="card-body d-inline-flex">
-                                                    <img src="images/${productos.nombreImagen}" alt="" class="rounded"
-                                                         width="100" height="100">
-                                                    <div class="d-flex flex-column">
-                                                        <h5 class="card-title text-center">${productos.nombre}</h5>
-                                                        <!-- Product price-->
-                                                        <span class="text-center p-1 ">$${productos.precio}</span>
-                                                    </div>
+                                            <div class="card-body d-inline-flex">
+                                                <img src="images/${productos.nombreImagen}" alt="" class="rounded"
+                                                     width="100" height="100">
+                                                <div class="d-flex flex-column">
+                                                    <h5 class="card-title text-center">${productos.nombre}</h5>
+                                                    <!-- Product price-->
+                                                    <span class="text-center p-1 ">$${productos.precio}</span>
                                                 </div>
-                                                <!-- accion ir a ver mas-->
-                                                <div class="card-footer pt-0 border-top-0 bg-transparent">
-                                                    <a class="btn btn-block btn-outline-dark mt-auto"
-                                                       href="detalleProducto?id=${productos.id}">Ir
-                                                        al producto</a>
-                                                </div>
+                                            </div>
+                                            <!-- accion ir a ver mas-->
+                                            <div class="card-footer pt-0 border-top-0 bg-transparent">
+                                                <a class="btn btn-block btn-outline-dark mt-auto"
+                                                   href="detalleProducto?id=${productos.id}">Ir
+                                                    al producto</a>
+                                            </div>
                                         </div>
                                     </c:if>
                                 </c:forEach>
-                                </section>
-                            </div>
+                            </section>
                         </div>
-                </c:forEach>
+                    </div>
+                    </c:forEach>
+                </div>
             </div>
             <div class="col-md-4 ">
                 <!-- seccion destacados-->
