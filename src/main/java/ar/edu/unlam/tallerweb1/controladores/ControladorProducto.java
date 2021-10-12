@@ -36,8 +36,10 @@ public class ControladorProducto {
 
         try {
             List<Producto> listaProductos = this.servicioProductos.listarProductos();
+            List<Categoria> listaCategorias = this.servicioCategoria.listarCategorias();
             List<Producto> destacados = this.servicioProductos.listarDestacados();
             modelo.put("listaProductos", listaProductos);
+            modelo.put("listaCategorias", listaCategorias);
             modelo.put("destacados",destacados);
         } catch (ListaNoEncontrada e) {
             modelo.put("msgError", "No hay productos");
