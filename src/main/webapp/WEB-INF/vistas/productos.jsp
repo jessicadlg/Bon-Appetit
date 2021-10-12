@@ -53,9 +53,9 @@
                         </section>
                     </c:forEach>
                 </div>
-                <%-- --%>
 
-                <c:forEach items="${listaCategorias}" var="categorias">
+                <%-- Desplegable--%>
+              <%--  <c:forEach items="${listaCategorias}" var="categorias">
                     <!-- <botones categorias > -->
                     <div class="card-header" id="headingThree">
                         <button class="btn btn-link collapsed fw-bolder" data-toggle="collapse"
@@ -91,7 +91,7 @@
                         </div>
                     </c:forEach>
                     ${contador}
-                </c:forEach>
+                </c:forEach>--%>
 
             </div>
             <div class="col-md-4 ">
