@@ -132,6 +132,17 @@ public class ServicioProductoTest {
 
     }
 
+    @Test
+    public void queMeTraigaUnaListaRandomComplementariaAlNoEncontrarProductosDestacados(){
+
+        givenQueExisteUnosProductosConPocosMeGusta();
+
+        whenListoLosProductosDestacados();
+
+        thenMeTraeLosProductosDestacados();
+
+    }
+
     private void givenUnaListaDeProductosConMeGusta() {
         List<Producto> productos = new ArrayList<>();
         Producto p1 = new Producto();
@@ -154,17 +165,6 @@ public class ServicioProductoTest {
         productos.add(p5);
         productos.add(p6);
         when(repositorioProducto.listarProductos()).thenReturn(productos);
-    }
-
-    @Test
-    public void queMeTraigaUnaListaRandomComplementariaAlNoEncontrarProductosDestacados(){
-
-        givenQueExisteUnosProductosConPocosMeGusta();
-
-        whenListoLosProductosDestacados();
-
-        thenMeTraeLosProductosDestacados();
-
     }
 
     private void givenQueExisteUnosProductosConPocosMeGusta() {

@@ -154,11 +154,11 @@ public class ControladorProductoTest {
 
         whenListoLosProductos();
 
-        thenTraeLosTresPrimerosOrdenadosPorMeGusta();
+        thenTraeLosTresPrimerosQueTienenMasDeTresMeGusta();
 
     }
 
-    private void thenTraeLosTresPrimerosOrdenadosPorMeGusta() {
+    private void thenTraeLosTresPrimerosQueTienenMasDeTresMeGusta() {
         assertThat(mav.getViewName()).isEqualTo("productos");
         assertThat(mav.getModel().get("destacados")).isEqualTo(servicioProducto.listarDestacados());
     }

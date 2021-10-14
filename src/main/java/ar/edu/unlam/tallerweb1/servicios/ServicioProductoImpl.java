@@ -84,7 +84,7 @@ public class ServicioProductoImpl implements ServicioProducto {
         }
         if (destacados.size() < 3) {
             for (int i = 0; i < listaProductos.size(); i++) {
-                destacados.add(listaProductos.get((int) Math.random() * listaProductos.size()));
+                destacados.add(listaProductos.get((int) (Math.random() * listaProductos.size())));
                 if (destacados.size() == 3) {
                     break;
                 }
