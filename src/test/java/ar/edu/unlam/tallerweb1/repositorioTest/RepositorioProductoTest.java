@@ -23,6 +23,19 @@ public class RepositorioProductoTest extends SpringTest {
     @Test
     @Rollback
     @Transactional
+    public void queSePuedaBuscarUnProductoPorId() {
+
+        Long idProducto = givenQueExisteUnProducto();
+
+        Producto productoObtenido = whenBuscoUnProductoPorId(idProducto);
+
+        thenMeDevuelveElProductoBuscado(idProducto, productoObtenido);
+
+    }
+
+    @Test
+    @Rollback
+    @Transactional
     public void queSePuedanListarTodasLasProductos (){
 
         List<Producto>productosEsperados = givenUnaListaDeProductos();
@@ -30,7 +43,6 @@ public class RepositorioProductoTest extends SpringTest {
         List<Producto>productosObtenidos = whenListoLosProductos();
 
         thenMeTraeLaListaDeProductos(productosEsperados,productosObtenidos);
-
 
     }
 
@@ -45,7 +57,6 @@ public class RepositorioProductoTest extends SpringTest {
 
         thenMeTraeLaListaDeProductosActivos(productosEsperados,productosObtenidos);
 
-
     }
 
     @Test
@@ -59,9 +70,51 @@ public class RepositorioProductoTest extends SpringTest {
 
         thenMeTraeElProductoBuscado(productoEsperado,productoObtenido);
 
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    public void queSePuedaDarMeGustaAUnProductoYQueDevuelvaElIdDelProducto() {
+        Long idEsperado = givenQueUnProductoConMegusta();
+        Producto productoObtenido = whenBuscoUnProductoPorId(idEsperado);
+        productoObtenido.setCantidadMeGusta(1);
+        whenDoyMeGustaAlProducto(productoObtenido);
+        Long idObtenido = whenDoyMeGustaAlProducto(productoObtenido);
+        thenMeDevuelveElIdDeEseProducto(idEsperado, productoObtenido);
 
     }
 
+    private Long givenQueUnProductoConMegusta() {
+        Producto p1 = new Producto();
+        p1.setCantidadMeGusta(0);
+        return (Long) session().save(p1);
+
+
+    }
+    private void thenMeDevuelveElProductoBuscado(Long idProducto, Producto productoObtenido) {
+        assertThat(productoObtenido).isNotNull();
+        assertThat(idProducto).isEqualTo(productoObtenido.getId());
+    }
+
+
+    private Long givenQueExisteUnProducto() {
+        Producto p1 = new Producto();
+        return (Long) session().save(p1);
+
+    }
+
+    private Long whenDoyMeGustaAlProducto(Producto productoObtenido) {
+        return repositorioProducto.actualizarProducto(productoObtenido);
+    }
+
+    private Producto whenBuscoUnProductoPorId(Long idProducto) {
+        return repositorioProducto.buscarProductoPorId(idProducto);
+    }
+    private void thenMeDevuelveElIdDeEseProducto(Long idEsperado, Producto productoObtenido) {
+        assertThat(idEsperado).isEqualTo(productoObtenido.getId());
+        assertThat(productoObtenido.getCantidadMeGusta()).isEqualTo(1);
+    }
     private Producto givenQueUnProductoExiste() {
         Producto producto = new Producto();
         producto.setNombre(nombreProducto);
