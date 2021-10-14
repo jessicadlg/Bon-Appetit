@@ -1,6 +1,8 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="/WEB-INF/includes/header.jsp"/>
-<div class="container-fluid producto">
+<c:if test="${not empty productoDetalles}">
+<div class="container-fluid">
     <!-- Product Aquarius-->
     <section class="container py-5">
         <div class="row gx-4 gx-lg-5 align-items-center">
@@ -9,10 +11,10 @@
                      class=" productoImg img-thumbnail img-fluid mb-5 mb-md-0" alt="...">
             </div>
             <div class="col-md-6">
-                <h1 class="display-5 fw-bolder">${productoDetalles.nombre}</h1>
-                <div class="mb-5">
-                    <span class="tachado">$35.00</span>
-                    <span class="fw-bolder">$${productoDetalles.precio}</span>
+                <h1 class="display-5 fw-bolder text-center">${productoDetalles.nombre}</h1>
+                <div class="mb-5 text-center">
+                    <span class="tachado text-danger">$35.00</span>
+                    <span class="fw-bolder text-success">$${productoDetalles.precio}</span>
                 </div>
                 <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium at dolorem
                     quidem
@@ -39,26 +41,12 @@
             </div>
         </div>
     </section>
-
-    <!-- Testimonio footeer-->
-    <div class=" bg-secondary py-1">
-        <div class="container">
-            <div class="row gx-5 justify-content-center">
-                <div class="col-lg-10 col-xl-7">
-                    <div class="text-center">
-                        <div class="fs-4 mb-4 fst-italic">"Working with Start Bootstrap templates has saved me tons of
-                            development time when building new projects! Starting with a Bootstrap template just makes
-                            things easier!"
-                        </div>
-                        <div class="d-flex align-items-center justify-content-center">
-                            <img class="rounded-circle me-3" src="images/testimonial.png" alt="..."/>
-                            <div class="fw-bold">
-                                Tom Ato
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    </div>
+</c:if>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <p class="text-center display-4"><c:if test="${not empty productoNoEncontrado}">${productoNoEncontrado}</c:if></p>
         </div>
     </div>
 </div>
