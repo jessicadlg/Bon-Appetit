@@ -96,12 +96,23 @@ public class ControladorProducto {
         return new ModelAndView("detalleProducto",modelo);
     }
 
-    @RequestMapping("darMeGusta")
+    @RequestMapping("darMeGusta")//cambiar al proximo srpint por POST
     public ModelAndView darMeGusta(@RequestParam Long id) {
 
-        Long idProducto = servicioProductos.darMeGusta(id);
-
-        return new ModelAndView("redirect:/detalleProducto?id=" + idProducto);
+        return darMeGustaDesde(id, "listarProductos");
     }
 
+    @RequestMapping("darMeGustaDetalle")//cambiar al proximo srpint por POST
+    public ModelAndView darMeGustaDetalle(@RequestParam Long id) {
+
+        return darMeGustaDesde(id, "detalleProducto?id=" + id);
+
+    }
+
+    private ModelAndView darMeGustaDesde(Long id, String redirigeA) {
+
+        servicioProductos.darMeGusta(id);
+
+        return new ModelAndView("redirect:/" + redirigeA);
+    }
 }
