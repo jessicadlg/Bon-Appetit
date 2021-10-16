@@ -30,7 +30,7 @@
                             Agregar al carrito
                         </a>
                         <!-- boton static toma el numerito-->
-                        <a href="darMeGusta?id=${productoDetalles.id}" class="d-sm-block btn btn-sm btn-primary m-3 ">
+                        <a href="darMeGustaDetalle?id=${productoDetalles.id}" class="d-sm-block btn btn-sm btn-primary m-3 ">
                             Me gusta <span class="badge badge-light">${productoDetalles.cantidadMeGusta}</span>
                         </a>
                         <%--<a href="#" class="d-sm-block btn btn-sm btn-success m-3">

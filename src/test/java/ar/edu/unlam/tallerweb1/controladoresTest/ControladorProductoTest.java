@@ -137,7 +137,18 @@ public class ControladorProductoTest {
     }
 
     @Test
-    public void queSePuedaDarMeGustaAUnProducto(){
+    public void queSePuedaDarMeGustaAUnProductoDesdeDetalleProducto(){
+
+        givenQueExisteUnProducto();
+
+        whenDoyMeGustaAUnProducto();
+
+        thenElProductoTieneUnMeGustaMas();
+
+    }
+
+    @Test
+    public void queSePuedaDarMeGustaAUnProductoDesdeListaProductos(){
 
         givenQueExisteUnProducto();
 
@@ -168,7 +179,7 @@ public class ControladorProductoTest {
     }
 
     private void thenElProductoTieneUnMeGustaMas() {
-        assertThat(mav.getViewName()).isEqualTo("redirect:/detalleProducto?id=" + idProducto);
+        assertThat(mav.getViewName()).isEqualTo("redirect:/listarProductos");
     }
 
 

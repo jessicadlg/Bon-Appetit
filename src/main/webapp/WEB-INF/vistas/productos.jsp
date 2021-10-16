@@ -43,6 +43,9 @@
                                                    href="detalleProducto?id=${productos.id}">Ir
                                                     al producto</a>
                                             </div>
+                                            <a href="darMeGusta?id=${productos.id}" class="d-sm-block btn btn-sm btn-primary m-3 ">
+                                                Me gusta <span class="badge badge-light">${productos.cantidadMeGusta}</span>
+                                            </a>
                                         </div>
                                     </c:if>
                                 </c:forEach>
