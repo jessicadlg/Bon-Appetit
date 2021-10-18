@@ -11,7 +11,7 @@
                 </div>
                 <div class="form-group mx-2">
                     <form:input path="password" type="text" id="password" class="form-control"
-                                placeholder="Contraseña"/></div>
+                                placeholder="Contraseña:"/></div>
                 <div class="form-group mx-2">
                     <button class="btn btn-block btn-info " Type="Submit"/>
                     Enviar</button>

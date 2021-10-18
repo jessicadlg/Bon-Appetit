@@ -50,26 +50,6 @@ public class ServicioProductoTest {
     }
 
     @Test
-    public void queSePuedanListarLosProductosActivos(){
-
-        givenQueExisteUnaListaDeProductosActivos();
-
-        whenListoLosProductosActivos();
-
-        thenMeTraeLaListaDeProductosActivos();
-
-    }
-
-    @Test(expected = ListaNoEncontrada.class)
-    public void queCuandoListeProductosActivosYLaListaSeaNulaLanzaUnaListaNoEncontradaExcepcion(){
-
-        givenUnaListaDeProductosActivosVacia();
-
-        whenListoLosProductosActivos();
-
-    }
-
-    @Test
     public void queSePuedaBuscarUnProductoPorNombre(){
 
         givenUnaListaDeProductos();
@@ -239,34 +219,6 @@ public class ServicioProductoTest {
     private void thenMeDevuelveElProductoBuscado() {
         assertThat(producto).isNotNull();
 
-    }
-
-    private void givenUnaListaDeProductosActivosVacia() {
-        List<Producto>productos = new ArrayList<>();
-        when(repositorioProducto.listarProductosActivos()).thenReturn(productos);
-    }
-
-    private void givenQueExisteUnaListaDeProductosActivos() {
-        List<Producto>productos = new ArrayList<Producto>();
-        Producto p1 = new Producto();
-        Producto p2 = new Producto();
-        Producto p3 = new Producto();
-        p1.setActivo(true);
-        p2.setActivo(true);
-        p3.setActivo(true);
-        productos.add(p1);
-        productos.add(p2);
-        productos.add(p3);
-        when(repositorioProducto.listarProductosActivos()).thenReturn(productos);
-    }
-
-    private void whenListoLosProductosActivos() {
-        listaDeProducto = servicioProducto.listarProductosActivos();
-    }
-
-    private void thenMeTraeLaListaDeProductosActivos() {
-        assertThat(listaDeProducto).isNotNull();
-        assertThat(listaDeProducto).hasSize(3);
     }
 
     private void givenUnaListaVacia() {

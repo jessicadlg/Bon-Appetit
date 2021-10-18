@@ -45,20 +45,6 @@ public class RepositorioProductoTest extends SpringTest {
         thenMeTraeLaListaDeProductos(productosEsperados,productosObtenidos);
 
     }
-
-    @Test
-    @Rollback
-    @Transactional
-    public void queSePuedaListarTodosLosProductosActivos(){
-
-        List<Producto>productosEsperados = givenUnaListaDeProductosActivos();
-
-        List<Producto>productosObtenidos = whenListoLosProductosActivos();
-
-        thenMeTraeLaListaDeProductosActivos(productosEsperados,productosObtenidos);
-
-    }
-
     @Test
     @Rollback
     @Transactional
@@ -83,6 +69,30 @@ public class RepositorioProductoTest extends SpringTest {
         Long idObtenido = whenDoyMeGustaAlProducto(productoObtenido);
         thenMeDevuelveElIdDeEseProducto(idEsperado, productoObtenido);
 
+    }
+    @Test
+    @Rollback
+    @Transactional
+    public void quePuedaObtenerLosProductosDestacadosPorCantidadDeLikes() {
+        givenQueUnProductoConMegusta(2);
+        givenQueUnProductoConMegusta(4);
+
+        List<Producto> productos = whenBuscoProductosConMasMeGustaQue(3);
+        thenObtengo(1, productos);
+    }
+
+    private void givenQueUnProductoConMegusta(int cantidadLikes) {
+        Producto p1 = new Producto();
+        p1.setCantidadMeGusta(cantidadLikes);
+        session().save(p1);
+    }
+
+    private List<Producto> whenBuscoProductosConMasMeGustaQue(int cantidad) {
+        return repositorioProducto.buscarProductosConMasDe(cantidad);
+    }
+
+    private void thenObtengo(int cantidad, List<Producto> productos) {
+        assertThat(productos).hasSize(cantidad);
     }
 
     private Long givenQueUnProductoConMegusta() {
@@ -133,33 +143,6 @@ public class RepositorioProductoTest extends SpringTest {
 
     }
 
-    private List<Producto> givenUnaListaDeProductosActivos() {
-        List<Producto>productosLista = new ArrayList<>();
-        Producto p1 = new Producto();
-        Producto p2 = new Producto();
-        Producto p3 = new Producto();
-        Producto p4 = new Producto();
-        p1.setActivo(true);
-        p2.setActivo(true);
-        p3.setActivo(false);
-        p4.setActivo(false);
-        session().save(p1);
-        session().save(p2);
-        session().save(p3);
-        session().save(p4);
-        productosLista.add(p1);
-        productosLista.add(p2);
-        return productosLista;
-    }
-
-    private List<Producto> whenListoLosProductosActivos() {
-        return repositorioProducto.listarProductosActivos();
-    }
-
-    private void thenMeTraeLaListaDeProductosActivos(List<Producto> productosEsperados, List<Producto> productosObtenidos) {
-        assertThat(productosEsperados).isEqualTo(productosObtenidos);
-        assertThat(productosObtenidos).hasSize(2);
-    }
 
     private List<Producto> givenUnaListaDeProductos() {
         List<Producto>productosLista = new ArrayList<>();

@@ -13,13 +13,9 @@
             <div class="col-md-6">
                 <h1 class="display-5 fw-bolder text-center">${productoDetalles.nombre}</h1>
                 <div class="mb-5 text-center">
-                    <span class="tachado text-danger">$35.00</span>
-                    <span class="fw-bolder text-success">$${productoDetalles.precio}</span>
+                    <span class="text-success">$${productoDetalles.precio}</span>
                 </div>
-                <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium at dolorem
-                    quidem
-                    modi. Nam sequi consequatur obcaecati excepturi alias magni, accusamus eius blanditiis delectus
-                    ipsam minima ea iste laborum vero?</p>
+                <p class="">${productoDetalles.descripcion}</p>
                 <div class="row align-items-center">
                     <div class="d-flex mx-auto">
                         <a href="#" class="d-sm-block btn btn-sm btn-info m-3">
@@ -33,9 +29,7 @@
                         <a href="darMeGustaDetalle?id=${productoDetalles.id}" class="d-sm-block btn btn-sm btn-primary m-3 ">
                             Me gusta <span class="badge badge-light">${productoDetalles.cantidadMeGusta}</span>
                         </a>
-                        <%--<a href="#" class="d-sm-block btn btn-sm btn-success m-3">
-                            Me gusta con contador <span class="badge badge-light">${productoDetalles.cantidadMeGusta}</span>
-                        </a>--%>
+
                     </div>
                 </div>
             </div>
@@ -43,10 +37,26 @@
     </section>
     </div>
 </c:if>
-<div class="container">
+<div class=" container-fluid p-5 m-5" role="main">
     <div class="row">
-        <div class="col">
-            <p class="text-center display-4"><c:if test="${not empty productoNoEncontrado}">${productoNoEncontrado}</c:if></p>
+        <div class="col-md-10 col-sm-12 mx-auto">
+            <div class="alert alert-warning alert-dismissible " role="alert">
+                <p class="text-center">
+                    <c:if test="${not empty productoNoEncontrado}">${productoNoEncontrado}</c:if>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class=" mx-auto">
+            <a href="listarProductos" class="btn btn-secondary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/>
+                    <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/>
+                </svg>
+                Volver
+            </a>
         </div>
     </div>
 </div>
