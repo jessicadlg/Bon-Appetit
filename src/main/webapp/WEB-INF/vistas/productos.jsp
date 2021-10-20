@@ -27,25 +27,46 @@
                             <section class="col-md-6 p-2">
                                 <c:forEach items="${listaProductos}" var="productos">
                                     <c:if test="${productos.categoria.id == categorias.id}">
-                                        <div class="card" style="width: 18rem;">
+                                        <div class="card" style="width: 28rem;">
                                             <div class="card-body d-inline-flex">
                                                 <img src="images/${productos.nombreImagen}" alt="" class="rounded"
                                                      width="100" height="100">
                                                 <div class="d-flex flex-column">
-                                                    <h5 class="card-title text-center">${productos.nombre}</h5>
-                                                    <!-- Product price-->
-                                                    <span class="text-center p-1 ">$${productos.precio}</span>
+                                                    <h5 class="card-title text-center mx-3">${productos.nombre}</h5>
+                                                    <!-- Product precio-->
+                                                    <span class="text-center">$${productos.precio}</span>
+                                                    <div class=" d-flex justify-content-center">
+                                                        <a href="#" class="d-sm-block btn btn-sm btn-info m-2">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                 height="16" fill="currentColor"
+                                                                 class="bi bi-cart4 mx-1" viewBox="0 0 16 16">
+                                                                <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                                                            </svg>
+                                                            Agregar al carrito
+                                                        </a>
+                                                        <!-- boton toma el numerito-->
+                                                        <a href="darMeGusta?id=${productos.id}"
+                                                           class="d-sm-block btn btn-sm btn-primary m-2 ">
+                                                            Me gusta <span
+                                                                class="badge badge-light">${productos.cantidadMeGusta}</span>
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <!-- accion ir a ver mas-->
+
+                                            <!-- accion ir al producto-->
                                             <div class="card-footer pt-0 border-top-0 bg-transparent">
-                                                <a class="btn btn-block btn-outline-dark mt-auto"
-                                                   href="detalleProducto?id=${productos.id}">Ir
+                                                <a class="d-sm-block btn btn-sm btn-outline-dark "
+                                                   href="detalleProducto?id=${productos.id}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                         fill="currentColor" class="bi bi-arrow-up-right"
+                                                         viewBox="0 0 16 16">
+                                                        <path fill-rule="evenodd"
+                                                              d="M14 2.5a.5.5 0 0 0-.5-.5h-6a.5.5 0 0 0 0 1h4.793L2.146 13.146a.5.5 0 0 0 .708.708L13 3.707V8.5a.5.5 0 0 0 1 0v-6z"/>
+                                                    </svg>
+                                                    Ir
                                                     al producto</a>
                                             </div>
-                                            <a href="darMeGusta?id=${productos.id}" class="d-sm-block btn btn-sm btn-primary m-3 ">
-                                                Me gusta <span class="badge badge-light">${productos.cantidadMeGusta}</span>
-                                            </a>
                                         </div>
                                     </c:if>
                                 </c:forEach>
@@ -73,7 +94,6 @@
                                                 <!-- Product name-->
                                                 <h5 class="">${productos.nombre}</h5>
                                                 <!-- Product price-->
-                                                <span class="tachado text-danger">$35.00</span>
                                                 <span class="fw-bolder text-success">$${productos.precio}</span>
                                             </div>
                                         </div>

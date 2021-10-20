@@ -68,4 +68,10 @@ public class RepositorioProductoImpl implements RepositorioProducto {
         session.save(producto);
         return producto.getId();
     }
+
+    @Override
+    public List<Producto> buscarProductosConMasDe(int cantidad) {
+        final Session session = this.sessionFactory.getCurrentSession();
+        return  session.createCriteria(Producto.class)
+                .add(Restrictions.gt("cantidadMeGusta",cantidad)).list();    }
 }
