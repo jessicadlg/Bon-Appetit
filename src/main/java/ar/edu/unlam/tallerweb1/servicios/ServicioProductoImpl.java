@@ -72,9 +72,22 @@ public class ServicioProductoImpl implements ServicioProducto {
 
     @Override
     public List<Producto> listarDestacados() {
-        List<Producto> destacados = new ArrayList<>();
-        List<Producto> listaProductos = this.repositorioProducto.listarProductos();
-        for (int i = 0; i < listaProductos.size(); i++) {
+        List<Producto> listaProductosDestacados = this.repositorioProducto.buscarProductosConMasDe(3);
+        if (listaProductosDestacados.size() < 3) {
+            List<Producto> listaProductosTotales = this.repositorioProducto.listarProductos();
+            for (int i = 0; i < listaProductosTotales.size(); i++) {
+                listaProductosDestacados.add(listaProductosTotales.get((int) (Math.random() * listaProductosTotales.size())));
+                if (listaProductosDestacados.size() == 3) {
+                    break;
+                }
+            }
+        }
+        return listaProductosDestacados;
+    }
+}
+
+//logica q funciona
+       /* for (int i = 0; i < listaProductos.size(); i++) {
             if (listaProductos.get(i).getCantidadMeGusta() > 3) {
                 destacados.add(listaProductos.get(i));
                 if (destacados.size() == 3) {
@@ -90,6 +103,4 @@ public class ServicioProductoImpl implements ServicioProducto {
                 }
             }
         }
-        return destacados;
-    }
-}
+        return destacados;*/
