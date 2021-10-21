@@ -21,6 +21,13 @@ public class ControladorReserva {
         this.servicioReserva = servicioReserva;
     }
 
+    @RequestMapping("reservar")
+    public ModelAndView reservar(){
+        ModelMap modelMap = new ModelMap();
+        modelMap.put("reserva", new Reserva());
+        return new ModelAndView("reservaMesa", modelMap);
+    }
+
     @RequestMapping("/confirmarReserva")
     public ModelAndView confirmarReserva() {
         ModelMap modelMap = new ModelMap();
