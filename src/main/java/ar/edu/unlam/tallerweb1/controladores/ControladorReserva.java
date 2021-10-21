@@ -26,6 +26,7 @@ public class ControladorReserva {
         ModelMap modelMap = new ModelMap();
         try {
             Reserva reserva = new Reserva();
+            reserva.setFecha(new Date());
             servicioReserva.confirmarReserva(reserva);
             modelMap.put("mnsj","La Reserva se ha realizado con Exito!");
         } catch (ReservaException e) {

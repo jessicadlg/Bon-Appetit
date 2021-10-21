@@ -7,7 +7,7 @@ import java.util.Date;
 public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "ID_RESERVA")
     private Long id;
     private String nombre;
     private String dni;

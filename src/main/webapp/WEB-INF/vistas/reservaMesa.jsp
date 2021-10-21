@@ -9,7 +9,7 @@
             <div class="card shadow-lg p-3 mb-5 bg-white ">
                 <div class="card-header text-center">Reserva de mesa</div>
                 <div class="card-body">
-                    <form:form action="" method="POST" modelAttribute="datosReserva">
+                    <form:form action="" method="POST" modelAttribute="Reserva">
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             <label for="fecha">Fecha de reserva:</label>
