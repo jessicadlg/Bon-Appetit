@@ -18,8 +18,9 @@ public class Producto {
     private Categoria categoria;
     private boolean activo;
     private Integer cantidadMeGusta;
-
     private String nombreImagen;
+    private String descripcion;
+
 
     public Producto() {
 
@@ -87,5 +88,12 @@ public class Producto {
 
     public void setCantidadMeGusta(Integer cantidadMeGusta) {
         this.cantidadMeGusta = cantidadMeGusta;
+    }
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }
