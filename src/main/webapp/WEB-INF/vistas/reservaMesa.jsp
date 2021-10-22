@@ -27,46 +27,20 @@
                                    value="" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label>Mesa disponible:</label>
-                            <input name="cantidadMesa" type="text" class="form-control" id="" placeholder=""
-                                   value="" required>
-                        </div>
+                            <button class="btn btn-secondary" type="submit">Consultar Disponibilidad</button> </div>
 
                         <div class="mx-auto">
                             <button class="btn btn-secondary" type="submit">Enviar</button>
                         </div>
                     </div>
                 </div>
-
                 </form:form>
             </div>
         </div>
     </div>
 </div>
 </div>
-<%--<div class="fondo">
-    <div class="form">
-        <h1 class="titulo text-center p-2">Reservar</h1>
-        <form:form action="" method="POST" modelAttribute="datos">
-            <div class="form-group mx-2">
-                <form:input path="email" id="email" type="email" class="form-control" placeholder="Usuario:"/><br/>
-                <form:input path="claveActual" type="text" id="password" class="form-control"
-                            placeholder="Clave actual:"/><br/>
-                <form:input path="claveNueva" type="text" id="password" class="form-control"
-                            placeholder="Clave nueva:"/><br/>
-                <form:input path="repiteClaveNueva" type="text" id="repite-password" class="form-control"
-                            placeholder="Confirme clave nueva:"/>
-            </div>
-            <div class="row  mx-auto">
-                <div class="col-4">
-                    <button class="btn btn-block btn-info " Type="Submit"/>
-                    Modificar</button>
-                </div>
-                <div class="col-4">
-                    <a href="login" class=" btn btn-outline-danger btn-block">Cancelar</a>
-                </div>
-            </div>
-        </form:form>--%>
+
 <c:if test="${not empty error}">
     <h4><span class="text-dark">${error}</span></h4>
     <br>

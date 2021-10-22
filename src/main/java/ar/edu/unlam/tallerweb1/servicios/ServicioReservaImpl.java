@@ -17,7 +17,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class ServicioReservaImpl implements ServicioReserva{
+public class ServicioReservaImpl implements ServicioReserva {
 
     private RepositorioReserva respositorioReserva;
 
@@ -29,7 +29,7 @@ public class ServicioReservaImpl implements ServicioReserva{
     @Override
     public void confirmarReserva(Reserva reserva) throws ReservaException {
         Long idReserva = respositorioReserva.guardarReserva(reserva);
-        if(idReserva == null)
+        if (idReserva == null)
             throw new ReservaException();
     }
 
@@ -37,9 +37,24 @@ public class ServicioReservaImpl implements ServicioReserva{
     public List<Reserva> consultarDisponibilidad(String fecha, Integer comensales) throws ParseException {
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Date fechaDate = formatter.parse(fecha);
-        if(respositorioReserva.buscarMesasPorFecha(fechaDate).size() < 1){
+
+        if (respositorioReserva.buscarMesasPorFecha(fechaDate).size() < 1) {
             throw new ReservaNoDisponible();
-        }
-        return respositorioReserva.buscarMesasPorFecha(fechaDate);
+        } /*else {
+            Integer cantidadMesas = (int) Math.ceil(comensales / 4);
+            Integer cantidadMesasReservadas = 0;
+            Integer totalMesas = 30;
+            List<Reserva> reservas = respositorioReserva.buscarMesasPorFecha(fechaDate);
+            for (Reserva reserva : reservas) {
+                cantidadMesasReservadas += reserva.getMesas();
+            }
+            Integer mesasDisponibles = totalMesas - cantidadMesasReservadas;
+            if(cantidadMesas < mesasDisponibles){
+
+            }
+        }*/
+
+
+            return respositorioReserva.buscarMesasPorFecha(fechaDate);
     }
 }
