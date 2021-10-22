@@ -1,6 +1,6 @@
 package ar.edu.unlam.tallerweb1.Excepciones;
 
-public class ReservaException extends Throwable {
+public class ReservaException extends RuntimeException {
 
     public ReservaException(String mensaje){
         super(mensaje);

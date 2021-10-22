@@ -1,6 +1,8 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
 import javax.persistence.*;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.FutureOrPresent;
 import java.util.Date;
 
 @Entity
@@ -12,7 +14,18 @@ public class Reserva {
     private String nombre;
     private String dni;
     private Integer mesas;
+    @Temporal(TemporalType.DATE)
+    @FutureOrPresent(message = "No se puede elegir una fecha pasada.")
     private Date fecha;
+    private String hora;
+
+    public String getHora() {
+        return hora;
+    }
+
+    public void setHora(String hora) {
+        this.hora = hora;
+    }
 
     public String getNombre() {
         return nombre;

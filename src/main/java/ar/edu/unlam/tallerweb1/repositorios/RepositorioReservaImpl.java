@@ -6,7 +6,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
 
 @Repository
 public class RepositorioReservaImpl implements RepositorioReserva{
@@ -30,5 +32,12 @@ public class RepositorioReservaImpl implements RepositorioReserva{
         Session session = this.sessionFactory.getCurrentSession();
         Reserva reserva = (Reserva) session.createCriteria(Reserva.class).add(Restrictions.eq("id",id)).uniqueResult();
         return reserva;
+    }
+
+    @Override
+    public List<Reserva> buscarMesasPorFecha(Date fecha) {
+        Session session = this.sessionFactory.getCurrentSession();
+        List<Reserva> reservas = session.createCriteria(Reserva.class).add(Restrictions.eq("fecha", fecha)).list();
+        return reservas;
     }
 }
