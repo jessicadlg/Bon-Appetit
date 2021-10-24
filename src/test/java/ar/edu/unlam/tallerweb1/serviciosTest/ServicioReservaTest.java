@@ -1,23 +1,20 @@
 package ar.edu.unlam.tallerweb1.serviciosTest;
 
+import ar.edu.unlam.tallerweb1.Excepciones.CantidadComensalesInvalida;
 import ar.edu.unlam.tallerweb1.Excepciones.ReservaException;
-import ar.edu.unlam.tallerweb1.Excepciones.ReservaNoDisponible;
 import ar.edu.unlam.tallerweb1.modelo.Reserva;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioReserva;
 import ar.edu.unlam.tallerweb1.servicios.ServicioReserva;
 import ar.edu.unlam.tallerweb1.servicios.ServicioReservaImpl;
 import org.junit.Test;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -33,36 +30,55 @@ public class ServicioReservaTest {
     }
 
     @Test
-    public void queHayDisponibilidadParaUnaFechaDeterminada() throws ParseException {
-        givenUnaFecha();
-        List<Reserva> reservas = whenSeConsultaLaDisponibilidad();
-        thenHayMesasDisponibles(reservas);
+    public void queHayDisponibilidadParaUnaFechaYHorarioDeterminado() throws ParseException {
+        givenUnaFechaUnHorario();
+        List<String> horariosDisponibles = whenSeConsultaLaDisponibilidad();
+        thenLaListaDeHorariosContieneElHorarioEnElQueSeDeseaRealizarLaReserva(horariosDisponibles, "22:00");
     }
 
-    @Test(expected = ReservaNoDisponible.class)
-    public void queSiNoHayDisponibilidadLanceRservaNoDisponible() throws ParseException {
-        givenUnaFechaSinDisponibilidad();
-        whenSeConsultaLaDisponibilidad();
+    @Test
+    public void queSiNoHayDisponibilidadDevuelvaLaListaDeHorariosDisponibles() throws ParseException {
+        givenUnaFechaYUnHorarioSinDisponibilidad();
+        List<String> horariosDisponibles = whenSeConsultaLaDisponibilidad();
+        thenLaListaDeHorariosNoContieneElHorario(horariosDisponibles,"21:00");
     }
 
-    private void givenUnaFechaSinDisponibilidad() {
-        when(repositorioReserva.buscarMesasPorFecha(any())).thenReturn(new ArrayList<Reserva>());
+    @Test(expected = CantidadComensalesInvalida.class)
+    public void queSiLaCantidadDeComensalesEsInvalidaLanceExcepcion() throws ParseException {
+        Integer cantidadComensales = givenUnaCantidadDeComensalesInvalida();
+        whenSeConsultaLaDisponibilidadConUnaCantidadInvalidaDeComensales(cantidadComensales);
     }
 
-    private void thenHayMesasDisponibles(List<Reserva> reservas) {
-        assertThat(reservas).hasSize(3);
+    private void whenSeConsultaLaDisponibilidadConUnaCantidadInvalidaDeComensales(Integer cantidadComensales) throws ParseException {
+        servicioReserva.consultarDisponibilidad("24/10/2021","22:00",cantidadComensales);
     }
 
-    private void givenUnaFecha() {
-        ArrayList<Reserva> reservas = new ArrayList<Reserva>();
-        reservas.add(new Reserva());
-        reservas.add(new Reserva());
-        reservas.add(new Reserva());
-        when(repositorioReserva.buscarMesasPorFecha(any())).thenReturn(reservas);
+    private Integer givenUnaCantidadDeComensalesInvalida() {
+        return 0;
     }
 
-    private List<Reserva> whenSeConsultaLaDisponibilidad() throws ParseException {
-        return servicioReserva.consultarDisponibilidad("22/10/2021", 8);
+    private void thenLaListaDeHorariosNoContieneElHorario(List<String> horariosDisponibles, String horarioAReservar) {
+        assertThat(horariosDisponibles).doesNotContain(horarioAReservar);
+    }
+
+    private void givenUnaFechaYUnHorarioSinDisponibilidad() {
+        List<Reserva> reservas = Arrays.asList(new Reserva(), new Reserva(), new Reserva());
+        for (Reserva reserva: reservas) {
+            reserva.setMesas(10);
+        }
+        when(repositorioReserva.obtenerReservasPor(any(), any())).thenReturn(reservas);
+    }
+
+    private void thenLaListaDeHorariosContieneElHorarioEnElQueSeDeseaRealizarLaReserva(List<String> horarios, String horarioAReservar) {
+        assertThat(horarios).contains(horarioAReservar);
+    }
+
+    private void givenUnaFechaUnHorario() {
+        when(repositorioReserva.obtenerReservasPor(any(), any())).thenReturn(new ArrayList<Reserva>());
+    }
+
+    private List<String> whenSeConsultaLaDisponibilidad() throws ParseException {
+        return servicioReserva.consultarDisponibilidad("22/10/2021", "21:00", 8);
     }
 
     private void givenUnaReserva() {

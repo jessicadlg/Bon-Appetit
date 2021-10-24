@@ -1,13 +1,16 @@
 package ar.edu.unlam.tallerweb1.controladoresTest;
 
+import ar.edu.unlam.tallerweb1.Excepciones.CantidadComensalesInvalida;
 import ar.edu.unlam.tallerweb1.Excepciones.ReservaException;
-import ar.edu.unlam.tallerweb1.Excepciones.ReservaNoDisponible;
 import ar.edu.unlam.tallerweb1.controladores.ControladorReserva;
+import ar.edu.unlam.tallerweb1.modelo.Reserva;
 import ar.edu.unlam.tallerweb1.servicios.ServicioReserva;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.ParseException;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -31,31 +34,62 @@ public class ControladorReservaTest {
     }
 
     @Test
-    public void queSeConsultaPorUnaFechaYNoHayDisponibilidad() throws ParseException {
-        givenUnaFechaYCantidadComensales();
-        ModelAndView mav= whenConsultoLaDisponibilidad();
-        thenMeDevuelveMensaje(mav);
+    public void queSeConsultaPorUnaFechaYUnaHoraYHayDisponibilidad() throws ParseException {
+        givenUnaFechaConDisponibilidad();
+        ModelAndView mav = whenConsultoLaDisponibilidad();
+        thenLaListaDeHorariosContieneElHorarioAReservar(mav, "22:00");
     }
 
-    private void givenUnaFechaYCantidadComensales() throws ParseException {
-        when(servicioReserva.consultarDisponibilidad(any(), anyInt())).thenThrow(ReservaNoDisponible.class);
+    @Test
+    public void queSiSeIngresaUnaCantidadDeComensalesInvalidoMeDevuelveMensajeDeCantidadDeComensalesInvalido() throws ParseException {
+        givenUnaCantidadDeComensalesInvalida();
+        ModelAndView mav = whenConsultoLaDisponibilidad();
+        thenObtengoElMensaje("La Cantidad de comensales debe ser mayor a cero.", mav);
     }
 
-    private ModelAndView whenConsultoLaDisponibilidad() {
-        return controladorReserva.consultarDisponibilidad("22/10/2021", 10);
+    private void givenUnaCantidadDeComensalesInvalida() throws ParseException {
+        when(servicioReserva.consultarDisponibilidad(any(),any(),any())).thenThrow(CantidadComensalesInvalida.class);
     }
 
-    private void thenMeDevuelveMensaje(ModelAndView mav) {
+    private void thenObtengoElMensaje(String mensaje, ModelAndView mav) {
         assertThat(mav.getViewName()).isEqualTo("reservarMesa");
-        assertThat(mav.getModel().get("reservaNoDisponible")).isEqualTo("No hay disponibilidad para la Fecha Especificada.");
+        assertThat(mav.getModel().get("mnsjError")).isEqualTo(mensaje);
+    }
+
+    private void givenUnaFechaConDisponibilidad() throws ParseException {
+        List<String> horariosDisponibles = Arrays.asList("12:00","14:00","16:00","18:00","20:00", "22:00");
+        when(servicioReserva.consultarDisponibilidad(any(),any(),anyInt())).thenReturn(horariosDisponibles);
+    }
+
+    @Test
+    public void queSeConsultaPorUnaFechaYUnaHoraYNoHayDisponibilidad() throws ParseException {
+        givenUnaFechaYUnaHoraSinDisponibilidad();
+        ModelAndView mav= whenConsultoLaDisponibilidad();
+        thenObtengoListaHorariosSinLaHoraAReservarYElMensajeDeAviso(mav, "22:00");
     }
 
     private void givenUnaReServa() throws ReservaException {
         doThrow(ReservaException.class).when(servicioReserva).confirmarReserva(anyObject());
     }
 
+    private void givenUnaFechaYUnaHoraSinDisponibilidad() throws ParseException {
+        List<String> horariosDisponibles = Arrays.asList("12:00","14:00","16:00","18:00","20:00");
+        when(servicioReserva.consultarDisponibilidad(any(), any(), any())).thenReturn(horariosDisponibles);
+    }
+
+    private ModelAndView whenConsultoLaDisponibilidad() {
+        return controladorReserva.consultarDisponibilidad("22/10/2021", "22:00",10);
+    }
+
     private ModelAndView whenSeConfirmaLaReserva() {
-        return controladorReserva.confirmarReserva();
+        return controladorReserva.confirmarReserva(new Reserva());
+    }
+
+    private void thenObtengoListaHorariosSinLaHoraAReservarYElMensajeDeAviso(ModelAndView mav, String horarioAReservar) {
+        assertThat(mav.getViewName()).isEqualTo("reservarMesa");
+        assertThat(mav.getModel().get("mnsjError")).isEqualTo("No hay disponibilidad para la Fecha y Hora Especificada.");
+        List<String> horariosDisponibles = (List<String>) mav.getModel().get("horariosDisponibles");
+        assertThat(horariosDisponibles).doesNotContain(horarioAReservar);
     }
 
     private void thenLaReservaNoSeRealizaConExito(ModelAndView mav) {
@@ -66,5 +100,12 @@ public class ControladorReservaTest {
     private void thenLaReservaSeRealizaConExito(ModelAndView mav) {
         assertThat(mav.getViewName()).isEqualTo("reserva");
         assertThat(mav.getModel().get("mnsj")).isEqualTo("La Reserva se ha realizado con Exito!");
+    }
+
+    private void thenLaListaDeHorariosContieneElHorarioAReservar(ModelAndView mav, String horarioAReservar) {
+        assertThat(mav.getViewName()).isEqualTo("reservarMesa");
+        assertThat(mav.getModel().get("mnsj")).isEqualTo("Existe disponibilidad para la Fecha y Hora Especificada. Complete los datos y confirme la Reserva.");
+        List<String> horariosDisponibles = (List<String>) mav.getModel().get("horariosDisponibles");
+        assertThat(horariosDisponibles).contains(horarioAReservar);
     }
 }

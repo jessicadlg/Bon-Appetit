@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.repositorios;
 import ar.edu.unlam.tallerweb1.modelo.Reserva;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -35,9 +36,9 @@ public class RepositorioReservaImpl implements RepositorioReserva{
     }
 
     @Override
-    public List<Reserva> buscarMesasPorFecha(Date fecha) {
+    public List<Reserva> obtenerReservasPor(Date fecha, String hora) {
         Session session = this.sessionFactory.getCurrentSession();
-        List<Reserva> reservas = session.createCriteria(Reserva.class).add(Restrictions.eq("fecha", fecha)).list();
+        List<Reserva> reservas = (List<Reserva>)session.createCriteria(Reserva.class).add(Restrictions.eq("fecha",fecha)).add(Restrictions.eq("hora", hora)).list();
         return reservas;
     }
 }

@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
+import ar.edu.unlam.tallerweb1.Excepciones.CantidadComensalesInvalida;
 import ar.edu.unlam.tallerweb1.Excepciones.ReservaException;
 import ar.edu.unlam.tallerweb1.Excepciones.ReservaNoDisponible;
 import ar.edu.unlam.tallerweb1.modelo.Reserva;
@@ -7,6 +8,7 @@ import ar.edu.unlam.tallerweb1.servicios.ServicioReserva;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,11 +36,9 @@ public class ControladorReserva {
     }
 
     @RequestMapping("/confirmarReserva")
-    public ModelAndView confirmarReserva() {
+    public ModelAndView confirmarReserva(@ModelAttribute("reserva") Reserva reserva) {
         ModelMap modelMap = new ModelMap();
         try {
-            Reserva reserva = new Reserva();
-            reserva.setFecha(new Date());
             servicioReserva.confirmarReserva(reserva);
             modelMap.put("mnsj","La Reserva se ha realizado con Exito!");
         } catch (ReservaException e) {
@@ -48,15 +48,21 @@ public class ControladorReserva {
     }
 
     @RequestMapping("consultarDisponibilidad")
-    public ModelAndView consultarDisponibilidad(@RequestParam String fecha, @RequestParam Integer comensales) {
+    public ModelAndView consultarDisponibilidad(@RequestParam String fecha, @RequestParam String hora ,@RequestParam Integer comensales) {
         ModelMap model = new ModelMap();
         try{
-            List<Reserva> horariosDisponibles = servicioReserva.consultarDisponibilidad(fecha, comensales);
-            model.put("horariosDisponibles", horariosDisponibles);
-        }catch (ReservaNoDisponible e){
-            model.put("reservaNoDisponible", "No hay disponibilidad para la Fecha Especificada.");
+            List<String> horariosDisponibles = servicioReserva.consultarDisponibilidad(fecha, hora ,comensales);
+            if(horariosDisponibles.contains(hora)){
+                model.put("mnsj", "Existe disponibilidad para la Fecha y Hora Especificada. Complete los datos y confirme la Reserva.");
+                model.put("horariosDisponibles",horariosDisponibles);
+            }else{
+                model.put("mnsjError", "No hay disponibilidad para la Fecha y Hora Especificada.");
+                model.put("horariosDisponibles", horariosDisponibles);
+            }
         }catch (ParseException e){
             model.put("fechaInvalida", "Se ha igresado una Fecha Invalida");
+        }catch (CantidadComensalesInvalida e){
+            model.put("mnsjError", "La Cantidad de comensales debe ser mayor a cero.");
         }
         return new ModelAndView("reservarMesa", model);
     }

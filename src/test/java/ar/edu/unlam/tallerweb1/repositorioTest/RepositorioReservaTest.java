@@ -8,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,6 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RepositorioReservaTest extends SpringTest {
 
     private static final Reserva RESERVA = new Reserva();
+    private static final Date FECHA_CONSULTADA = new Date();
     @Autowired
     private RepositorioReserva repositorioReserva;
 
@@ -38,42 +42,51 @@ public class RepositorioReservaTest extends SpringTest {
         thenObtengoLaReservaDeseada(reservaRecuperada);
     }
 
-    private void thenObtengoLaReservaDeseada(Reserva reservaRecuperada) {
-        assertThat(reservaRecuperada.getNombre()).isEqualTo("Bon-appetit");
+    @Test
+    @Rollback
+    @Transactional
+    public void queSiHayDisponibilidadDevuelvaDevuelveUnaListaVacia() throws ParseException {
+        givenUnaCantidadDeReservasCargadas();
+        List<Reserva> reservas = whenConsultoMesasReservadasPorFechaYHora(FECHA_CONSULTADA, "22:00");
+        thenLaListaDeReservasEstaVacia(reservas);
     }
 
     @Test
     @Rollback
     @Transactional
-    public void queSiHayDisponibilidadDevuelvaUnaListaDeReservas(){
-        List<Reserva> esperada = givenUnaFechaDeterminada();
-        List<Reserva> obtenida = whenBuscoReservasPorFecha();
-        thenObtengoUnaListaDeReservas(esperada, obtenida);
+    public void queSiHayReservasRealizadasParaLaFechaYLaHoraEspecificadaDevuelveUnaListaConReservas() throws ParseException {
+        givenUnaCantidadDeReservasCargadas();
+        List<Reserva> reservas = whenConsultoMesasReservadasPorFechaYHora(this.pasarFechaDeStringADate("22/10/2021"), "22:00");
+        thenLaCantidadDeMesasEs(reservas);
     }
 
-    private List<Reserva> givenUnaFechaDeterminada() {
-        List<Reserva> esperada = new ArrayList<Reserva>();
-        Reserva r1 = new Reserva();
-        Reserva r2 = new Reserva();
-        Reserva r3 = new Reserva();
-        r1.setFecha(new Date());
-        r2.setFecha(new Date());
-        r3.setFecha(new Date());
-        esperada.add(r1);
-        esperada.add(r2);
-        esperada.add(r3);
-        session().save(r1);
-        session().save(r2);
-        session().save(r3);
-        return esperada;
+    private void thenLaCantidadDeMesasEs(List<Reserva> cantidadMesasReservadas) {
+        assertThat(cantidadMesasReservadas.size()).isEqualTo(3);
     }
 
-    private List<Reserva> whenBuscoReservasPorFecha() {
-        return repositorioReserva.buscarMesasPorFecha(new Date());
+    private void thenObtengoLaReservaDeseada(Reserva reservaRecuperada) {
+        assertThat(reservaRecuperada.getNombre()).isEqualTo("Bon-appetit");
     }
 
-    private void thenObtengoUnaListaDeReservas(List<Reserva> esperada, List<Reserva> obtenida) {
-        assertThat(esperada).isEqualTo(obtenida);
+    private void thenLaListaDeReservasEstaVacia(List<Reserva> reservas) {
+        assertThat(reservas.size()).isEqualTo(0);
+    }
+
+    private List<Reserva> whenConsultoMesasReservadasPorFechaYHora(Date fecha, String hora) {
+        return repositorioReserva.obtenerReservasPor(fecha,hora);
+    }
+
+    private void givenUnaCantidadDeReservasCargadas() throws ParseException {
+        List<Reserva> reservas = Arrays.asList(new Reserva(), new Reserva(), new Reserva());
+        Date fecha = this.pasarFechaDeStringADate("22/10/2021");
+        String hora = "22:00";
+        Integer cantMesas = 10;
+        for(Reserva reserva : reservas){
+            reserva.setFecha(fecha);
+            reserva.setHora(hora);
+            reserva.setMesas(cantMesas);
+            session().save(reserva);
+        }
     }
 
     private Long givenUnaReservaGuardada(Reserva reserva) {
@@ -98,5 +111,10 @@ public class RepositorioReservaTest extends SpringTest {
 
     private void thenObtengoElIdGenerado(Long id) {
         assertThat(id).isNotNull();
+    }
+
+    private Date pasarFechaDeStringADate(String fecha) throws ParseException {
+        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        return formatter.parse(fecha);
     }
 }

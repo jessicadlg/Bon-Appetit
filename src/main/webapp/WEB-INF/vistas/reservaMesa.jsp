@@ -9,14 +9,14 @@
             <div class="card shadow-lg p-3 mb-5 bg-white ">
                 <div class="card-header text-center">Reserva de mesa</div>
                 <div class="card-body">
-                    <form:form action="" method="POST" modelAttribute="reserva">
+                    <form:form action="confirmarReserva" method="POST" modelAttribute="reserva">
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             <label for="fecha">Fecha de reserva:</label>
                             <input name="fecha" type="date" class="form-control" id="fecha" required>
                         </div>
                         <div class="col-md-12 mb-3">
-                            <label for="">Hora:</label>
+                            <label for="hora">Hora:</label>
                             <input name="hora" type="text" class="form-control" id="hora"
                                    required>
                         </div>
@@ -29,9 +29,9 @@
                         <div class="col-md-6 mb-3">
                             <button class="btn btn-secondary" type="submit">Consultar Disponibilidad</button> </div>
 
-                        <div class="mx-auto">
+                        <!--div class="mx-auto">
                             <button class="btn btn-secondary" type="submit">Enviar</button>
-                        </div>
+                        </div-->
                     </div>
                 </div>
                 </form:form>

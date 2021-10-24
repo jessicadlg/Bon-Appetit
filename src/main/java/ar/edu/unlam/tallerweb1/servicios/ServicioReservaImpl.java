@@ -1,7 +1,7 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.Excepciones.CantidadComensalesInvalida;
 import ar.edu.unlam.tallerweb1.Excepciones.ReservaException;
-import ar.edu.unlam.tallerweb1.Excepciones.ReservaNoDisponible;
 import ar.edu.unlam.tallerweb1.modelo.Reserva;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioReserva;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,19 +11,22 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
 public class ServicioReservaImpl implements ServicioReserva {
 
+    private static final Integer COMENSALES_POR_MESA = 4;
     private RepositorioReserva respositorioReserva;
+    private List<String> HORARIOS;
+    private Integer MESAS_TOTALES;
 
     @Autowired
     public ServicioReservaImpl(RepositorioReserva respositorioReserva) {
         this.respositorioReserva = respositorioReserva;
+        this.HORARIOS = Arrays.asList("12:00","14:00","16:00","18:00","20:00","22:00");
+        this.MESAS_TOTALES = 30;
     }
 
     @Override
@@ -34,27 +37,50 @@ public class ServicioReservaImpl implements ServicioReserva {
     }
 
     @Override
-    public List<Reserva> consultarDisponibilidad(String fecha, Integer comensales) throws ParseException {
+    public List<String> consultarDisponibilidad(String fecha, String hora, Integer comensales) throws ParseException {
+        if(comensales == 0){
+            throw new CantidadComensalesInvalida();
+        }
+        List<Reserva> reservas = respositorioReserva.obtenerReservasPor(this.pasarFechaDeStringADate(fecha), hora);
+        List<String> horariosDisponibles = new ArrayList<String>();
+        if (reservas.size() == 0){
+            horariosDisponibles = this.HORARIOS;
+        }else{
+            Integer mesasAReservar = this.calcularCantidadMesas(comensales);
+            Integer mesasDisponibles = this.obtenerMesasDisponibles(reservas);
+            if(verificarMesasDisponibles(mesasAReservar, mesasDisponibles)){
+                horariosDisponibles = obtenerHorariosDisponibles(hora);
+            }
+        }
+        return horariosDisponibles;
+    }
+
+    private List<String> obtenerHorariosDisponibles(String hora) {
+        List<String> horariosDisponibles = this.HORARIOS;
+        if(horariosDisponibles.contains(hora)){
+            horariosDisponibles.remove(hora);
+        }
+        return horariosDisponibles;
+    }
+
+    private Boolean verificarMesasDisponibles(Integer mesasAReservar, Integer mesasDisponibles) {
+        return mesasAReservar > mesasDisponibles;
+    }
+
+    private Integer obtenerMesasDisponibles(List<Reserva> reservas) {
+        Integer mesasReservadas = 0;
+        for (Reserva reserva: reservas) {
+            mesasReservadas += reserva.getMesas();
+        }
+        return this.MESAS_TOTALES - mesasReservadas;
+    }
+
+    public Integer calcularCantidadMesas(Integer comensales) {
+        return (int) Math.ceil(comensales/COMENSALES_POR_MESA);
+    }
+
+    private Date pasarFechaDeStringADate(String fecha) throws ParseException {
         DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        Date fechaDate = formatter.parse(fecha);
-
-        if (respositorioReserva.buscarMesasPorFecha(fechaDate).size() < 1) {
-            throw new ReservaNoDisponible();
-        } /*else {
-            Integer cantidadMesas = (int) Math.ceil(comensales / 4);
-            Integer cantidadMesasReservadas = 0;
-            Integer totalMesas = 30;
-            List<Reserva> reservas = respositorioReserva.buscarMesasPorFecha(fechaDate);
-            for (Reserva reserva : reservas) {
-                cantidadMesasReservadas += reserva.getMesas();
-            }
-            Integer mesasDisponibles = totalMesas - cantidadMesasReservadas;
-            if(cantidadMesas < mesasDisponibles){
-
-            }
-        }*/
-
-
-            return respositorioReserva.buscarMesasPorFecha(fechaDate);
+        return formatter.parse(fecha);
     }
 }
