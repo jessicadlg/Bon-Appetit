@@ -31,7 +31,7 @@ public class ServicioReservaTest {
 
     @Test
     public void queHayDisponibilidadParaUnaFechaYHorarioDeterminado() throws ParseException {
-        givenUnaFechaUnHorario();
+        givenUnaFechaYUnHorarioConDisponibilidad();
         List<String> horariosDisponibles = whenSeConsultaLaDisponibilidad();
         thenLaListaDeHorariosContieneElHorarioEnElQueSeDeseaRealizarLaReserva(horariosDisponibles, "22:00");
     }
@@ -62,19 +62,15 @@ public class ServicioReservaTest {
     }
 
     private void givenUnaFechaYUnHorarioSinDisponibilidad() {
-        List<Reserva> reservas = Arrays.asList(new Reserva(), new Reserva(), new Reserva());
-        for (Reserva reserva: reservas) {
-            reserva.setMesas(10);
-        }
-        when(repositorioReserva.obtenerReservasPor(any(), any())).thenReturn(reservas);
+        when(repositorioReserva.obtenerMesasReservadasPor(any(), any())).thenReturn(30L);
     }
 
     private void thenLaListaDeHorariosContieneElHorarioEnElQueSeDeseaRealizarLaReserva(List<String> horarios, String horarioAReservar) {
         assertThat(horarios).contains(horarioAReservar);
     }
 
-    private void givenUnaFechaUnHorario() {
-        when(repositorioReserva.obtenerReservasPor(any(), any())).thenReturn(new ArrayList<Reserva>());
+    private void givenUnaFechaYUnHorarioConDisponibilidad() {
+        when(repositorioReserva.obtenerMesasReservadasPor(any(), any())).thenReturn(null);
     }
 
     private List<String> whenSeConsultaLaDisponibilidad() throws ParseException {

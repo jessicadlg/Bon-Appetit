@@ -41,13 +41,13 @@ public class ServicioReservaImpl implements ServicioReserva {
         if(comensales == 0){
             throw new CantidadComensalesInvalida();
         }
-        List<Reserva> reservas = respositorioReserva.obtenerReservasPor(this.pasarFechaDeStringADate(fecha), hora);
+        Long cantidadMesasReservadas = respositorioReserva.obtenerMesasReservadasPor(this.pasarFechaDeStringADate(fecha), hora);
         List<String> horariosDisponibles = new ArrayList<String>();
-        if (reservas.size() == 0){
+        if (cantidadMesasReservadas == null){
             horariosDisponibles = this.HORARIOS;
         }else{
             Integer mesasAReservar = this.calcularCantidadMesas(comensales);
-            Integer mesasDisponibles = this.obtenerMesasDisponibles(reservas);
+            Long mesasDisponibles = this.obtenerMesasDisponibles(cantidadMesasReservadas);
             if(verificarMesasDisponibles(mesasAReservar, mesasDisponibles)){
                 horariosDisponibles = obtenerHorariosDisponibles(hora);
             }
@@ -63,15 +63,11 @@ public class ServicioReservaImpl implements ServicioReserva {
         return horariosDisponibles;
     }
 
-    private Boolean verificarMesasDisponibles(Integer mesasAReservar, Integer mesasDisponibles) {
+    private Boolean verificarMesasDisponibles(Integer mesasAReservar, Long mesasDisponibles) {
         return mesasAReservar > mesasDisponibles;
     }
 
-    private Integer obtenerMesasDisponibles(List<Reserva> reservas) {
-        Integer mesasReservadas = 0;
-        for (Reserva reserva: reservas) {
-            mesasReservadas += reserva.getMesas();
-        }
+    private Long obtenerMesasDisponibles(Long mesasReservadas) {
         return this.MESAS_TOTALES - mesasReservadas;
     }
 

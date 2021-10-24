@@ -45,57 +45,19 @@ public class RepositorioReservaTest extends SpringTest {
     @Test
     @Rollback
     @Transactional
-    public void queSiHayDisponibilidadDevuelvaDevuelveUnaListaVacia() throws ParseException {
-        givenUnaCantidadDeReservasCargadas();
-        List<Reserva> reservas = whenConsultoMesasReservadasPorFechaYHora(FECHA_CONSULTADA, "22:00");
-        thenLaListaDeReservasEstaVacia(reservas);
+    public void queSiHayReservasParaLaFechaYHoraEspecificadaNosDevuelveLaCantidadDeMesasReservadas() throws ParseException {
+        Long cantMesasEsperadas = givenUnaCantidadDeReservasCargadas();
+        Long cantMesasObtenidas = whenConsultoMesasReservadasPor(this.pasarFechaDeStringADate("22/10/2021"), "22:00");
+        thenLaCantidadDeMesasReservadasEs(cantMesasEsperadas, cantMesasObtenidas);
     }
 
     @Test
     @Rollback
     @Transactional
-    public void queSiHayReservasRealizadasParaLaFechaYLaHoraEspecificadaDevuelveUnaListaConReservas() throws ParseException {
+    public void queSiHayNoReservasParaLaFechaYHoraEspecificadaLaCantidadDeMesasReservadasEsNull() throws ParseException {
         givenUnaCantidadDeReservasCargadas();
-        List<Reserva> reservas = whenConsultoMesasReservadasPorFechaYHora(this.pasarFechaDeStringADate("22/10/2021"), "22:00");
-        thenLaCantidadDeMesasEs(reservas);
-    }
-
-    private void thenLaCantidadDeMesasEs(List<Reserva> cantidadMesasReservadas) {
-        assertThat(cantidadMesasReservadas.size()).isEqualTo(3);
-    }
-
-    private void thenObtengoLaReservaDeseada(Reserva reservaRecuperada) {
-        assertThat(reservaRecuperada.getNombre()).isEqualTo("Bon-appetit");
-    }
-
-    private void thenLaListaDeReservasEstaVacia(List<Reserva> reservas) {
-        assertThat(reservas.size()).isEqualTo(0);
-    }
-
-    private List<Reserva> whenConsultoMesasReservadasPorFechaYHora(Date fecha, String hora) {
-        return repositorioReserva.obtenerReservasPor(fecha,hora);
-    }
-
-    private void givenUnaCantidadDeReservasCargadas() throws ParseException {
-        List<Reserva> reservas = Arrays.asList(new Reserva(), new Reserva(), new Reserva());
-        Date fecha = this.pasarFechaDeStringADate("22/10/2021");
-        String hora = "22:00";
-        Integer cantMesas = 10;
-        for(Reserva reserva : reservas){
-            reserva.setFecha(fecha);
-            reserva.setHora(hora);
-            reserva.setMesas(cantMesas);
-            session().save(reserva);
-        }
-    }
-
-    private Long givenUnaReservaGuardada(Reserva reserva) {
-        reserva.setNombre("Bon-appetit");
-        return repositorioReserva.guardarReserva(reserva);
-    }
-
-    private Reserva whenBuscoUnaReservaPorId(Long id) {
-        return repositorioReserva.buscarPorId(id);
+        Long cantMesasObtenidas = whenConsultoMesasReservadasPor(this.pasarFechaDeStringADate("24/10/2021"), "22:00");
+        thenLaCantidadDeMesasReservadasEsNull(cantMesasObtenidas);
     }
 
     private Reserva givenUnaReserva() {
@@ -105,8 +67,49 @@ public class RepositorioReservaTest extends SpringTest {
         return RESERVA;
     }
 
+    private Long givenUnaReservaGuardada(Reserva reserva) {
+        reserva.setNombre("Bon-appetit");
+        return repositorioReserva.guardarReserva(reserva);
+    }
+
+    private Long givenUnaCantidadDeReservasCargadas() throws ParseException {
+        List<Reserva> reservas = Arrays.asList(new Reserva(), new Reserva(), new Reserva());
+        Date fecha = this.pasarFechaDeStringADate("22/10/2021");
+        String hora = "22:00";
+        Integer cantMesas = 10;
+        Long cantidadMesasEsperadas = 0L;
+        for(Reserva reserva : reservas){
+            reserva.setFecha(fecha);
+            reserva.setHora(hora);
+            reserva.setMesas(cantMesas);
+            cantidadMesasEsperadas += cantMesas;
+            session().save(reserva);
+        }
+        return cantidadMesasEsperadas;
+    }
+
     private Long whenGuardoLaReserva(Reserva reserva) {
         return repositorioReserva.guardarReserva(reserva);
+    }
+
+    private Reserva whenBuscoUnaReservaPorId(Long id) {
+        return repositorioReserva.buscarPorId(id);
+    }
+
+    private Long whenConsultoMesasReservadasPor(Date fecha, String hora) {
+        return repositorioReserva.obtenerMesasReservadasPor(fecha, hora);
+    }
+
+    private void thenObtengoLaReservaDeseada(Reserva reservaRecuperada) {
+        assertThat(reservaRecuperada.getNombre()).isEqualTo("Bon-appetit");
+    }
+
+    private void thenLaCantidadDeMesasReservadasEsNull(Long cantMesasObtenidas) {
+        assertThat(cantMesasObtenidas).isNull();
+    }
+
+    private void thenLaCantidadDeMesasReservadasEs(Long cantMesasEsperadas, Long cantMesasObtenidas) {
+        assertThat(cantMesasObtenidas).isEqualTo(cantMesasEsperadas);
     }
 
     private void thenObtengoElIdGenerado(Long id) {

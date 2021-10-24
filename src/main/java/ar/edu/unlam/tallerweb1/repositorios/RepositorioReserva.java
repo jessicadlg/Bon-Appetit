@@ -11,5 +11,5 @@ public interface RepositorioReserva {
 
     Reserva buscarPorId(Long id);
 
-    List<Reserva> obtenerReservasPor(Date fecha, String hora);
+    Long obtenerMesasReservadasPor(Date fecha, String hora);
 }

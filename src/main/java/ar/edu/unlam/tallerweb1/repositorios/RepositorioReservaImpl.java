@@ -36,9 +36,9 @@ public class RepositorioReservaImpl implements RepositorioReserva{
     }
 
     @Override
-    public List<Reserva> obtenerReservasPor(Date fecha, String hora) {
+    public Long obtenerMesasReservadasPor(Date fecha, String hora) {
         Session session = this.sessionFactory.getCurrentSession();
-        List<Reserva> reservas = (List<Reserva>)session.createCriteria(Reserva.class).add(Restrictions.eq("fecha",fecha)).add(Restrictions.eq("hora", hora)).list();
-        return reservas;
+        Long mesasReservadas = (Long)session.createCriteria(Reserva.class).add(Restrictions.eq("fecha", fecha)).add(Restrictions.eq("hora",hora)).setProjection(Projections.sum("mesas")).uniqueResult();
+        return mesasReservadas;
     }
 }
