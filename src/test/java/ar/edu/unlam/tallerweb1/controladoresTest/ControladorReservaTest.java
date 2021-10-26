@@ -52,7 +52,7 @@ public class ControladorReservaTest {
     }
 
     private void thenObtengoElMensaje(String mensaje, ModelAndView mav) {
-        assertThat(mav.getViewName()).isEqualTo("reservarMesa");
+        assertThat(mav.getViewName()).isEqualTo("reservaMesa");
         assertThat(mav.getModel().get("mnsjError")).isEqualTo(mensaje);
     }
 
@@ -86,7 +86,7 @@ public class ControladorReservaTest {
     }
 
     private void thenObtengoListaHorariosSinLaHoraAReservarYElMensajeDeAviso(ModelAndView mav, String horarioAReservar) {
-        assertThat(mav.getViewName()).isEqualTo("reservarMesa");
+        assertThat(mav.getViewName()).isEqualTo("reservaMesa");
         assertThat(mav.getModel().get("mnsjError")).isEqualTo("No hay disponibilidad para la Fecha y Hora Especificada.");
         List<String> horariosDisponibles = (List<String>) mav.getModel().get("horariosDisponibles");
         assertThat(horariosDisponibles).doesNotContain(horarioAReservar);
@@ -103,7 +103,7 @@ public class ControladorReservaTest {
     }
 
     private void thenLaListaDeHorariosContieneElHorarioAReservar(ModelAndView mav, String horarioAReservar) {
-        assertThat(mav.getViewName()).isEqualTo("reservarMesa");
+        assertThat(mav.getViewName()).isEqualTo("reservaMesa");
         assertThat(mav.getModel().get("mnsj")).isEqualTo("Existe disponibilidad para la Fecha y Hora Especificada. Complete los datos y confirme la Reserva.");
         List<String> horariosDisponibles = (List<String>) mav.getModel().get("horariosDisponibles");
         assertThat(horariosDisponibles).contains(horarioAReservar);

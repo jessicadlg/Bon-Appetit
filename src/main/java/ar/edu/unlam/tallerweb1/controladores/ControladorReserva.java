@@ -64,6 +64,6 @@ public class ControladorReserva {
         }catch (CantidadComensalesInvalida e){
             model.put("mnsjError", "La Cantidad de comensales debe ser mayor a cero.");
         }
-        return new ModelAndView("reservarMesa", model);
+        return new ModelAndView("reservaMesa", model);
     }
 }

@@ -38,11 +38,11 @@ public class ServicioReservaImpl implements ServicioReserva {
 
     @Override
     public List<String> consultarDisponibilidad(String fecha, String hora, Integer comensales) throws ParseException {
-        if(comensales == 0){
+        if(comensales < 1){
             throw new CantidadComensalesInvalida();
         }
-        Long cantidadMesasReservadas = respositorioReserva.obtenerMesasReservadasPor(this.pasarFechaDeStringADate(fecha), hora);
         List<String> horariosDisponibles = new ArrayList<String>();
+        Long cantidadMesasReservadas = respositorioReserva.obtenerMesasReservadasPor(this.pasarFechaDeStringADate(fecha), hora);
         if (cantidadMesasReservadas == null){
             horariosDisponibles = this.HORARIOS;
         }else{

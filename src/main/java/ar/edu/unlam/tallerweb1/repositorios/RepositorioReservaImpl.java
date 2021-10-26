@@ -31,14 +31,20 @@ public class RepositorioReservaImpl implements RepositorioReserva{
     @Override
     public Reserva buscarPorId(Long id) {
         Session session = this.sessionFactory.getCurrentSession();
-        Reserva reserva = (Reserva) session.createCriteria(Reserva.class).add(Restrictions.eq("id",id)).uniqueResult();
+        Reserva reserva = (Reserva) session.createCriteria(Reserva.class)
+                .add(Restrictions.eq("id",id))
+                .uniqueResult();
         return reserva;
     }
 
     @Override
     public Long obtenerMesasReservadasPor(Date fecha, String hora) {
         Session session = this.sessionFactory.getCurrentSession();
-        Long mesasReservadas = (Long)session.createCriteria(Reserva.class).add(Restrictions.eq("fecha", fecha)).add(Restrictions.eq("hora",hora)).setProjection(Projections.sum("mesas")).uniqueResult();
+        Long mesasReservadas = (Long)session.createCriteria(Reserva.class)
+                .add(Restrictions.eq("fecha", fecha))
+                .add(Restrictions.eq("hora",hora))
+                .setProjection(Projections.sum("mesas"))
+                .uniqueResult();
         return mesasReservadas;
     }
 }

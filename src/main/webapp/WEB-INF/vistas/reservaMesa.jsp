@@ -9,7 +9,7 @@
             <div class="card shadow-lg p-3 mb-5 bg-white ">
                 <div class="card-header text-center">Reserva de mesa</div>
                 <div class="card-body">
-                    <form:form action="confirmarReserva" method="POST" modelAttribute="reserva">
+                    <form:form action="consultarDisponibilidad" method="GET">
                     <div class="row">
                         <div class="col-md-12 mb-3">
                             <label for="fecha">Fecha de reserva:</label>
@@ -22,7 +22,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label>Cantidad de Comensales:</label>
-                            <input name="cantidadComensales" type="text" class="form-control" id="comensales"
+                            <input name="comensales" type="text" class="form-control" id="comensales"
                                    placeholder=""
                                    value="" required>
                         </div>
