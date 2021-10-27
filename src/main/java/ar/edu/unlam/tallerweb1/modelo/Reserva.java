@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.modelo;
 import javax.persistence.*;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -12,10 +13,11 @@ public class Reserva {
     @Column(name = "ID_RESERVA")
     private Long id;
     private String nombre;
-    private String dni;
+    private String celular;
     private Integer mesas;
     @Temporal(TemporalType.DATE)
     @FutureOrPresent(message = "No se puede elegir una fecha pasada.")
+    @NotNull(message = "No se puede dejar vacio este campo")
     private Date fecha;
     private String hora;
 
@@ -36,11 +38,11 @@ public class Reserva {
     }
 
     public String getDni() {
-        return dni;
+        return celular;
     }
 
     public void setDni(String dni) {
-        this.dni = dni;
+        this.celular = dni;
     }
 
     public Integer getMesas() {

@@ -53,7 +53,7 @@ public class ControladorReservaTest {
 
     private void thenObtengoElMensaje(String mensaje, ModelAndView mav) {
         assertThat(mav.getViewName()).isEqualTo("reservaMesa");
-        assertThat(mav.getModel().get("mnsjError")).isEqualTo(mensaje);
+        assertThat(mav.getModel().get("mnsjCantidad")).isEqualTo(mensaje);
     }
 
     private void givenUnaFechaConDisponibilidad() throws ParseException {
@@ -87,7 +87,7 @@ public class ControladorReservaTest {
 
     private void thenObtengoListaHorariosSinLaHoraAReservarYElMensajeDeAviso(ModelAndView mav, String horarioAReservar) {
         assertThat(mav.getViewName()).isEqualTo("reservaMesa");
-        assertThat(mav.getModel().get("mnsjError")).isEqualTo("No hay disponibilidad para la Fecha y Hora Especificada.");
+        assertThat(mav.getModel().get("mnsjCantidad")).isEqualTo("No hay disponibilidad para la Fecha y Hora Especificada.");
         List<String> horariosDisponibles = (List<String>) mav.getModel().get("horariosDisponibles");
         assertThat(horariosDisponibles).doesNotContain(horarioAReservar);
     }
