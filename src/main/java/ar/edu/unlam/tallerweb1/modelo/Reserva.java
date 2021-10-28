@@ -16,8 +16,6 @@ public class Reserva {
     private String celular;
     private Integer mesas;
     @Temporal(TemporalType.DATE)
-    @FutureOrPresent(message = "No se puede elegir una fecha pasada.")
-    @NotNull(message = "No se puede dejar vacio este campo")
     private Date fecha;
     private String hora;
 
@@ -37,12 +35,12 @@ public class Reserva {
         this.nombre = nombre;
     }
 
-    public String getDni() {
+    public String getCelular() {
         return celular;
     }
 
-    public void setDni(String dni) {
-        this.celular = dni;
+    public void setCelular(String celular) {
+        this.celular = celular;
     }
 
     public Integer getMesas() {

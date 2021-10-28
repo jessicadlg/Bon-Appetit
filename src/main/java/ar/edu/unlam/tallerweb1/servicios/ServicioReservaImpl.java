@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.AttributeModel.DatosReserva;
 import ar.edu.unlam.tallerweb1.Excepciones.CantidadComensalesInvalida;
 import ar.edu.unlam.tallerweb1.Excepciones.ReservaException;
 import ar.edu.unlam.tallerweb1.modelo.Reserva;
@@ -35,8 +36,15 @@ public class ServicioReservaImpl implements ServicioReserva {
     }
 
     @Override
-    public void confirmarReserva(Reserva reserva) throws ReservaException {
-        Long idReserva = respositorioReserva.guardarReserva(reserva);
+    public void confirmarReserva(DatosReserva datosReserva) throws ReservaException, ParseException {
+        Reserva reservaNueva = new Reserva();
+        reservaNueva.setNombre(datosReserva.getNombre());
+        reservaNueva.setCelular(datosReserva.getCelular());
+        reservaNueva.setHora(datosReserva.getHora());
+        reservaNueva.setFecha(this.pasarFechaDeStringADate(datosReserva.getFecha()));
+        reservaNueva.setMesas(this.calcularCantidadMesas(datosReserva.getCantidadComensales()));
+
+        Long idReserva = respositorioReserva.guardarReserva(reservaNueva);
         if (idReserva == null)
             throw new ReservaException();
     }
@@ -81,11 +89,12 @@ public class ServicioReservaImpl implements ServicioReserva {
     }
 
     private Date pasarFechaDeStringADate(String fecha) throws ParseException {
+        //01-02-2021
         String[] fechaArray2 = fecha.split("-");
         String dia = fechaArray2[2];
         String mes = fechaArray2[1];
-        String año = fechaArray2[0];
-        String fechaNueva = año + "/" + mes + "/" + dia;
+        String ano = fechaArray2[0];
+        String fechaNueva = ano + "/" + mes + "/" + dia;
 
         DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
         return formatter.parse(fechaNueva);

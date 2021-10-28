@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.serviciosTest;
 
+import ar.edu.unlam.tallerweb1.AttributeModel.DatosReserva;
 import ar.edu.unlam.tallerweb1.Excepciones.CantidadComensalesInvalida;
 import ar.edu.unlam.tallerweb1.Excepciones.ReservaException;
 import ar.edu.unlam.tallerweb1.modelo.Reserva;
@@ -24,7 +25,7 @@ public class ServicioReservaTest {
     private ServicioReserva servicioReserva = new ServicioReservaImpl(repositorioReserva);
 
     @Test(expected = ReservaException.class)
-    public void queCuandoUnaReservaNoEsExitosaLanceReservaException() throws ReservaException {
+    public void queCuandoUnaReservaNoEsExitosaLanceReservaException() throws ReservaException, ParseException {
         givenUnaReserva();
         whenSeConfirmaLaReserva();
     }
@@ -74,14 +75,20 @@ public class ServicioReservaTest {
     }
 
     private List<String> whenSeConsultaLaDisponibilidad() throws ParseException {
-        return servicioReserva.consultarDisponibilidad("22/10/2021", "21:00", 8);
+        return servicioReserva.consultarDisponibilidad("2001-10-20", "22:00", 8);
     }
 
     private void givenUnaReserva() {
         when(repositorioReserva.guardarReserva(anyObject())).thenReturn(null);
     }
 
-    private void whenSeConfirmaLaReserva() throws ReservaException {
-        servicioReserva.confirmarReserva(new Reserva());
+    private void whenSeConfirmaLaReserva() throws ReservaException, ParseException {
+        DatosReserva datos = new DatosReserva();
+        datos.setCantidadComensales(2);
+        datos.setFecha("2001-02-09");
+        datos.setHora("22:00");
+        datos.setCelular("1133333333");
+        datos.setNombre("Taller");
+        servicioReserva.confirmarReserva(datos);
     }
 }
