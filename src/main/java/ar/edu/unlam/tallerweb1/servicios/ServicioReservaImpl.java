@@ -56,8 +56,9 @@ public class ServicioReservaImpl implements ServicioReserva {
             throw new CantidadComensalesInvalida();
         }
 
+        Date fechaAyer = new Date(new Date().getTime() - (1000 * 60 * 60 * 24));
         Date fechaConsulta = this.pasarFechaDeStringADate(fecha);
-        if(fechaConsulta.before(new Date())){
+        if(fechaConsulta.before(fechaAyer)){
             throw new FechaInvalida();
         }
 

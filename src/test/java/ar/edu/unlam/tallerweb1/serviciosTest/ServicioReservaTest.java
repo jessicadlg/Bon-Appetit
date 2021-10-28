@@ -3,15 +3,15 @@ package ar.edu.unlam.tallerweb1.serviciosTest;
 import ar.edu.unlam.tallerweb1.AttributeModel.DatosReserva;
 import ar.edu.unlam.tallerweb1.Excepciones.CantidadComensalesInvalida;
 import ar.edu.unlam.tallerweb1.Excepciones.ReservaException;
-import ar.edu.unlam.tallerweb1.modelo.Reserva;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioReserva;
 import ar.edu.unlam.tallerweb1.servicios.ServicioReserva;
 import ar.edu.unlam.tallerweb1.servicios.ServicioReservaImpl;
 import org.junit.Test;
 
+import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -48,6 +48,18 @@ public class ServicioReservaTest {
     public void queSiLaCantidadDeComensalesEsInvalidaLanceExcepcion() throws ParseException {
         Integer cantidadComensales = givenUnaCantidadDeComensalesInvalida();
         whenSeConsultaLaDisponibilidadConUnaCantidadInvalidaDeComensales(cantidadComensales);
+    }
+
+    private Date pasarFechaDeStringADate(String fecha) throws ParseException {
+        //01-02-2021
+        String[] fechaArray2 = fecha.split("-");
+        String dia = fechaArray2[2];
+        String mes = fechaArray2[1];
+        String ano = fechaArray2[0];
+        String fechaNueva = ano + "/" + mes + "/" + dia;
+
+        DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+        return formatter.parse(fechaNueva);
     }
 
     private void whenSeConsultaLaDisponibilidadConUnaCantidadInvalidaDeComensales(Integer cantidadComensales) throws ParseException {
