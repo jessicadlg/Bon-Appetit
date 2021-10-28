@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.AttributeModel.DatosReserva;
 import ar.edu.unlam.tallerweb1.Excepciones.CantidadComensalesInvalida;
+import ar.edu.unlam.tallerweb1.Excepciones.FechaInvalida;
 import ar.edu.unlam.tallerweb1.Excepciones.ReservaException;
 import ar.edu.unlam.tallerweb1.servicios.ServicioReserva;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,6 +96,8 @@ public class ControladorReserva {
             model.put("fechaInvalida", "Se ha igresado una Fecha Invalida");
         } catch (CantidadComensalesInvalida e) {
             model.put("mnsjCantidadComensalesInvalida", "La Cantidad de comensales debe ser mayor a cero.");
+        }catch (FechaInvalida e){
+            model.put("fechaPasada","No se puede elegir una fecha pasada");
         }
         return new ModelAndView("reservaMesa", model);
     }

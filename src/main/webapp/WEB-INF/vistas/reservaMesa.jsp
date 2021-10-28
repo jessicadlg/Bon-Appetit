@@ -18,6 +18,9 @@
                     <c:if test="${not empty fechaInvalida}">
                         <p class="text-danger">${fechaInvalida}</p>
                     </c:if>
+                    <c:if test="${not empty fechaPasada}">
+                        <p class="text-danger">${fechaPasada}</p>
+                    </c:if>
                     <c:if test="${not empty validacionesConsulta.get('fechaConsultaVacia')}">
                         <p class="text-danger">${validacionesConsulta.get('fechaConsultaVacia')}</p>
                     </c:if>

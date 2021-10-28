@@ -2,6 +2,7 @@ package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.AttributeModel.DatosReserva;
 import ar.edu.unlam.tallerweb1.Excepciones.CantidadComensalesInvalida;
+import ar.edu.unlam.tallerweb1.Excepciones.FechaInvalida;
 import ar.edu.unlam.tallerweb1.Excepciones.ReservaException;
 import ar.edu.unlam.tallerweb1.modelo.Reserva;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioReserva;
@@ -54,8 +55,14 @@ public class ServicioReservaImpl implements ServicioReserva {
         if (comensales < 1) {
             throw new CantidadComensalesInvalida();
         }
+
+        Date fechaConsulta = this.pasarFechaDeStringADate(fecha);
+        if(fechaConsulta.before(new Date())){
+            throw new FechaInvalida();
+        }
+
         List<String> horariosDisponibles = new ArrayList<String>();
-        Long cantidadMesasReservadas = respositorioReserva.obtenerMesasReservadasPor(this.pasarFechaDeStringADate(fecha), hora);
+        Long cantidadMesasReservadas = respositorioReserva.obtenerMesasReservadasPor(fechaConsulta, hora);
         if (cantidadMesasReservadas == null) {
             horariosDisponibles = this.HORARIOS;
         } else {
@@ -63,6 +70,8 @@ public class ServicioReservaImpl implements ServicioReserva {
             Long mesasDisponibles = this.obtenerMesasDisponibles(cantidadMesasReservadas);
             if (verificarMesasDisponibles(mesasAReservar, mesasDisponibles)) {
                 horariosDisponibles = obtenerHorariosDisponibles(hora);
+            }else{
+                horariosDisponibles = this.HORARIOS;
             }
         }
         return horariosDisponibles;

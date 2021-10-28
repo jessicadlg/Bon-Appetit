@@ -2,10 +2,12 @@ package ar.edu.unlam.tallerweb1.controladoresTest;
 
 import ar.edu.unlam.tallerweb1.AttributeModel.DatosReserva;
 import ar.edu.unlam.tallerweb1.Excepciones.CantidadComensalesInvalida;
+import ar.edu.unlam.tallerweb1.Excepciones.FechaInvalida;
 import ar.edu.unlam.tallerweb1.Excepciones.ReservaException;
 import ar.edu.unlam.tallerweb1.controladores.ControladorReserva;
 import ar.edu.unlam.tallerweb1.servicios.ServicioReserva;
 import org.junit.Test;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.ParseException;
@@ -66,6 +68,30 @@ public class ControladorReservaTest {
         givenUnaFechaYUnaHoraSinDisponibilidad();
         ModelAndView mav= whenConsultoLaDisponibilidad();
         thenObtengoListaHorariosSinLaHoraAReservarYElMensajeDeAviso(mav, "22:00");
+    }
+
+    @Test
+    public void queNoMeDejeConsultarUnaFechaPasada() throws ParseException {
+
+        givenQueHayUnaConsultaConUnaFechaPasada();
+
+        ModelAndView mav = whenConsultoLaDisponibilidad();
+
+        thenMeDevuelveElMensajeDeUnaFechaPasada(mav);
+
+
+    }
+
+    private void givenQueHayUnaConsultaConUnaFechaPasada() throws ParseException {
+        when(servicioReserva.consultarDisponibilidad(anyString(),anyString(),anyInt())).thenThrow(FechaInvalida.class);
+
+
+    }
+
+    private void thenMeDevuelveElMensajeDeUnaFechaPasada(ModelAndView mav) {
+        assertThat(mav.getViewName()).isEqualTo("reservaMesa");
+        assertThat(mav.getModel().get("fechaPasada")).isEqualTo("No se puede elegir una fecha pasada");
+
     }
 
     private void givenUnaReServa() throws ReservaException, ParseException {

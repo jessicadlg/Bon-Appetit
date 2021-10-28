@@ -51,7 +51,7 @@ public class ServicioReservaTest {
     }
 
     private void whenSeConsultaLaDisponibilidadConUnaCantidadInvalidaDeComensales(Integer cantidadComensales) throws ParseException {
-        servicioReserva.consultarDisponibilidad("24/10/2021","22:00",cantidadComensales);
+        servicioReserva.consultarDisponibilidad("24/10/2026","22:00",cantidadComensales);
     }
 
     private Integer givenUnaCantidadDeComensalesInvalida() {
@@ -75,7 +75,7 @@ public class ServicioReservaTest {
     }
 
     private List<String> whenSeConsultaLaDisponibilidad() throws ParseException {
-        return servicioReserva.consultarDisponibilidad("2001-10-20", "22:00", 8);
+        return servicioReserva.consultarDisponibilidad("2026-10-26", "22:00", 8);
     }
 
     private void givenUnaReserva() {
