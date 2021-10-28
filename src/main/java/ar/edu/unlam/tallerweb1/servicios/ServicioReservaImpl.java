@@ -85,7 +85,8 @@ public class ServicioReservaImpl implements ServicioReserva {
     }
 
     public Integer calcularCantidadMesas(Integer comensales) {
-        return (int) Math.ceil(comensales / COMENSALES_POR_MESA);
+        double mesas = (double)comensales/(double)COMENSALES_POR_MESA;
+        return (int) Math.ceil(mesas);
     }
 
     private Date pasarFechaDeStringADate(String fecha) throws ParseException {
