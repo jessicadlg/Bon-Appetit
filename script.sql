@@ -15,9 +15,9 @@ INSERT INTO Categoria(nombreCategoria) values
                                            ('Sushi');
 
 INSERT INTO Producto(nombre, precio,codigo,ID_CATEGORIA,activo,nombreImagen,cantidadMeGusta,descripcion) values
-                                                                                                             ('Agua',50.0,"FF1",1,false,"agua.webp",1,"Agua Mineral sin Gas Villavicencio Botella de 500 ml"),
-                                                                                                             ('Cerveza Stella Artois',150.0,"FF",1,false,"cerveza.webp",1,"Cerveza Stella Artois Lata de 473 ml"),
-                                                                                                             ('Coca cola',250.0,"FF",1,false,"cocacola.webp",2,"Coca cola Sabor original Botella de 1.5 lts"),
+                                                                                                             ('Agua',50.0,"FF1",1,false,"agua.webp",5,"Agua Mineral sin Gas Villavicencio Botella de 500 ml"),
+                                                                                                             ('Cerveza Stella Artois',150.0,"FF",1,false,"cerveza.webp",5,"Cerveza Stella Artois Lata de 473 ml"),
+                                                                                                             ('Coca cola',250.0,"FF",1,false,"cocacola.webp",5,"Coca cola Sabor original Botella de 1.5 lts"),
                                                                                                              ('Chipa sin tacc',350.0,"FF",2,false,"chipa.webp",3,""),
                                                                                                              ('Pizza de Jamon',450.0,"FF21",11,false,"pizza.webp",2,""),
                                                                                                              ('Pizza de pepperoni',450.0,"FF22",11,false,"pizza2.webp",2,"La auténtica pizza Pepperoni con tomate, queso, pepperoni y orégano sobre una fina masa y hornada en el horno de leña."),
@@ -34,3 +34,9 @@ INSERT INTO Producto(nombre, precio,codigo,ID_CATEGORIA,activo,nombreImagen,cant
                                                                                                              ('Papas Fritas',350.0,"FG20",8,false,"papas-fritas.webp",3,""),
                                                                                                              ('Papas con Huevo',450.0,"FG21",8,false,"papas-huevo.webp",2,""),
                                                                                                              ('Papas al Verdeo',550.0,"FG24",8,false,"papas-verdeo.webp",1,"");
+
+INSERT INTO Reserva(nombre,celular,mesas,fecha,hora) values
+    ('Sebastian','1566466616',1,'2021/10/01',"22:00");
+    
+    INSERT INTO Reserva(nombre,celular,mesas,fecha,hora) values
+    ('Sebastian','1566466616',30,'2021/11/01',"22:00");

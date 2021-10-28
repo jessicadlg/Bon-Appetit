@@ -4,16 +4,34 @@ import java.util.Date;
 
 public class DatosReserva {
 
-    private Date fecha;
+
+    private String nombre;
+    private String celular;
+    private String fecha;
     private String hora;
     private Integer cantidadComensales;
-    private Integer cantidadMesa;
 
-    public Date getFecha() {
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
+    }
+
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
@@ -31,13 +49,5 @@ public class DatosReserva {
 
     public void setCantidadComensales(Integer cantidadComensales) {
         this.cantidadComensales = cantidadComensales;
-    }
-
-    public Integer getCantidadMesa() {
-        return cantidadMesa;
-    }
-
-    public void setCantidadMesa(Integer cantidadMesa) {
-        this.cantidadMesa = cantidadMesa;
     }
 }
