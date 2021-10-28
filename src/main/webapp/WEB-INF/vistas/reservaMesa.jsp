@@ -34,14 +34,16 @@
                                 </optgroup>
                             </c:if>
                             <c:if test="${empty horaConsulta}">
-                            <option value="" selected disabled="disabled">Ingrese una opcion...</option>
+                                <option value="" selected disabled="disabled">Ingrese una opcion...</option>
                             </c:if>
-                            <option value="12:00">12:00</option>
-                            <option value="14:00">14:00</option>
-                            <option value="16:00">16:00</option>
-                            <option value="18:00">18:00</option>
-                            <option value="20:00">20:00</option>
-                            <option value="22:00">22:00</option>
+                            <optgroup label="Horarios disponibles">
+                                <option value="12:00">12:00</option>
+                                <option value="14:00">14:00</option>
+                                <option value="16:00">16:00</option>
+                                <option value="18:00">18:00</option>
+                                <option value="20:00">20:00</option>
+                                <option value="22:00">22:00</option>
+                            </optgroup>
                         </select>
                     </c:if>
                     <c:if test="${not empty horariosDisponibles}">
@@ -108,30 +110,19 @@
                     <p class="text-danger">${validaciones.get('fechaIncompleta')}</p>
                 </c:if>
             </div>
-            <c:if test="${not empty horaElegida or not empty validaciones}">
+            <c:if test="${not empty horaConsulta or not empty validaciones}">
                 <div class="col-4">
                     <select name="hora" class="form-control" aria-readonly="true">
-                        <option value="${horaElegida}" selected>${horaElegida}</option>
+                        <option value="${horaConsulta}" selected>${horaConsulta}</option>
                     </select>
                     <c:if test="${not empty validaciones.get('horaIncompleta')}">
                         <p class="text-danger">${validaciones.get('horaIncompleta')}</p>
                     </c:if>
                 </div>
             </c:if>
-                <%--            <c:if test="${empty horaElegida}">--%>
-                <%--                <div class="col-4">--%>
-                <%--                    <select name="hora" class="form-control">--%>
-                <%--                        <c:forEach items="${horariosDisponibles}" var="horarios">--%>
-                <%--                            <option disabled selected>Ingrese un horario...</option>--%>
-                <%--                            <option value="${horarios}">${horarios}</option>--%>
-                <%--                        </c:forEach>--%>
-                <%--                    </select>--%>
-                <%--                </div>--%>
-                <%--            </c:if>--%>
-
             <div class="col-4">
                 <input type="number" name="cantidadComensales" placeholder="cantidad" class="form-control"
-                       value="${comensalesElegido}" readonly/>
+                       value="${comensalesConsulta}" readonly/>
                 <c:if test="${not empty validaciones.get('cantidadIncompleta')}">
                     <p class="text-danger">${validaciones.get('cantidadIncompleta')}</p>
                 </c:if>

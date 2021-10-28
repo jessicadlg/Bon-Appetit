@@ -82,14 +82,11 @@ public class ControladorReserva {
             return new ModelAndView("reservaMesa",model);
         }
 
-
         try {
             List<String> horariosDisponibles = servicioReserva.consultarDisponibilidad(fecha, hora, cantidadComensales);
             if (horariosDisponibles.contains(hora)) {
                 model.put("reservaDisponible", "Existe disponibilidad para la Fecha y Hora Especificada. Complete los datos y confirme la Reserva.");
                 model.put("horariosDisponibles", horariosDisponibles);
-                model.put("horaElegida",hora);
-                model.put("comensalesElegido",cantidadComensales);
             } else {
                 model.put("reservaNoDisponible", "No hay disponibilidad para la Fecha y Hora Especificada. Por favor consulte en otro horario");
                 model.put("horariosDisponibles", horariosDisponibles);

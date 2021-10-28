@@ -38,8 +38,8 @@ public class ServicioReservaImpl implements ServicioReserva {
     @Override
     public void confirmarReserva(DatosReserva datosReserva) throws ReservaException, ParseException {
         Reserva reservaNueva = new Reserva();
-        reservaNueva.setNombre(datosReserva.getNombre());
-        reservaNueva.setCelular(datosReserva.getCelular());
+        reservaNueva.setNombre(datosReserva.getNombre().trim());
+        reservaNueva.setCelular(datosReserva.getCelular().trim());
         reservaNueva.setHora(datosReserva.getHora());
         reservaNueva.setFecha(this.pasarFechaDeStringADate(datosReserva.getFecha()));
         reservaNueva.setMesas(this.calcularCantidadMesas(datosReserva.getCantidadComensales()));

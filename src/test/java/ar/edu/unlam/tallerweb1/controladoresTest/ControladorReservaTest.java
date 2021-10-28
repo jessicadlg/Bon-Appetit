@@ -4,7 +4,6 @@ import ar.edu.unlam.tallerweb1.AttributeModel.DatosReserva;
 import ar.edu.unlam.tallerweb1.Excepciones.CantidadComensalesInvalida;
 import ar.edu.unlam.tallerweb1.Excepciones.ReservaException;
 import ar.edu.unlam.tallerweb1.controladores.ControladorReserva;
-import ar.edu.unlam.tallerweb1.modelo.Reserva;
 import ar.edu.unlam.tallerweb1.servicios.ServicioReserva;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
@@ -101,12 +100,10 @@ public class ControladorReservaTest {
 
     private void thenLaReservaNoSeRealizaConExito(ModelAndView mav) {
         assertThat(mav.getViewName()).isEqualTo("redirect:reservar?confirmada=false");
-        //assertThat(mav.getModel().get("mnsj")).isEqualTo("No se ha podido realizar la Reserva.");
     }
 
     private void thenLaReservaSeRealizaConExito(ModelAndView mav) {
         assertThat(mav.getViewName()).isEqualTo("redirect:reservar?confirmada=true");
-       // assertThat(mav.getModel().get("mnsj")).isEqualTo("La Reserva se ha realizado con Exito!");
     }
 
     private void thenLaListaDeHorariosContieneElHorarioAReservar(ModelAndView mav, String horarioAReservar) {
