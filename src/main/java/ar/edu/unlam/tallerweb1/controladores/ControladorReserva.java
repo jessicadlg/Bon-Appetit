@@ -30,23 +30,23 @@ public class ControladorReserva {
     }
 
     @RequestMapping("reservar")
-    public ModelAndView reservar(@RequestParam(value = "confirmada", defaultValue = "false") Boolean confirmada) {
-        ModelMap modelMap = new ModelMap();
-        if (confirmada != null) {
-            if (confirmada) {
-                modelMap.put("reservaConfirmada", "La Reserva se ha realizado con Exito!");
-            } else {
-                modelMap.put("reservaFallida", "No se ha podido realizar la reserva");
-            }
-        }
-        modelMap.put("datosReserva", new DatosReserva());
-        return new ModelAndView("reservaMesa", modelMap);
+    public ModelAndView reservarFormulario() {
+        return procesarReservar(null);
+    }
+
+    @RequestMapping("reservar-error")
+    public ModelAndView reservar() {
+        return procesarReservar("No se ha podido realizar reserva");
+    }
+
+    @RequestMapping("reserva-exitosa")
+    public ModelAndView reservaExitosa() {
+        return procesarReservar("La Reserva se ha realizado con Exito!");
     }
 
     @RequestMapping(value = "/confirmarReserva", method = RequestMethod.POST)
     public ModelAndView confirmarReserva(@ModelAttribute("datosReserva") DatosReserva datosReserva) {
         ModelMap modelMap = new ModelMap();
-        Boolean exito = false;
         HashMap<String,String> validaciones = validarFormulario(datosReserva);
         if(validaciones.size()>=1){
             modelMap.put("validaciones",validaciones);
@@ -60,11 +60,12 @@ public class ControladorReserva {
         try {
             servicioReserva.confirmarReserva(datosReserva);
             modelMap.put("reservaConfirmada", "La Reserva se ha realizado con Exito!");
-            exito = true;
+            return new ModelAndView("redirect:reservar-exitosa");
+
         } catch (ReservaException | ParseException e) {
             modelMap.put("errorReserva", "No se ha podido realizar la Reserva.");
         }
-        return new ModelAndView("redirect:reservar?confirmada=" + exito);
+        return new ModelAndView("redirect:reservar-error");
     }
 
     @RequestMapping("consultarDisponibilidad")
@@ -127,6 +128,15 @@ public class ControladorReserva {
             validacionesConsulta.put("horaConsultaVacia","Debe ingresar una hora para poder consultar");
         }
     return validacionesConsulta;
+    }
+
+    private ModelAndView procesarReservar(String mensajeReserva) {
+        ModelMap modelMap = new ModelMap();
+        if(mensajeReserva!=null){
+            modelMap.put("mensajeReserva", mensajeReserva);
+        }
+        modelMap.put("datosReserva", new DatosReserva());
+        return new ModelAndView("reservaMesa", modelMap);
     }
 
 }

@@ -125,11 +125,11 @@ public class ControladorReservaTest {
     }
 
     private void thenLaReservaNoSeRealizaConExito(ModelAndView mav) {
-        assertThat(mav.getViewName()).isEqualTo("redirect:reservar?confirmada=false");
+        assertThat(mav.getViewName()).isEqualTo("redirect:reservar-error");
     }
 
     private void thenLaReservaSeRealizaConExito(ModelAndView mav) {
-        assertThat(mav.getViewName()).isEqualTo("redirect:reservar?confirmada=true");
+        assertThat(mav.getViewName()).isEqualTo("redirect:reservar-exitosa");
     }
 
     private void thenLaListaDeHorariosContieneElHorarioAReservar(ModelAndView mav, String horarioAReservar) {

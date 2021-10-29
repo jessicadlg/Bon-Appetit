@@ -80,11 +80,8 @@
         </form:form>
         <div class="row">
             <div class="col">
-                <c:if test="${not empty reservaNoDisponible}">
-                    <p class="text-center text-danger">${reservaNoDisponible}</p>
-                </c:if>
-                <c:if test="${not empty reservaConfirmada}">
-                    <p class="text-success text-center">${reservaConfirmada}</p>
+                <c:if test="${not empty mensajeReserva}">
+                    <p class="text-center text-danger">${mensajeReserva}</p>
                 </c:if>
             </div>
         </div>
