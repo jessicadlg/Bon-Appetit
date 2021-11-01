@@ -74,4 +74,6 @@ public class RepositorioProductoImpl implements RepositorioProducto {
         final Session session = this.sessionFactory.getCurrentSession();
         return  session.createCriteria(Producto.class)
                 .add(Restrictions.gt("cantidadMeGusta",cantidad)).list();    }
+
+
 }

@@ -1,24 +1,43 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
+@Entity
 public class Pedido {
 
-    private ArrayList<Producto> productosPedidos;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private Double total;
 
-    public Pedido() {
-        this.productosPedidos = new ArrayList<Producto>();
+    @OneToMany
+    List<Producto> listaProductos;
+
+    public List<Producto> getListaProductos() {
+
+        return listaProductos;
     }
 
-    public void agregarProducto(Producto producto) {
-        this.productosPedidos.add(producto);
+    public void setListaProductos(List<Producto> listaProductos) {
+        this.listaProductos = listaProductos;
     }
 
-    public ArrayList<Producto> getProductosPedidos() {
-        return this.productosPedidos;
+    public Double getTotal() {
+
+        return total;
     }
 
-    public ArrayList<Producto> eliminarProducto(String codigoProducto) {
-        return null;
+    public void setTotal(Double total) {
+        this.total = total;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

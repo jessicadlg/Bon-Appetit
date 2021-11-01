@@ -2,25 +2,38 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
 import ar.edu.unlam.tallerweb1.modelo.Producto;
+import ar.edu.unlam.tallerweb1.servicios.ServicioPedido;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Controller
 public class ControladorPedido {
 
-    public static ModelAndView agregarProducto(Pedido pedido, Producto producto) {
-        pedido.agregarProducto(producto);
-        ModelMap model = new ModelMap();
-        model.put("productosPedidos",pedido.getProductosPedidos());
-        return new ModelAndView("cargar-pedido",model);
+    private ServicioPedido servicioPedido;
+
+    @Autowired
+    public ControladorPedido(ServicioPedido servicioPedido){
+        this.servicioPedido = servicioPedido;
     }
 
-    public static ModelAndView EliminarProductoDelPedido(Pedido pedido, String codigoProducto) {
-        ArrayList<Producto> productosPedidos = pedido.eliminarProducto(codigoProducto);
+
+    public ModelAndView agregarPlatoAlPedido(Long idProducto, Long idPedido) {
+
         ModelMap model = new ModelMap();
-        model.put("productosPedidos", productosPedidos);
-        return new ModelAndView("cargar-pedido", model);
+
+        try{
+            Pedido pedido = this.servicioPedido.agregarPlatoAlPedido(idProducto,idPedido);
+            model.put("pedido",pedido);
+        }catch (Exception e){
+
+        }
+        return new ModelAndView("listaProductos",model);
     }
 }

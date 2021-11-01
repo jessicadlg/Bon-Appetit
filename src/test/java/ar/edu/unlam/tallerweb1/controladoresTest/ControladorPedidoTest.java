@@ -2,57 +2,50 @@ package ar.edu.unlam.tallerweb1.controladoresTest;
 
 import ar.edu.unlam.tallerweb1.controladores.ControladorPedido;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
-import ar.edu.unlam.tallerweb1.modelo.Producto;
+import ar.edu.unlam.tallerweb1.modelo.Plato;
+import ar.edu.unlam.tallerweb1.servicios.ServicioPedido;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class ControladorPedidoTest {
 
-    @Test
-    public void queSePuedaAgregarUnProductoAUnPedido(){
-        Pedido pedido = givenUnPedido();
-        ModelAndView modelAndView = whenSeAgregaUnProductoAlPedido(pedido);
-        thenElPedidoNoEstaVacio(modelAndView);
+    private ModelAndView mav;
+    private ServicioPedido servicioPedido;
+    private ControladorPedido controladorPedido;
+
+
+    @Before
+    public void init() {
+        servicioPedido = mock(ServicioPedido.class);
+        controladorPedido = new ControladorPedido(servicioPedido);
     }
 
     @Test
-    public void queSePuedaEliminarUnProductoDeUnPedido(){
-        Pedido pedido = givenUnPedidoConUnProductoCargado();
-        ModelAndView modelAndView = whenSeEliminaUnProductoDelPedido(pedido);
-        thenElPedidoEstaVacio(modelAndView);
+    public void queSePuedaAgregarPlatosAUnPedidoYQueSeCalculeElTotal(){
+
+        givenQueExisteUnPedidoSinPlatos();
+
+        whenAgregoUnPlato();
+
+        thenMeDevuelveElPedidoConSusPlatos();
+
     }
 
-    private Pedido givenUnPedidoConUnProductoCargado() {
-        Producto producto = new Producto();
-        producto.setCodigo("CoCa-Cola");
-        Pedido pedido = new Pedido();
-        pedido.agregarProducto(producto);
-        return pedido;
+    private void givenQueExisteUnPedidoSinPlatos() {
+        when(servicioPedido.agregarPlatoAlPedido(1L,2L)).thenReturn(new Pedido());
     }
 
-    private ModelAndView whenSeEliminaUnProductoDelPedido(Pedido pedido) {
-        return ControladorPedido.EliminarProductoDelPedido(pedido, "CoCa-Cola");
+    private void whenAgregoUnPlato() {
+        mav = controladorPedido.agregarPlatoAlPedido(1L,2L);
     }
 
-    private void thenElPedidoEstaVacio(ModelAndView modelAndView) {
-    }
-
-    private Pedido givenUnPedido() {
-        return new Pedido();
-    }
-
-    private ModelAndView whenSeAgregaUnProductoAlPedido(Pedido pedido) {
-        Producto producto = new Producto();
-        return ControladorPedido.agregarProducto(pedido, producto);
-    }
-
-    private void thenElPedidoNoEstaVacio(ModelAndView modelAndView) {
-        ArrayList<Producto> productosPedidos = (ArrayList<Producto>) modelAndView.getModel().get("productosPedidos");
-        assertThat(productosPedidos.size()).isEqualTo(1);
+    private void thenMeDevuelveElPedidoConSusPlatos() {
+        assertThat(mav.getViewName()).isEqualTo("listaProductos");
+        assertThat(mav.getModel().get("pedido")).isEqualTo(servicioPedido.agregarPlatoAlPedido(1L,2L));
     }
 
 }

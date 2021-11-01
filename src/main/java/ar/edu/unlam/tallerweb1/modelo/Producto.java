@@ -2,12 +2,14 @@ package ar.edu.unlam.tallerweb1.modelo;
 
 
 import javax.persistence.*;
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Producto {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID_PRODUCTO")
     private Long id;
     private String nombre;
@@ -21,9 +23,19 @@ public class Producto {
     private String nombreImagen;
     private String descripcion;
 
-
     public Producto() {
 
+    }
+
+    public Producto(String nombre, double precio, String codigo, Categoria categoria, boolean activo, Integer cantidadMeGusta, String nombreImagen, String descripcion) {
+        this.nombre = nombre;
+        this.precio = precio;
+        this.codigo = codigo;
+        this.categoria = categoria;
+        this.activo = activo;
+        this.cantidadMeGusta = cantidadMeGusta;
+        this.nombreImagen = nombreImagen;
+        this.descripcion = descripcion;
     }
 
     public String getNombreImagen() {
