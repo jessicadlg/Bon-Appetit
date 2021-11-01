@@ -24,7 +24,7 @@ public class ControladorPedido {
     }
 
 
-    public ModelAndView agregarPlatoAlPedido(Long idProducto, Long idPedido) {
+    public ModelAndView agregarPlatoAlPedido(@RequestParam Long idProducto, @RequestParam Long idPedido) {
 
         ModelMap model = new ModelMap();
 
