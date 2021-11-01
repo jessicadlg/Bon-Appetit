@@ -2,7 +2,6 @@ package ar.edu.unlam.tallerweb1.modelo;
 
 
 import javax.persistence.*;
-//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)

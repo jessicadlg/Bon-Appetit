@@ -31,6 +31,8 @@ public class ServicioPedidoImpl implements ServicioPedido {
     public Pedido agregarPlatoAlPedido(Long idProducto, Long idPedido) {
 
         Pedido pedido = repositorioPedido.obtenerPedido(idPedido);
+        if(pedido == null)
+            pedido= new Pedido();
         Producto producto = repositorioProducto.buscarProductoPorId(idProducto);
 
         pedido.getListaProductos().add(producto);

@@ -34,7 +34,7 @@ public class ControladorReserva {
         return procesarReservar(null);
     }
 
-    @RequestMapping("reservar-error")
+    @RequestMapping("reserva-error")
     public ModelAndView reservar() {
         return procesarReservar("No se ha podido realizar reserva");
     }
@@ -60,12 +60,12 @@ public class ControladorReserva {
         try {
             servicioReserva.confirmarReserva(datosReserva);
             modelMap.put("reservaConfirmada", "La Reserva se ha realizado con Exito!");
-            return new ModelAndView("redirect:reservar-exitosa");
+            return new ModelAndView("redirect:reserva-exitosa");
 
         } catch (ReservaException | ParseException e) {
             modelMap.put("errorReserva", "No se ha podido realizar la Reserva.");
         }
-        return new ModelAndView("redirect:reservar-error");
+        return new ModelAndView("redirect:reserva-error");
     }
 
     @RequestMapping("consultarDisponibilidad")

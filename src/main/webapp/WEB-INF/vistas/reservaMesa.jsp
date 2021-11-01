@@ -81,7 +81,7 @@
         <div class="row">
             <div class="col">
                 <c:if test="${not empty mensajeReserva}">
-                    <p class="text-center text-danger">${mensajeReserva}</p>
+                    <p class="text-center text-dark">${mensajeReserva}</p>
                 </c:if>
             </div>
         </div>
