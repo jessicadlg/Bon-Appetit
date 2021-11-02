@@ -1,17 +1,13 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
-import ar.edu.unlam.tallerweb1.modelo.Plato;
 import ar.edu.unlam.tallerweb1.modelo.Producto;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPedido;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioProducto;
-import com.sun.xml.bind.v2.TODO;
-import org.apache.taglibs.standard.lang.jstl.test.beans.PublicBean1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.HashMap;
 
 @Service
 @Transactional
@@ -28,7 +24,7 @@ public class ServicioPedidoImpl implements ServicioPedido {
     }
 
     @Override
-    public Pedido agregarPlatoAlPedido(Long idProducto, Long idPedido) {
+    public Pedido agregarComidaAlPedido(Long idProducto, Long idPedido) {
 
         Pedido pedido = repositorioPedido.obtenerPedido(idPedido);
         if(pedido == null)
@@ -46,7 +42,7 @@ public class ServicioPedidoImpl implements ServicioPedido {
     }
 
     @Override
-    public Pedido eliminarPlatoDeUnPedido(Long idProducto, Long idPedido) {
+    public Pedido eliminarComidaDeUnPedido(Long idProducto, Long idPedido) {
 
         Pedido pedido = repositorioPedido.obtenerPedido(idPedido);
         Producto producto = repositorioProducto.buscarProductoPorId(idProducto);

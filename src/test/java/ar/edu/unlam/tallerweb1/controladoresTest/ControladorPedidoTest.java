@@ -2,7 +2,6 @@ package ar.edu.unlam.tallerweb1.controladoresTest;
 
 import ar.edu.unlam.tallerweb1.controladores.ControladorPedido;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
-import ar.edu.unlam.tallerweb1.modelo.Plato;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCategoria;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPedido;
 import ar.edu.unlam.tallerweb1.servicios.ServicioProducto;
@@ -20,6 +19,9 @@ public class ControladorPedidoTest {
     private ServicioProducto servicioProducto;
     private ServicioCategoria servicioCategoria;
     private ControladorPedido controladorPedido;
+    private Long idProducto = 1L;
+    private Long idPedido = 2L;
+
 
 
     @Before
@@ -31,27 +33,27 @@ public class ControladorPedidoTest {
     }
 
     @Test
-    public void queSePuedaAgregarPlatosAUnPedidoYQueSeCalculeElTotal(){
+    public void queSePuedaAgregarComidaAUnPedidoYQueSeCalculeElTotal(){
 
-        givenQueExisteUnPedidoSinPlatos();
+        givenQueExisteUnPedidoSinComidas();
 
-        whenAgregoUnPlato();
+        whenAgregoUnaComida();
 
-        thenMeDevuelveElPedidoConSusPlatos();
+        thenMeDevuelveElPedidoConSusComidas();
 
     }
 
-    private void givenQueExisteUnPedidoSinPlatos() {
-        when(servicioPedido.agregarPlatoAlPedido(1L,2L)).thenReturn(new Pedido());
+    private void givenQueExisteUnPedidoSinComidas() {
+        when(servicioPedido.agregarComidaAlPedido(idProducto,idPedido)).thenReturn(new Pedido());
     }
 
-    private void whenAgregoUnPlato() {
-        mav = controladorPedido.agregarPlatoAlPedido(1L,2L);
+    private void whenAgregoUnaComida() {
+        mav = controladorPedido.agregarComidaAlPedido(idProducto,idPedido);
     }
 
-    private void thenMeDevuelveElPedidoConSusPlatos() {
+    private void thenMeDevuelveElPedidoConSusComidas() {
         assertThat(mav.getViewName()).isEqualTo("productos");
-        assertThat(mav.getModel().get("pedido")).isEqualTo(servicioPedido.agregarPlatoAlPedido(1L,2L));
+        assertThat(mav.getModel().get("pedido")).isEqualTo(servicioPedido.agregarComidaAlPedido(idProducto,idPedido));
     }
 
 }

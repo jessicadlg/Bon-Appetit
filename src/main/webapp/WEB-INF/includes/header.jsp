@@ -21,7 +21,7 @@
 <!-- barra navegacion-->
 <nav class="navbar navbar-expand-lg d-flex justify-content-between col-md-12 bg-dark">
     <div class="">
-        <a class="navbar-brand" href="login"><img class="w-25" src="images/logoB.png" alt="Bon_appetit"/></a>
+        <a class="navbar-brand" href="home"><img class="w-25" src="images/logoB.png" alt="Bon_appetit"/></a>
     </div>
     <div class="d-flex justify-content-end">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"

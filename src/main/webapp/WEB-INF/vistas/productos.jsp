@@ -85,7 +85,6 @@
                             <c:if test="${not empty pedido}">
                                 <h3 class="col-12 py-4">Su Pedido:</h3>
                                 <div class="card" style="width: 20rem;">
-
                                     <c:forEach items="${pedido.listaProductos}" var="productos">
                                         <div class="">
                                             <div class="card-body d-inline-flex">

@@ -1,7 +1,7 @@
 package ar.edu.unlam.tallerweb1.serviciosTest;
 
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
-import ar.edu.unlam.tallerweb1.modelo.Plato;
+import ar.edu.unlam.tallerweb1.modelo.Comida;
 import ar.edu.unlam.tallerweb1.modelo.Producto;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPedido;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioProducto;
@@ -21,72 +21,73 @@ public class ServicioPedidoTest {
     private RepositorioProducto repositorioProducto = mock(RepositorioProducto.class);
     private ServicioPedido servicioPedido = new ServicioPedidoImpl(repositorioPedido,repositorioProducto);
     Pedido pedido;
+    private Long idProducto = 1L;
+    private Long idPedido = 2L;
+
 
     @Test
-    public void queSePuedaAgregarUnPlatoAUnPedido(){
+    public void queSePuedaAgregarUnaComidaAUnPedido(){
 
-        givenQueExisteUnPedidoSinPlatos();
+        givenQueExisteUnPedidoSinComidas();
 
-        whenAgregoUnPlatoAlPedido();
+        whenAgregoUnaComidaAlPedido();
 
-        thenMeDevuelveElPedidoConLosPlatos();
+        thenMeDevuelveElPedidoConLosComidas();
 
     }
 
     @Test
-    public void queSePuedaEliminarUnPlatoDeUnPedido(){
+    public void queSePuedaEliminarUnaComidaDeUnPedido(){
 
-        givenQueExisteUnPedidoConPlatos();
+        givenQueExisteUnPedidoConComidas();
 
-        whenQuieroEliminarUnPlato();
+        whenQuieroEliminarUnaComida();
 
-        thenMeEliminaElPlato();
-
+        thenMeEliminaLaComida();
 
     }
 
-    private void givenQueExisteUnPedidoConPlatos() {
+    private void givenQueExisteUnPedidoConComidas() {
         List<Producto> listaProductos = new ArrayList<>();
-        Plato plato = new Plato();
-        Plato plato2 = new Plato();
-        plato.setPrecio(200.0);
-        plato2.setPrecio(300.0);
-        plato.setNombre("Pizza");
-        plato2.setNombre("Pizza otra vez");
-        listaProductos.add(plato);
-        listaProductos.add(plato2);
+        Comida comida = new Comida();
+        Comida comida2 = new Comida();
+        comida.setPrecio(200.0);
+        comida2.setPrecio(300.0);
+        comida.setNombre("Pizza");
+        comida2.setNombre("Pizza otra vez");
+        listaProductos.add(comida);
+        listaProductos.add(comida2);
         Pedido pedido = new Pedido();
         pedido.setListaProductos(listaProductos);
         pedido.setTotal(500.0);
         when(repositorioPedido.obtenerPedido(anyLong())).thenReturn(pedido);
-        when(repositorioProducto.buscarProductoPorId(anyLong())).thenReturn(plato);
-
+        when(repositorioProducto.buscarProductoPorId(anyLong())).thenReturn(comida);
     }
 
-    private void whenQuieroEliminarUnPlato() {
-        pedido = servicioPedido.eliminarPlatoDeUnPedido(1L,2L);
+    private void whenQuieroEliminarUnaComida() {
+        pedido = servicioPedido.eliminarComidaDeUnPedido(idProducto,idPedido);
     }
 
-    private void thenMeEliminaElPlato() {
+    private void thenMeEliminaLaComida() {
         assertThat(pedido.getListaProductos()).hasSize(1);
         assertThat(pedido.getTotal()).isEqualTo(300.0);
     }
 
-    private void givenQueExisteUnPedidoSinPlatos() {
-        Plato p1 = new Plato();
+    private void givenQueExisteUnPedidoSinComidas() {
+        Comida p1 = new Comida();
         p1.setPrecio(200.0);
         Pedido p2 = new Pedido();
         p2.setTotal(0.0);
         p2.setListaProductos(new ArrayList<>());
         when(repositorioPedido.obtenerPedido(1L)).thenReturn(p2);
-        when(repositorioProducto.buscarProductoPorId(1L)).thenReturn(p1);
+        when(repositorioProducto.buscarProductoPorId(idProducto)).thenReturn(p1);
     }
 
-    private void whenAgregoUnPlatoAlPedido() {
-        pedido = servicioPedido.agregarPlatoAlPedido(1L,1L);
+    private void whenAgregoUnaComidaAlPedido() {
+        pedido = servicioPedido.agregarComidaAlPedido(idProducto,idPedido);
     }
 
-    private void thenMeDevuelveElPedidoConLosPlatos() {
+    private void thenMeDevuelveElPedidoConLosComidas() {
         assertThat(pedido.getListaProductos()).hasSize(1);
         assertThat(pedido.getTotal()).isEqualTo(200.0);
     }
