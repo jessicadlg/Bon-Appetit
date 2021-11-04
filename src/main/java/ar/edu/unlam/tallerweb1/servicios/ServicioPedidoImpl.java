@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.Excepciones.PedidoInexistente;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
 import ar.edu.unlam.tallerweb1.modelo.Producto;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPedido;
@@ -27,13 +28,19 @@ public class ServicioPedidoImpl implements ServicioPedido {
     public Pedido agregarComidaAlPedido(Long idProducto, Long idPedido) {
 
         Pedido pedido = repositorioPedido.obtenerPedido(idPedido);
-        if(pedido == null)
-            pedido= new Pedido();
+        Double total = 0.0;
+        if (pedido == null) {
+            pedido = new Pedido();
+        }
         Producto producto = repositorioProducto.buscarProductoPorId(idProducto);
 
-        pedido.getListaProductos().add(producto);
+            if (pedido.getListaProductos().contains(producto)) {
+                total = calcularTotal("+", pedido.getTotal(), producto.getPrecio());
+            } else {
+                pedido.getListaProductos().add(producto);
+                total = calcularTotal("+", pedido.getTotal(), producto.getPrecio());
+            }
 
-        Double total = calcularTotal("+", pedido.getTotal(), producto.getPrecio());
         pedido.setTotal(total);
 
         repositorioPedido.actualizarPedido(pedido);
@@ -44,7 +51,7 @@ public class ServicioPedidoImpl implements ServicioPedido {
     @Override
     public Pedido eliminarComidaDeUnPedido(Long idProducto, Long idPedido) {
 
-        Pedido pedido = repositorioPedido.obtenerPedido(idPedido);
+        Pedido pedido = obtenerPedido(idPedido);
         Producto producto = repositorioProducto.buscarProductoPorId(idProducto);
 
         if (pedido.getListaProductos().contains(producto)) {
@@ -57,13 +64,24 @@ public class ServicioPedidoImpl implements ServicioPedido {
         return pedido;
     }
 
+    @Override
+    public Pedido obtenerPedido(Long idPedido) {
 
-    private Double calcularTotal(String operacion,Double pedidoTotal,Double precioActualizar){
+        if(repositorioPedido.obtenerPedido(idPedido)==null){
+            throw new PedidoInexistente();
+        }
+
+
+        return repositorioPedido.obtenerPedido(idPedido);
+    }
+
+
+    private Double calcularTotal(String operacion, Double pedidoTotal, Double precioActualizar) {
 
         Double total = pedidoTotal;
-        if(operacion.equals("+")){
+        if (operacion.equals("+")) {
             total = total + precioActualizar;
-        }else{
+        } else {
             total = total - precioActualizar;
         }
         return total;

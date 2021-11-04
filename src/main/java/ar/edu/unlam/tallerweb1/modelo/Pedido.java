@@ -9,15 +9,18 @@ public class Pedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID_PEDIDO")
     private Long id;
+
     private Double total;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     List<Producto> listaProductos;
 
     public List<Producto> getListaProductos() {
-    if(listaProductos == null)
-        listaProductos=new ArrayList<>();
+    if(listaProductos == null) {
+        listaProductos = new ArrayList<>();
+    }
         return listaProductos;
     }
 
@@ -26,8 +29,9 @@ public class Pedido {
     }
 
     public Double getTotal() {
-    if (total== null)
-        total= 0.0;
+    if (total== null) {
+        total = 0.0;
+    }
         return total;
     }
 

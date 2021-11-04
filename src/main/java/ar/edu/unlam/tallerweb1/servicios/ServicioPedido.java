@@ -8,4 +8,6 @@ public interface ServicioPedido {
     Pedido agregarComidaAlPedido(Long idProducto, Long idPedido);
 
     Pedido eliminarComidaDeUnPedido(Long idProducto, Long idPedido);
+
+    Pedido obtenerPedido(Long idPedido);
 }

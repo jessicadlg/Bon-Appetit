@@ -2,6 +2,9 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="/WEB-INF/includes/header.jsp"/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+      crossorigin=""/>
 <div class="container-fluid pt-5">
     <!-- seccion listado y destacados-->
     <div class="container p-5">
@@ -78,12 +81,23 @@
                     </c:forEach>
                 </div>
             </div>
-            <div class="col-md-3 ">
+            <p class="text-danger display-4">Aca tendria que estar la api</p>
+
+
+
+            <div id="map" style="height: 600px;"></div>
+
+            <script>
+                var mymap = L.map('map').setView([51.505, -0.09], 13);
+            </script>
+        <div class="col-md-3 ">
                 <section class="container">
                     <aside>
                         <div class="row  justify-content-center">
                             <c:if test="${not empty pedido}">
-                                <h3 class="col-12 py-4">Su Pedido:</h3>
+                                <div class="col">
+                                    <h3 class=" py-4">Su Pedido:</h3>
+                                </div>
                                 <div class="card" style="width: 20rem;">
                                     <c:forEach items="${pedido.listaProductos}" var="productos">
                                         <div class="">
@@ -97,6 +111,7 @@
                                                     <!-- Product price-->
                                                     <span class="text-center text-success">$${productos.precio}</span>
                                                 </div>
+                                                <a href="eliminar-producto?idProducto=${productos.id}&idPedido=1"><button type="button" class="close" data-dismiss="modal">&times;</button></a>
                                             </div>
                                         </div>
                                     </c:forEach>
@@ -105,7 +120,7 @@
                                 <!-- accion ir a comprar-->
                                 <div class="card-footer border-top-0 bg-transparent  mx-auto">
                                     <a class="btn btn-outline-success"
-                                       href="#">Comprar</a>
+                                       href="confirmar-pedido?idPedido=${pedido.id}">Comprar</a>
                                 </div>
                             </c:if>
                         </div>
@@ -150,4 +165,7 @@
         </div>
     </div>
 </div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
 <jsp:include page="/WEB-INF/includes/footer.jsp"/>
