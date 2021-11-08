@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
+import org.hibernate.annotations.Cascade;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,25 +16,11 @@ public class Pedido {
 
     private Double total;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    List<Producto> listaProductos;
+    private Double tiempoPreparacion;
 
-    public List<Producto> getListaProductos() {
-    if(listaProductos == null) {
-        listaProductos = new ArrayList<>();
-    }
-        return listaProductos;
-    }
-
-    public void setListaProductos(List<Producto> listaProductos) {
-        this.listaProductos = listaProductos;
-    }
-
-    public Double getTotal() {
-    if (total== null) {
-        total = 0.0;
-    }
-        return total;
+    public Pedido(){
+        this.total = 0.0;
+        this.tiempoPreparacion= 0.0;
     }
 
     public void setTotal(Double total) {
@@ -45,5 +33,18 @@ public class Pedido {
 
     public Long getId() {
         return id;
+    }
+
+    public Double getTotal() {
+
+        return total;
+    }
+
+    public Double getTiempoPreparacion() {
+        return tiempoPreparacion;
+    }
+
+    public void setTiempoPreparacion(Double tiempoPreparacion) {
+        this.tiempoPreparacion = tiempoPreparacion;
     }
 }

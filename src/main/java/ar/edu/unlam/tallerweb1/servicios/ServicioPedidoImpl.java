@@ -1,6 +1,8 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.Excepciones.PedidoInexistente;
+import ar.edu.unlam.tallerweb1.modelo.Comida;
+import ar.edu.unlam.tallerweb1.modelo.ItemPedido;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
 import ar.edu.unlam.tallerweb1.modelo.Producto;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPedido;
@@ -14,6 +16,7 @@ import javax.transaction.Transactional;
 @Transactional
 public class ServicioPedidoImpl implements ServicioPedido {
 
+
     private RepositorioPedido repositorioPedido;
     private RepositorioProducto repositorioProducto;
 
@@ -24,69 +27,67 @@ public class ServicioPedidoImpl implements ServicioPedido {
 
     }
 
+
+
     @Override
-    public Pedido agregarComidaAlPedido(Long idProducto, Long idPedido) {
+    public Pedido agregarProductoAlPedido(Long idProducto, Long idPedido) {
 
         Pedido pedido = repositorioPedido.obtenerPedido(idPedido);
-        Double total = 0.0;
-        if (pedido == null) {
-            pedido = new Pedido();
-        }
+
         Producto producto = repositorioProducto.buscarProductoPorId(idProducto);
 
-            if (pedido.getListaProductos().contains(producto)) {
-                total = calcularTotal("+", pedido.getTotal(), producto.getPrecio());
-            } else {
-                pedido.getListaProductos().add(producto);
-                total = calcularTotal("+", pedido.getTotal(), producto.getPrecio());
-            }
+        ItemPedido itemPedido = repositorioPedido.obtenerItemPedido(idPedido,idProducto);
+        Integer cantidad = itemPedido.getCantidad();
+        itemPedido.setCantidad(++cantidad);
 
-        pedido.setTotal(total);
+        if(producto instanceof Comida){
+            Double totalTiempo = calcularTotal("+",pedido.getTiempoPreparacion(),((Comida) producto).getTiempoDeCoccion());
+            pedido.setTiempoPreparacion(totalTiempo);
+        }
+
+        Double totalPrecio = calcularTotal("+",pedido.getTotal(),producto.getPrecio());
+        pedido.setTotal(totalPrecio);
 
         repositorioPedido.actualizarPedido(pedido);
+        repositorioPedido.guardarItemPedido(itemPedido);
+
+
 
         return pedido;
     }
 
     @Override
     public Pedido eliminarComidaDeUnPedido(Long idProducto, Long idPedido) {
-
-        Pedido pedido = obtenerPedido(idPedido);
-        Producto producto = repositorioProducto.buscarProductoPorId(idProducto);
-
-        if (pedido.getListaProductos().contains(producto)) {
-            pedido.getListaProductos().remove(producto);
-        }
-        Double total = calcularTotal("-", pedido.getTotal(), producto.getPrecio());
-        pedido.setTotal(total);
-
-        repositorioPedido.actualizarPedido(pedido);
-        return pedido;
+        return null;
     }
 
     @Override
     public Pedido obtenerPedido(Long idPedido) {
-
-        if(repositorioPedido.obtenerPedido(idPedido)==null){
-            throw new PedidoInexistente();
-        }
-
-
-        return repositorioPedido.obtenerPedido(idPedido);
+        return null;
     }
 
+    @Override
+    public Long generarPedido() {
+        Pedido pedido = new Pedido();
 
-    private Double calcularTotal(String operacion, Double pedidoTotal, Double precioActualizar) {
+       Long idPedido = repositorioPedido.generarPedido(pedido);
 
-        Double total = pedidoTotal;
+
+        return idPedido;
+    }
+
+        private Double calcularTotal(String operacion, Double montoTotal, Double cantidadActualizar) {
+
+        Double total = montoTotal;
         if (operacion.equals("+")) {
-            total = total + precioActualizar;
+            total = total + cantidadActualizar;
         } else {
-            total = total - precioActualizar;
+            total = total - cantidadActualizar;
         }
         return total;
 
     }
+
 
 
 }

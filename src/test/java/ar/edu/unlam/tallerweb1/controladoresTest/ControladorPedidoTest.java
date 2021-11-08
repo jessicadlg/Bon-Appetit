@@ -1,9 +1,7 @@
 package ar.edu.unlam.tallerweb1.controladoresTest;
 
-import ar.edu.unlam.tallerweb1.Excepciones.PedidoInexistente;
 import ar.edu.unlam.tallerweb1.controladores.ControladorPedido;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
-import ar.edu.unlam.tallerweb1.modelo.Producto;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCategoria;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPedido;
 import ar.edu.unlam.tallerweb1.servicios.ServicioProducto;
@@ -25,9 +23,6 @@ public class ControladorPedidoTest {
     private Long idPedido = 2L;
 
 
-
-
-
     @Before
     public void init() {
         servicioPedido = mock(ServicioPedido.class);
@@ -37,82 +32,58 @@ public class ControladorPedidoTest {
     }
 
     @Test
-    public void queSePuedaAgregarComidaAUnPedidoYQueSeCalculeElTotal(){
+    public void queSePuedaGenerarUnPedido(){
 
-        givenQueExisteUnPedidoSinComidas();
+        givenUnPedidoNuevo();
 
-        whenAgregoUnaComida();
+        whenQuieroGenerarElPedido();
 
-        thenMeDevuelveElPedidoConSusComidas();
+        thenObtengoElIdDelPedidoGenerado();
+
+    }
+
+    private void givenUnPedidoNuevo() {
+        when(servicioPedido.generarPedido()).thenReturn(1L);
+    }
+
+    private void whenQuieroGenerarElPedido() {
+        mav = controladorPedido.generarPedido();
+    }
+
+    private void thenObtengoElIdDelPedidoGenerado() {
+        assertThat(mav.getViewName()).isEqualTo("productos");
+        assertThat(mav.getModel().get("idPedido")).isEqualTo(servicioPedido.generarPedido());
 
     }
 
     @Test
-    public void queSePuedaConfirmarUnPedido(){
-        givenQueExisteUnPedidoConComidas();
+    public void queSePuedaAgregarUnProductoAUnPedidoYQueSeCalculeElTotal(){
 
-        whenQuieroConfirmarElPedido();
+        givenQueExisteUnPedidoSinProductos();
 
-        thenMeLlevaAlFormularioParaConfirmarElPedido();
+        whenAgregoUnProducto();
 
-    }
-
-    @Test
-    public void queSiSeConfirmaUnPedidoInexistenteNotifique(){
-
-        givenQueNoExisteUnPedido();
-
-        whenQuieroConfirmarElPedido();
-
-        thenMeDevuelveElMensajeDePedidoInexistente();
-
+        thenMeDevuelveElPedidoConSusProductos();
 
     }
 
-    private void givenQueNoExisteUnPedido() {
-        when(servicioPedido.obtenerPedido(1L)).thenThrow(PedidoInexistente.class);
-
-
+    private void givenQueExisteUnPedidoSinProductos() {
+        when(servicioPedido.agregarProductoAlPedido(idProducto,idPedido)).thenReturn(new Pedido());
     }
 
-    private void thenMeDevuelveElMensajeDePedidoInexistente() {
-        assertThat(mav.getViewName()).isEqualTo("formularioPedido");
-        assertThat(mav.getModel().get("pedidoError")).isEqualTo("Este pedido no existe");
-    }
+    private void whenAgregoUnProducto() {
 
-    private void givenQueExisteUnPedidoConComidas() {
-
-        Pedido p1 = new Pedido();
-        Producto pr1 = new Producto();
-        Producto pr2 = new Producto();
-        Producto pr3 = new Producto();
-        p1.getListaProductos().add(pr1);
-        p1.getListaProductos().add(pr2);
-        p1.getListaProductos().add(pr3);
-        when(servicioPedido.obtenerPedido(1L)).thenReturn(p1);
-    }
-
-    private void whenQuieroConfirmarElPedido() {
-        mav = controladorPedido.procesarPedido(1L);
-    }
-
-    private void thenMeLlevaAlFormularioParaConfirmarElPedido() {
-        assertThat(mav.getViewName()).isEqualTo("formularioPedido");
-        assertThat(mav.getModel().get("pedido")).isEqualTo(servicioPedido.obtenerPedido(1L));
-    }
-
-    private void givenQueExisteUnPedidoSinComidas() {
-        when(servicioPedido.agregarComidaAlPedido(idProducto,idPedido)).thenReturn(new Pedido());
-    }
-
-    private void whenAgregoUnaComida() {
         mav = controladorPedido.agregarProductoAlPedido(idProducto,idPedido);
     }
 
-    private void thenMeDevuelveElPedidoConSusComidas() {
-        assertThat(mav.getViewName()).isEqualTo("productos");
-        assertThat(mav.getModel().get("pedido")).isEqualTo(servicioPedido.agregarComidaAlPedido(idProducto,idPedido));
+    private void thenMeDevuelveElPedidoConSusProductos() {
+        assertThat(mav.getViewName()).isEqualTo("redirect:carrito?idPedido=2");
     }
+
+
+
+
+
 
 
 

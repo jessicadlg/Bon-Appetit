@@ -1,16 +1,14 @@
 package ar.edu.unlam.tallerweb1.serviciosTest;
 
-import ar.edu.unlam.tallerweb1.modelo.Pedido;
+import ar.edu.unlam.tallerweb1.modelo.Bebida;
 import ar.edu.unlam.tallerweb1.modelo.Comida;
-import ar.edu.unlam.tallerweb1.modelo.Producto;
+import ar.edu.unlam.tallerweb1.modelo.ItemPedido;
+import ar.edu.unlam.tallerweb1.modelo.Pedido;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPedido;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioProducto;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPedido;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPedidoImpl;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
@@ -21,75 +19,95 @@ public class ServicioPedidoTest {
     private RepositorioProducto repositorioProducto = mock(RepositorioProducto.class);
     private ServicioPedido servicioPedido = new ServicioPedidoImpl(repositorioPedido,repositorioProducto);
     Pedido pedido;
-    private Long idProducto = 1L;
-    private Long idPedido = 2L;
-
+    private Long idProducto = 2L;
+    private Long idPedido = 1L;
 
     @Test
-    public void queSePuedaAgregarUnaComidaAUnPedido(){
+    public void queSePuedaGenerarUnPedido(){
+
+        givenUnPedidoNuevo();
+
+        Long idPedido = whenQuieroGenerarElPedido();
+
+        thenObtengoElIdDelPedidoGenerado(idPedido);
+
+    }
+
+    @Test
+    public void queSePuedaAgregarUnaComidaAUnPedidoYQueSeCalculeElTotalYElTiempoDeCoccion(){
 
         givenQueExisteUnPedidoSinComidas();
 
-        whenAgregoUnaComidaAlPedido();
+        whenAgregoUnaComida();
 
-        thenMeDevuelveElPedidoConLosComidas();
+        thenMeDevuelveElPedidoConSusProductos();
 
     }
 
     @Test
-    public void queSePuedaEliminarUnaComidaDeUnPedido(){
+    public void queSePuedaAgregarUnaBebidaAUnPedidoYQueSeCalculeElTotal(){
 
-        givenQueExisteUnPedidoConComidas();
+     givenQueExisteUnPedidoSinBebidas();
 
-        whenQuieroEliminarUnaComida();
+     whenAgregoUnaBebida();
 
-        thenMeEliminaLaComida();
+     thenMeDevuelveElPedido();
 
     }
 
-    private void givenQueExisteUnPedidoConComidas() {
-        List<Producto> listaProductos = new ArrayList<>();
-        Comida comida = new Comida();
-        Comida comida2 = new Comida();
-        comida.setPrecio(200.0);
-        comida2.setPrecio(300.0);
-        comida.setNombre("Pizza");
-        comida2.setNombre("Pizza otra vez");
-        listaProductos.add(comida);
-        listaProductos.add(comida2);
+    private void givenQueExisteUnPedidoSinBebidas() {
         Pedido pedido = new Pedido();
-        pedido.setListaProductos(listaProductos);
-        pedido.setTotal(500.0);
+        Bebida producto = new Bebida();
+        ItemPedido itemPedido = new ItemPedido();
+        producto.setPrecio(50.0);
         when(repositorioPedido.obtenerPedido(anyLong())).thenReturn(pedido);
-        when(repositorioProducto.buscarProductoPorId(anyLong())).thenReturn(comida);
+        when(repositorioProducto.buscarProductoPorId(anyLong())).thenReturn(producto);
+        when(repositorioPedido.obtenerItemPedido(anyLong(),anyLong())).thenReturn(itemPedido);
+
     }
 
-    private void whenQuieroEliminarUnaComida() {
-        pedido = servicioPedido.eliminarComidaDeUnPedido(idProducto,idPedido);
+    private void whenAgregoUnaBebida() {
+        pedido = servicioPedido.agregarProductoAlPedido(idProducto,idPedido);
     }
 
-    private void thenMeEliminaLaComida() {
-        assertThat(pedido.getListaProductos()).hasSize(1);
-        assertThat(pedido.getTotal()).isEqualTo(300.0);
+    private void thenMeDevuelveElPedido() {
+        assertThat(pedido).isNotNull();
+        assertThat(pedido.getTotal()).isEqualTo(50.0);
+        assertThat(pedido.getTiempoPreparacion()).isEqualTo(0.0);
     }
 
     private void givenQueExisteUnPedidoSinComidas() {
-        Comida p1 = new Comida();
-        p1.setPrecio(200.0);
-        Pedido p2 = new Pedido();
-        p2.setTotal(0.0);
-        p2.setListaProductos(new ArrayList<>());
-        when(repositorioPedido.obtenerPedido(1L)).thenReturn(p2);
-        when(repositorioProducto.buscarProductoPorId(idProducto)).thenReturn(p1);
+        Pedido pedido = new Pedido();
+        Comida producto = new Comida();
+        ItemPedido itemPedido = new ItemPedido();
+        producto.setPrecio(50.0);
+        producto.setTiempoDeCoccion(100.0);
+        when(repositorioPedido.obtenerPedido(anyLong())).thenReturn(pedido);
+        when(repositorioProducto.buscarProductoPorId(anyLong())).thenReturn(producto);
+        when(repositorioPedido.obtenerItemPedido(anyLong(),anyLong())).thenReturn(itemPedido);
     }
 
-    private void whenAgregoUnaComidaAlPedido() {
-        pedido = servicioPedido.agregarComidaAlPedido(idProducto,idPedido);
+    private void whenAgregoUnaComida() {
+        pedido = servicioPedido.agregarProductoAlPedido(idProducto,idPedido);
     }
 
-    private void thenMeDevuelveElPedidoConLosComidas() {
-        assertThat(pedido.getListaProductos()).hasSize(1);
-        assertThat(pedido.getTotal()).isEqualTo(200.0);
+    private void thenMeDevuelveElPedidoConSusProductos() {
+        assertThat(pedido).isNotNull();
+        assertThat(pedido.getTotal()).isEqualTo(50.0);
+        assertThat(pedido.getTiempoPreparacion()).isEqualTo(100.0);
+      //  verify(repositorioPedido.actualizarPedido(anyObject(),times(1).equals(1));
+    }
+
+    private void givenUnPedidoNuevo() {
+        when(repositorioPedido.generarPedido(anyObject())).thenReturn(1L);
+    }
+
+    private Long whenQuieroGenerarElPedido() {
+        return servicioPedido.generarPedido();
+    }
+
+    private void thenObtengoElIdDelPedidoGenerado(Long idPedido) {
+        assertThat(idPedido).isEqualTo(1L);
     }
 
 }

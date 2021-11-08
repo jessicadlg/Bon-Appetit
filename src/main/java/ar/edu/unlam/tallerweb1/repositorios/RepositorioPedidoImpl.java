@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.repositorios;
 
+import ar.edu.unlam.tallerweb1.modelo.ItemPedido;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -29,5 +30,26 @@ public class RepositorioPedidoImpl implements RepositorioPedido{
     @Override
     public void actualizarPedido(Pedido pedido) {
         sessionFactory.getCurrentSession().save(pedido);
+    }
+
+    @Override
+    public Long generarPedido(Pedido pedido) {
+        return (Long) sessionFactory.getCurrentSession().save(pedido);
+    }
+
+    @Override
+    public ItemPedido obtenerItemPedido(Long idPedido, Long idProducto) {
+        final Session session = this.sessionFactory.getCurrentSession();
+        ItemPedido itemPedido = (ItemPedido) session.createCriteria(ItemPedido.class)
+                .add(Restrictions.eq("producto.id",idProducto))
+                .add(Restrictions.eq("pedido.id",idPedido))
+                .uniqueResult();
+
+        return itemPedido;
+    }
+
+    @Override
+    public void guardarItemPedido(ItemPedido itemPedido) {
+        sessionFactory.getCurrentSession().save(itemPedido);
     }
 }
