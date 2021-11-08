@@ -37,6 +37,11 @@ public class ServicioPedidoImpl implements ServicioPedido {
         Producto producto = repositorioProducto.buscarProductoPorId(idProducto);
 
         ItemPedido itemPedido = repositorioPedido.obtenerItemPedido(idPedido,idProducto);
+
+        if(itemPedido==null){
+            itemPedido = new ItemPedido();
+        }
+
         Integer cantidad = itemPedido.getCantidad();
         itemPedido.setCantidad(++cantidad);
 
@@ -58,7 +63,25 @@ public class ServicioPedidoImpl implements ServicioPedido {
 
     @Override
     public Pedido eliminarComidaDeUnPedido(Long idProducto, Long idPedido) {
-        return null;
+
+        Pedido pedido = repositorioPedido.obtenerPedido(idPedido);
+        Producto producto = repositorioProducto.buscarProductoPorId(idProducto);
+
+        ItemPedido itemPedido = repositorioPedido.obtenerItemPedido(idPedido,idProducto);
+        Integer cantidad = itemPedido.getCantidad();
+        itemPedido.setCantidad(--cantidad);
+
+        if(producto instanceof Comida){
+            Double totalTiempo = calcularTotal("-",pedido.getTiempoPreparacion(),((Comida) producto).getTiempoDeCoccion());
+            pedido.setTiempoPreparacion(totalTiempo);
+        }
+
+        Double totalPrecio = calcularTotal("-",pedido.getTotal(),producto.getPrecio());
+        pedido.setTotal(totalPrecio);
+
+        repositorioPedido.actualizarPedido(pedido);
+        repositorioPedido.guardarItemPedido(itemPedido);
+        return pedido;
     }
 
     @Override

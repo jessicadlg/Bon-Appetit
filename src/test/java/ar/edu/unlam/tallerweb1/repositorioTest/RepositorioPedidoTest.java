@@ -29,7 +29,6 @@ public class RepositorioPedidoTest extends SpringTest {
 
         thenMeDevuelveElPedidoBuscado(idPedido, pedidoObtenido);
 
-
     }
 
     private Long givenQueExisteUnPedido() {

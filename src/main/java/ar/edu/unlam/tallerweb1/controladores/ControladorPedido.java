@@ -33,12 +33,19 @@ public class ControladorPedido {
 
     @RequestMapping("generar-pedido")
     public ModelAndView generarPedido() {
+        Long idPedido = servicioPedido.generarPedido();
+        return new ModelAndView("redirect:pedido?idPedido=" + idPedido);
+    }
+
+    @RequestMapping("pedido")
+    public ModelAndView mostraPedido(@RequestParam Long idPedido) {
 
         ModelMap model = new ModelMap();
 
-        try{
-            Long idPedido = servicioPedido.generarPedido();
+        try {
+            Pedido pedido = servicioPedido.obtenerPedido(idPedido);
             traerProductos(model);
+            model.put("pedido", pedido);
             model.put("idPedido",idPedido);
         } catch (ListaNoEncontrada e) {
             model.put("msgError", "No hay productos");
@@ -46,11 +53,10 @@ public class ControladorPedido {
             model.put("categoriasNoEncontradas", "No se encontro ninguna categoria por mostrar");
         }
 
-        return new ModelAndView("productos",model);
+        return new ModelAndView("productos", model);
     }
 
-
-    @RequestMapping(path = "agregarPedido")
+    @RequestMapping(path = "agregar-producto")
     public ModelAndView agregarProductoAlPedido(@RequestParam Long idProducto, @RequestParam Long idPedido) {
 
         this.servicioPedido.agregarProductoAlPedido(idProducto, idPedido);
@@ -65,11 +71,12 @@ public class ControladorPedido {
         try {
             Pedido pedido = this.servicioPedido.obtenerPedido(idPedido);
             traerProductos(model);
-            model.put("pedido",pedido);
+            model.put("pedido", pedido);
+            model.put("idPedido", idPedido);
         } catch (ListaNoEncontrada e) {
-             model.put("msgError", "No hay productos");
+            model.put("msgError", "No hay productos");
         } catch (ListaCategoriaNoEncontrada f) {
-             model.put("categoriasNoEncontradas", "No se encontro ninguna categoria por mostrar");
+            model.put("categoriasNoEncontradas", "No se encontro ninguna categoria por mostrar");
         }
         return new ModelAndView("productos", model);
     }
@@ -82,8 +89,6 @@ public class ControladorPedido {
         model.put("listaCategorias", listaCategorias);
         model.put("destacados", destacados);
     }
-
-
 
 
 }

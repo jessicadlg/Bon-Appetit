@@ -40,15 +40,18 @@
                                                         <!-- Product precio-->
                                                         <span class="text-center">$${productos.precio}</span>
                                                         <div class=" d-flex justify-content-center">
-                                                            <a href="agregarPedido?idProducto=${productos.id}&idPedido=1"
-                                                               class="d-sm-block btn btn-sm btn-info m-2">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                                                     height="16" fill="currentColor"
-                                                                     class="bi bi-cart4 mx-1" viewBox="0 0 16 16">
-                                                                    <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
-                                                                </svg>
-                                                                Agregar al carrito
-                                                            </a>
+                                                            <c:if test="${not empty idPedido}">
+                                                                <a href="agregar-producto?idProducto=${productos.id}&idPedido=${idPedido}"
+                                                                   class="d-sm-block btn btn-sm btn-info m-2">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                         height="16" fill="currentColor"
+                                                                         class="bi bi-cart4 mx-1" viewBox="0 0 16 16">
+                                                                        <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
+                                                                    </svg>
+                                                                    Agregar al carrito
+                                                                </a>
+                                                            </c:if>
+
                                                             <!-- boton toma el numerito-->
                                                             <a href="darMeGusta?id=${productos.id}"
                                                                class="d-sm-block btn btn-sm btn-primary m-2 ">
@@ -81,16 +84,7 @@
                     </c:forEach>
                 </div>
             </div>
-            <p class="text-danger display-4">Aca tendria que estar la api</p>
-
-
-
-            <div id="map" style="height: 600px;"></div>
-
-            <script>
-                var mymap = L.map('map').setView([51.505, -0.09], 13);
-            </script>
-        <div class="col-md-3 ">
+            <div class="col-md-3 ">
                 <section class="container">
                     <aside>
                         <div class="row  justify-content-center">
@@ -111,7 +105,10 @@
                                                     <!-- Product price-->
                                                     <span class="text-center text-success">$${productos.precio}</span>
                                                 </div>
-                                                <a href="eliminar-producto?idProducto=${productos.id}&idPedido=1"><button type="button" class="close" data-dismiss="modal">&times;</button></a>
+                                                <a href="eliminar-producto?idProducto=${productos.id}&idPedido=1">
+                                                    <button type="button" class="close" data-dismiss="modal">&times;
+                                                    </button>
+                                                </a>
                                             </div>
                                         </div>
                                     </c:forEach>
@@ -165,7 +162,7 @@
         </div>
     </div>
 </div>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-            crossorigin=""></script>
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
 <jsp:include page="/WEB-INF/includes/footer.jsp"/>

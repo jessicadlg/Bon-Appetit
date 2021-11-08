@@ -51,8 +51,7 @@ public class ControladorPedidoTest {
     }
 
     private void thenObtengoElIdDelPedidoGenerado() {
-        assertThat(mav.getViewName()).isEqualTo("productos");
-        assertThat(mav.getModel().get("idPedido")).isEqualTo(servicioPedido.generarPedido());
+        assertThat(mav.getViewName()).isEqualTo("redirect:pedido?idPedido=1");
 
     }
 
