@@ -69,11 +69,20 @@
                                                     </div>
                                                 </div>
                                                 <div class="col">
-                                                    <a href="darMeGusta?id=${productos.id}"
-                                                       class="d-sm-block btn btn-sm btn-primary">
-                                                        Me gusta <span
-                                                            class="badge badge-light">${productos.cantidadMeGusta}</span>
-                                                    </a>
+                                                    <c:if test="${not empty idPedido}">
+                                                        <a href="darMeGustaPedido?id=${productos.id}&idPedido=${idPedido}"
+                                                           class="d-sm-block btn btn-sm btn-primary">
+                                                            Me gusta <span
+                                                                class="badge badge-light">${productos.cantidadMeGusta}</span>
+                                                        </a>
+                                                    </c:if>
+                                                    <c:if test="${empty idPedido}">
+                                                        <a href="darMeGusta?id=${productos.id}"
+                                                           class="d-sm-block btn btn-sm btn-primary">
+                                                            Me gusta <span
+                                                                class="badge badge-light">${productos.cantidadMeGusta}</span>
+                                                        </a>
+                                                    </c:if>
                                                 </div>
                                                 <c:if test="${not empty idPedido}">
                                                     <div class="col">
@@ -180,7 +189,8 @@
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <a href="confirmar-pedido?idPedido=${pedido.id}" class="btn btn-primary btn-block">Confirmar pedido</a>
+                                    <a href="confirmar-pedido?idPedido=${pedido.id}" class="btn btn-primary btn-block">Confirmar
+                                        pedido</a>
                                 </div>
                             </div>
                         </div>
