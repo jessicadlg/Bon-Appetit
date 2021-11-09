@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.Excepciones.PedidoInexistente;
+import ar.edu.unlam.tallerweb1.Excepciones.PedidoVacio;
 import ar.edu.unlam.tallerweb1.modelo.Comida;
 import ar.edu.unlam.tallerweb1.modelo.ItemPedido;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Transactional
@@ -42,6 +44,7 @@ public class ServicioPedidoImpl implements ServicioPedido {
             itemPedido = new ItemPedido();
         }
 
+
         Integer cantidad = itemPedido.getCantidad();
         itemPedido.setCantidad(++cantidad);
 
@@ -54,6 +57,7 @@ public class ServicioPedidoImpl implements ServicioPedido {
         pedido.setTotal(totalPrecio);
 
         repositorioPedido.actualizarPedido(pedido);
+        actualizarItem(itemPedido,producto,pedido);
         repositorioPedido.guardarItemPedido(itemPedido);
 
 
@@ -70,6 +74,11 @@ public class ServicioPedidoImpl implements ServicioPedido {
         ItemPedido itemPedido = repositorioPedido.obtenerItemPedido(idPedido,idProducto);
         Integer cantidad = itemPedido.getCantidad();
         itemPedido.setCantidad(--cantidad);
+        if(cantidad==0){
+            repositorioPedido.eliminarItemPedido(itemPedido);
+        }else{
+            repositorioPedido.guardarItemPedido(itemPedido);
+        }
 
         if(producto instanceof Comida){
             Double totalTiempo = calcularTotal("-",pedido.getTiempoPreparacion(),((Comida) producto).getTiempoDeCoccion());
@@ -80,13 +89,18 @@ public class ServicioPedidoImpl implements ServicioPedido {
         pedido.setTotal(totalPrecio);
 
         repositorioPedido.actualizarPedido(pedido);
-        repositorioPedido.guardarItemPedido(itemPedido);
         return pedido;
     }
 
     @Override
     public Pedido obtenerPedido(Long idPedido) {
-        return null;
+
+        if(repositorioPedido.obtenerPedido(idPedido)==null){
+            throw new PedidoInexistente();
+        }
+
+
+        return repositorioPedido.obtenerPedido(idPedido);
     }
 
     @Override
@@ -99,7 +113,18 @@ public class ServicioPedidoImpl implements ServicioPedido {
         return idPedido;
     }
 
-        private Double calcularTotal(String operacion, Double montoTotal, Double cantidadActualizar) {
+    @Override
+    public List<ItemPedido> obtenerItemsPedido(Long idPedido) {
+
+        List<ItemPedido> itemPedidos = repositorioPedido.obtenerItemsPedido(idPedido);
+        if(itemPedidos.size()<1){
+            throw new PedidoVacio();
+        }
+
+        return itemPedidos;
+    }
+
+    private Double calcularTotal(String operacion, Double montoTotal, Double cantidadActualizar) {
 
         Double total = montoTotal;
         if (operacion.equals("+")) {
@@ -108,6 +133,17 @@ public class ServicioPedidoImpl implements ServicioPedido {
             total = total - cantidadActualizar;
         }
         return total;
+
+    }
+
+    private void actualizarItem(ItemPedido itemPedido,Producto producto,Pedido pedido){
+
+        if(itemPedido.getProducto()==null){
+            itemPedido.setProducto(producto);
+        }
+        if(itemPedido.getPedido()==null){
+            itemPedido.setPedido(pedido);
+        }
 
     }
 

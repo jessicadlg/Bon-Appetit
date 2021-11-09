@@ -2,7 +2,10 @@ package ar.edu.unlam.tallerweb1.controladores;
 
 import ar.edu.unlam.tallerweb1.Excepciones.ListaCategoriaNoEncontrada;
 import ar.edu.unlam.tallerweb1.Excepciones.ListaNoEncontrada;
+import ar.edu.unlam.tallerweb1.Excepciones.PedidoInexistente;
+import ar.edu.unlam.tallerweb1.Excepciones.PedidoVacio;
 import ar.edu.unlam.tallerweb1.modelo.Categoria;
+import ar.edu.unlam.tallerweb1.modelo.ItemPedido;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
 import ar.edu.unlam.tallerweb1.modelo.Producto;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCategoria;
@@ -38,7 +41,7 @@ public class ControladorPedido {
     }
 
     @RequestMapping("pedido")
-    public ModelAndView mostraPedido(@RequestParam Long idPedido) {
+    public ModelAndView mostrarPedido(@RequestParam Long idPedido) {
 
         ModelMap model = new ModelMap();
 
@@ -47,10 +50,16 @@ public class ControladorPedido {
             traerProductos(model);
             model.put("pedido", pedido);
             model.put("idPedido",idPedido);
+            List<ItemPedido> itemsPedido = servicioPedido.obtenerItemsPedido(idPedido);
+            model.put("itemsPedido",itemsPedido);
         } catch (ListaNoEncontrada e) {
             model.put("msgError", "No hay productos");
         } catch (ListaCategoriaNoEncontrada f) {
             model.put("categoriasNoEncontradas", "No se encontro ninguna categoria por mostrar");
+        } catch (PedidoInexistente g){
+            model.put("pedidoInexistente","Este pedido no existe");
+        } catch (PedidoVacio h){
+            model.put("pedidoVacio","Su pedido está vacio");
         }
 
         return new ModelAndView("productos", model);
@@ -73,10 +82,16 @@ public class ControladorPedido {
             traerProductos(model);
             model.put("pedido", pedido);
             model.put("idPedido", idPedido);
+            List<ItemPedido> itemsPedido = servicioPedido.obtenerItemsPedido(idPedido);
+            model.put("itemsPedido",itemsPedido);
         } catch (ListaNoEncontrada e) {
             model.put("msgError", "No hay productos");
         } catch (ListaCategoriaNoEncontrada f) {
             model.put("categoriasNoEncontradas", "No se encontro ninguna categoria por mostrar");
+        } catch (PedidoInexistente f){
+            model.put("pedidoInexistente","Este pedido no existe");
+        } catch (PedidoVacio h){
+            model.put("pedidoVacio","Su pedido está vacio");
         }
         return new ModelAndView("productos", model);
     }
@@ -88,6 +103,19 @@ public class ControladorPedido {
         model.put("listaProductos", listaProductos);
         model.put("listaCategorias", listaCategorias);
         model.put("destacados", destacados);
+    }
+
+    @RequestMapping("eliminar-producto")
+    public ModelAndView eliminarProductoDeUnPedido(@RequestParam Long idPedido,@RequestParam Long idProducto){
+
+        Pedido pedido = servicioPedido.eliminarComidaDeUnPedido(idProducto,idPedido);
+
+        if(pedido.getTotal()<=0.0){
+            return new ModelAndView("redirect:pedido?idPedido=" + idPedido);
+        }
+
+        return new ModelAndView("redirect:carrito?idPedido=" + idPedido);
+
     }
 
 

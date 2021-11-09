@@ -11,12 +11,12 @@ public class ItemPedido {
     @Column(name = "ID_ITEM_PEDIDO")
     private Long id;
 
-    @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
     private Producto producto;
 
     private Integer cantidad;
 
-    @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
     private Pedido pedido;
 
 

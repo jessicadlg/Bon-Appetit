@@ -1,6 +1,9 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.modelo.ItemPedido;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
+
+import java.util.List;
 
 public interface ServicioPedido {
 
@@ -12,4 +15,6 @@ public interface ServicioPedido {
     Pedido obtenerPedido(Long idPedido);
 
     Long generarPedido();
+
+    List<ItemPedido> obtenerItemsPedido(Long idPedido);
 }

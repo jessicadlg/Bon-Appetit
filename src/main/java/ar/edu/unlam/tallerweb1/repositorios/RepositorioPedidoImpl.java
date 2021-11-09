@@ -8,6 +8,8 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class RepositorioPedidoImpl implements RepositorioPedido{
 
@@ -52,4 +54,19 @@ public class RepositorioPedidoImpl implements RepositorioPedido{
     public void guardarItemPedido(ItemPedido itemPedido) {
         sessionFactory.getCurrentSession().save(itemPedido);
     }
+
+    @Override
+    public List<ItemPedido> obtenerItemsPedido(Long idPedido) {
+        final Session session = this.sessionFactory.getCurrentSession();
+        List<ItemPedido>itemPedidos = session.createCriteria(ItemPedido.class)
+                .add(Restrictions.eq("pedido.id",idPedido)).list();
+        return itemPedidos;
+    }
+
+    public void eliminarItemPedido(ItemPedido itemPedido){
+        final Session session = this.sessionFactory.getCurrentSession();
+        session.delete("ItemPedido",itemPedido);
+       // session.delete(itemPedido);
+    }
+
 }
