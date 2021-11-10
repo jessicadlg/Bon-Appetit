@@ -66,7 +66,6 @@ public class RepositorioPedidoImpl implements RepositorioPedido{
     public void eliminarItemPedido(ItemPedido itemPedido){
         final Session session = this.sessionFactory.getCurrentSession();
         session.delete("ItemPedido",itemPedido);
-       // session.delete(itemPedido);
     }
 
 }

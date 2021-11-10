@@ -17,10 +17,47 @@ public class Pedido {
     private Double total;
 
     private Double tiempoPreparacion;
+    private String nombre;
+    private String telefono;
+    private String calle;
+    private String altura;
 
     public Pedido(){
         this.total = 0.0;
         this.tiempoPreparacion= 0.0;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getCalle() {
+        return calle;
+    }
+
+    public void setCalle(String calle) {
+        this.calle = calle;
+    }
+
+
+    public String getAltura() {
+        return altura;
+    }
+
+    public void setAltura(String altura) {
+        this.altura = altura;
     }
 
     public void setTotal(Double total) {

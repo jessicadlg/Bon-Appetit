@@ -124,6 +124,11 @@ public class ServicioPedidoImpl implements ServicioPedido {
         return itemPedidos;
     }
 
+    @Override
+    public void consultarRango() {
+
+    }
+
     private Double calcularTotal(String operacion, Double montoTotal, Double cantidadActualizar) {
 
         Double total = montoTotal;

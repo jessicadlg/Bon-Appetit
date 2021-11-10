@@ -32,6 +32,30 @@ public class ControladorPedidoTest {
     }
 
     @Test
+    public void quePuedaConsultarSiEstaDentroDelRangoDeEnvios(){
+        givenUnaCalleYUnaAltura();
+
+        whenConsultoElRango();
+
+        thenPuedoAgregarLosProductos();
+    }
+
+    private void givenUnaCalleYUnaAltura() {
+
+    }
+
+    private void whenConsultoElRango() {
+        mav = controladorPedido.consultarRango("Estrada","123");
+    }
+
+    private void thenPuedoAgregarLosProductos() {
+    }
+
+    @Test
+    public void quePuedaConsultarSiEstaFueraDelRangoDeEnvios(){
+
+    }
+    @Test
     public void queSePuedaGenerarUnPedido(){
 
         givenUnPedidoNuevo();

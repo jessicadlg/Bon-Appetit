@@ -1,9 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladores;
 
-import ar.edu.unlam.tallerweb1.Excepciones.ListaCategoriaNoEncontrada;
-import ar.edu.unlam.tallerweb1.Excepciones.ListaNoEncontrada;
-import ar.edu.unlam.tallerweb1.Excepciones.PedidoInexistente;
-import ar.edu.unlam.tallerweb1.Excepciones.PedidoVacio;
+import ar.edu.unlam.tallerweb1.Excepciones.*;
 import ar.edu.unlam.tallerweb1.modelo.Categoria;
 import ar.edu.unlam.tallerweb1.modelo.ItemPedido;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
@@ -34,6 +31,7 @@ public class ControladorPedido {
         this.servicioCategoria = servicioCategoria;
     }
 
+
     @RequestMapping("generar-pedido")
     public ModelAndView generarPedido() {
         Long idPedido = servicioPedido.generarPedido();
@@ -49,17 +47,17 @@ public class ControladorPedido {
             Pedido pedido = servicioPedido.obtenerPedido(idPedido);
             traerProductos(model);
             model.put("pedido", pedido);
-            model.put("idPedido",idPedido);
+            model.put("idPedido", idPedido);
             List<ItemPedido> itemsPedido = servicioPedido.obtenerItemsPedido(idPedido);
-            model.put("itemsPedido",itemsPedido);
+            model.put("itemsPedido", itemsPedido);
         } catch (ListaNoEncontrada e) {
             model.put("msgError", "No hay productos");
         } catch (ListaCategoriaNoEncontrada f) {
             model.put("categoriasNoEncontradas", "No se encontro ninguna categoria por mostrar");
-        } catch (PedidoInexistente g){
-            model.put("pedidoInexistente","Este pedido no existe");
-        } catch (PedidoVacio h){
-            model.put("pedidoVacio","Su pedido está vacio");
+        } catch (PedidoInexistente g) {
+            model.put("pedidoInexistente", "Este pedido no existe");
+        } catch (PedidoVacio h) {
+            model.put("pedidoVacio", "Su pedido está vacio");
         }
 
         return new ModelAndView("productos", model);
@@ -83,15 +81,15 @@ public class ControladorPedido {
             model.put("pedido", pedido);
             model.put("idPedido", idPedido);
             List<ItemPedido> itemsPedido = servicioPedido.obtenerItemsPedido(idPedido);
-            model.put("itemsPedido",itemsPedido);
+            model.put("itemsPedido", itemsPedido);
         } catch (ListaNoEncontrada e) {
             model.put("msgError", "No hay productos");
         } catch (ListaCategoriaNoEncontrada f) {
             model.put("categoriasNoEncontradas", "No se encontro ninguna categoria por mostrar");
-        } catch (PedidoInexistente f){
-            model.put("pedidoInexistente","Este pedido no existe");
-        } catch (PedidoVacio h){
-            model.put("pedidoVacio","Su pedido está vacio");
+        } catch (PedidoInexistente f) {
+            model.put("pedidoInexistente", "Este pedido no existe");
+        } catch (PedidoVacio h) {
+            model.put("pedidoVacio", "Su pedido está vacio");
         }
         return new ModelAndView("productos", model);
     }
@@ -106,16 +104,43 @@ public class ControladorPedido {
     }
 
     @RequestMapping("eliminar-producto")
-    public ModelAndView eliminarProductoDeUnPedido(@RequestParam Long idPedido,@RequestParam Long idProducto){
+    public ModelAndView eliminarProductoDeUnPedido(@RequestParam Long idPedido, @RequestParam Long idProducto) {
 
-        Pedido pedido = servicioPedido.eliminarComidaDeUnPedido(idProducto,idPedido);
+        Pedido pedido = servicioPedido.eliminarComidaDeUnPedido(idProducto, idPedido);
 
-        if(pedido.getTotal()<=0.0){
+        if (pedido.getTotal() <= 0.0) {
             return new ModelAndView("redirect:pedido?idPedido=" + idPedido);
         }
 
         return new ModelAndView("redirect:carrito?idPedido=" + idPedido);
 
+    }
+    @RequestMapping("consultar")
+    public ModelAndView consultarFormulario() {
+        return procesarConsultaRango(null);
+    }
+
+    @RequestMapping(path = "consultarRango")
+    public ModelAndView consultarRango(String calle, String altura) {
+        try {
+            servicioPedido.consultarRango();
+            return new ModelAndView("redirect:generar-pedido");
+        } catch (RangoInvalido e) {
+            return new ModelAndView("redirect:consultaRangoError");
+        }
+    }
+
+    @RequestMapping("consultaRangoError")
+    public ModelAndView consultarRangoFallido() {
+        return procesarConsultaRango("Lamentablemente no se encuentra dentro del rango de envios");
+    }
+
+    private ModelAndView procesarConsultaRango(String mensajeConsulta) {
+        ModelMap modelMap = new ModelMap();
+        if (mensajeConsulta != null) {
+            modelMap.put("errorConsultaRango", mensajeConsulta);
+        }
+        return new ModelAndView("formularioConsultaRango", modelMap);
     }
 
 

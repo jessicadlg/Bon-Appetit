@@ -2,9 +2,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="/WEB-INF/includes/header.jsp"/>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-      integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-      crossorigin=""/>
 <div class="container-fluid">
     <div class="row">
         <div class="col">
@@ -42,12 +39,12 @@
                                                          class="rounded img-thumbnail img-fluid"
                                                     >
                                                 </div>
-                                                <div class="col-8">
-                                                    <h5 class="card-title text-dark display-4 text-italic">${productos.nombre}</h5>
+                                                <div class="col-8 d-flex justify-content-between">
+                                                    <h3 class="card-title text-dark  text-italic">${productos.nombre}</h3>
                                                     <div class="row">
                                                         <div class="col">
-                                                            <h5 class="card-title text-dark display-4">
-                                                                $${productos.precio}</h5>
+                                                            <h4 class="card-title text-dark">
+                                                                $${productos.precio}</h4>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -126,7 +123,7 @@
                                         <!-- Product name-->
                                         <h5 class="">${productos.nombre}</h5>
                                         <!-- Product price-->
-                                        <span class="fw-bolder text-success">$${productos.precio}</span>
+                                        <span class="text-success">$${productos.precio}</span>
                                     </div>
                                 </div>
                                 <!-- accion ir a ver detalle-->
@@ -156,7 +153,7 @@
                     <div class="row">
                         <div class="col">
                             <c:forEach items="${itemsPedido}" var="productos">
-                                <div class="card border border-danger">
+                                <div class="card">
                                     <div class="row">
                                         <div class="col-5">
                                             <!-- Product image -->
@@ -170,8 +167,8 @@
                                             <!-- Product name-->
                                             <h5 class="">${productos.producto.nombre}</h5>
                                             <!-- Product details-->
-                                            <span class="fw-bolder text-success">$${productos.producto.precio}</span>
-                                            <h5>Cantidad: ${productos.cantidad}</h5>
+                                            <span class="font-weight-light">Cantidad: ${productos.cantidad}</span>
+                                            <span class="font-weight-light">Precio: $${productos.producto.precio}</span>
                                         </div>
                                         <div class="col-1">
                                             <a href="eliminar-producto?idProducto=${productos.producto.id}&idPedido=${pedido.id}">
@@ -202,48 +199,4 @@
 </div>
 </div>
 
-
-<%--                <section class="container">--%>
-<%--                    <aside>--%>
-<%--                        <div class="row  justify-content-center">--%>
-<%--                            <c:if test="${not empty pedido}">--%>
-<%--                                <div class="col">--%>
-<%--                                    <h3 class=" py-4">Su Pedido:</h3>--%>
-<%--                                </div>--%>
-<%--                                <div class="card" style="width: 20rem;">--%>
-<%--&lt;%&ndash;                                    <c:forEach items="${pedido.listaProductos}" var="productos">&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                        <div class="">&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                            <div class="card-body d-inline-flex">&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                                <!-- Product image -->&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                                <img src="images/${productos.nombreImagen}"&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                                     class="rounded" height="75" width="75"&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                                     alt="..."/>&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                                <div class="d-flex flex-column">&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                                    <h5 class="text-center">${productos.nombre}</h5>&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                                    <!-- Product price-->&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                                    <span class="text-center text-success">$${productos.precio}</span>&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                                </div>&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                                <a href="eliminar-producto?idProducto=${productos.id}&idPedido=1">&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                                    <button type="button" class="close" data-dismiss="modal">&times;&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                                    </button>&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                                </a>&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                            </div>&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                        </div>&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                    </c:forEach>&ndash;%&gt;--%>
-<%--&lt;%&ndash;                                </div>&ndash;%&gt;--%>
-<%--                                <h5 class="text-center pt-3">Monto total: $${pedido.total}</h5>--%>
-<%--                                <!-- accion ir a comprar-->--%>
-<%--                                <div class="card-footer border-top-0 bg-transparent  mx-auto">--%>
-<%--                                    <a class="btn btn-outline-success"--%>
-<%--                                       href="confirmar-pedido?idPedido=${pedido.id}">Comprar</a>--%>
-<%--                                </div>--%>
-<%--                            </c:if>--%>
-<%--                        </div>--%>
-<%--                    </aside>--%>
-<%--                </section>--%>
-
-
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-        crossorigin=""></script>
 <jsp:include page="/WEB-INF/includes/footer.jsp"/>

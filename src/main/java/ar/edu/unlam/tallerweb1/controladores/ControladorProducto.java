@@ -96,13 +96,13 @@ public class ControladorProducto {
         return new ModelAndView("detalleProducto",modelo);
     }
 
-    @RequestMapping("darMeGusta")//cambiar al proximo srpint por POST
+    @RequestMapping("darMeGusta")
     public ModelAndView darMeGusta(@RequestParam Long id) {
 
         return darMeGustaDesde(id, "/listarProductos");
     }
 
-    @RequestMapping("darMeGustaDetalle")//cambiar al proximo srpint por POST
+    @RequestMapping("darMeGustaDetalle")
     public ModelAndView darMeGustaDetalle(@RequestParam Long id) {
 
         return darMeGustaDesde(id, "/detalleProducto?id=" + id);

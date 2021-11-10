@@ -17,4 +17,6 @@ public interface ServicioPedido {
     Long generarPedido();
 
     List<ItemPedido> obtenerItemsPedido(Long idPedido);
+
+    void consultarRango();
 }
