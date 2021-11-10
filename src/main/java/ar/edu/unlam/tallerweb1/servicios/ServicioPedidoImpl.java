@@ -125,7 +125,7 @@ public class ServicioPedidoImpl implements ServicioPedido {
     }
 
     @Override
-    public void consultarRango() {
+    public void consultarRango(String calle, String altura) {
 
     }
 

@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.controladoresTest;
 
+import ar.edu.unlam.tallerweb1.Excepciones.RangoInvalido;
 import ar.edu.unlam.tallerweb1.controladores.ControladorPedido;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCategoria;
@@ -21,6 +22,8 @@ public class ControladorPedidoTest {
     private ControladorPedido controladorPedido;
     private Long idProducto = 1L;
     private Long idPedido = 2L;
+    private final String CALLE = "Estrada";
+    private final String ALTURA = "123";
 
 
     @Before
@@ -33,28 +36,44 @@ public class ControladorPedidoTest {
 
     @Test
     public void quePuedaConsultarSiEstaDentroDelRangoDeEnvios(){
-        givenUnaCalleYUnaAltura();
+        givenUnaCalleYUnaAlturaDentroDelRango();
 
         whenConsultoElRango();
 
         thenPuedoAgregarLosProductos();
     }
 
-    private void givenUnaCalleYUnaAltura() {
+    private void givenUnaCalleYUnaAlturaDentroDelRango() {
 
     }
 
     private void whenConsultoElRango() {
-        mav = controladorPedido.consultarRango("Estrada","123");
+        mav = controladorPedido.consultarRango(CALLE,ALTURA);
     }
 
     private void thenPuedoAgregarLosProductos() {
+        assertThat(mav.getViewName()).isEqualTo("redirect:generar-pedido");
     }
 
     @Test
     public void quePuedaConsultarSiEstaFueraDelRangoDeEnvios(){
 
+        givenUnaCalleYUnaAlturaFueraDelRango();
+
+        whenConsultoElRango();
+
+        thenMeAvisaQueEstoyFueraDelRango();
+
     }
+
+    private void givenUnaCalleYUnaAlturaFueraDelRango() {
+        doThrow(RangoInvalido.class).when(servicioPedido).consultarRango(CALLE,ALTURA);
+    }
+
+    private void thenMeAvisaQueEstoyFueraDelRango() {
+        assertThat(mav.getViewName()).isEqualTo("redirect:consultaRangoError");
+    }
+
     @Test
     public void queSePuedaGenerarUnPedido(){
 

@@ -18,5 +18,5 @@ public interface ServicioPedido {
 
     List<ItemPedido> obtenerItemsPedido(Long idPedido);
 
-    void consultarRango();
+    void consultarRango(String calle, String altura);
 }
