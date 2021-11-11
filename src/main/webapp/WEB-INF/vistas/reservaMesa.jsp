@@ -3,7 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="/WEB-INF/includes/header.jsp"/>
 <!-- page content -->
-<div class="container">
+<div class="container mt-4">
     <div class="card-header bg-white card shadow-lg">
         <div class="row">
             <div class="col">
@@ -81,7 +81,7 @@
         <div class="row">
             <div class="col">
                 <c:if test="${not empty mensajeReserva}">
-                    <p class="text-center text-danger">${mensajeReserva}</p>
+                    <p class="text-center text-dark">${mensajeReserva}</p>
                 </c:if>
             </div>
         </div>

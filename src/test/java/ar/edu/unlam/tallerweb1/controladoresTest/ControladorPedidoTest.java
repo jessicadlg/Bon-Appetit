@@ -1,58 +1,132 @@
 package ar.edu.unlam.tallerweb1.controladoresTest;
 
+import ar.edu.unlam.tallerweb1.Excepciones.RangoInvalido;
 import ar.edu.unlam.tallerweb1.controladores.ControladorPedido;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
-import ar.edu.unlam.tallerweb1.modelo.Producto;
+import ar.edu.unlam.tallerweb1.servicios.ServicioCategoria;
+import ar.edu.unlam.tallerweb1.servicios.ServicioPedido;
+import ar.edu.unlam.tallerweb1.servicios.ServicioProducto;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class ControladorPedidoTest {
 
-    @Test
-    public void queSePuedaAgregarUnProductoAUnPedido(){
-        Pedido pedido = givenUnPedido();
-        ModelAndView modelAndView = whenSeAgregaUnProductoAlPedido(pedido);
-        thenElPedidoNoEstaVacio(modelAndView);
+    private ModelAndView mav;
+    private ServicioPedido servicioPedido;
+    private ServicioProducto servicioProducto;
+    private ServicioCategoria servicioCategoria;
+    private ControladorPedido controladorPedido;
+    private Long idProducto = 1L;
+    private Long idPedido = 2L;
+    private final String CALLE = "Estrada";
+    private final String ALTURA = "123";
+
+
+    @Before
+    public void init() {
+        servicioPedido = mock(ServicioPedido.class);
+        servicioProducto = mock(ServicioProducto.class);
+        servicioCategoria= mock(ServicioCategoria.class);
+        controladorPedido = new ControladorPedido(servicioPedido,servicioProducto,servicioCategoria);
     }
 
     @Test
-    public void queSePuedaEliminarUnProductoDeUnPedido(){
-        Pedido pedido = givenUnPedidoConUnProductoCargado();
-        ModelAndView modelAndView = whenSeEliminaUnProductoDelPedido(pedido);
-        thenElPedidoEstaVacio(modelAndView);
+    public void quePuedaConsultarSiEstaDentroDelRangoDeEnvios(){
+        givenUnaCalleYUnaAlturaDentroDelRango();
+
+        whenConsultoElRango();
+
+        thenPuedoAgregarLosProductos();
     }
 
-    private Pedido givenUnPedidoConUnProductoCargado() {
-        Producto producto = new Producto();
-        producto.setCodigo("CoCa-Cola");
-        Pedido pedido = new Pedido();
-        pedido.agregarProducto(producto);
-        return pedido;
+    private void givenUnaCalleYUnaAlturaDentroDelRango() {
+
     }
 
-    private ModelAndView whenSeEliminaUnProductoDelPedido(Pedido pedido) {
-        return ControladorPedido.EliminarProductoDelPedido(pedido, "CoCa-Cola");
+    private void whenConsultoElRango() {
+        mav = controladorPedido.consultarRango(CALLE,ALTURA);
     }
 
-    private void thenElPedidoEstaVacio(ModelAndView modelAndView) {
+    private void thenPuedoAgregarLosProductos() {
+        assertThat(mav.getViewName()).isEqualTo("redirect:generar-pedido");
     }
 
-    private Pedido givenUnPedido() {
-        return new Pedido();
+    @Test
+    public void quePuedaConsultarSiEstaFueraDelRangoDeEnvios(){
+
+        givenUnaCalleYUnaAlturaFueraDelRango();
+
+        whenConsultoElRango();
+
+        thenMeAvisaQueEstoyFueraDelRango();
+
     }
 
-    private ModelAndView whenSeAgregaUnProductoAlPedido(Pedido pedido) {
-        Producto producto = new Producto();
-        return ControladorPedido.agregarProducto(pedido, producto);
+    private void givenUnaCalleYUnaAlturaFueraDelRango() {
+        doThrow(RangoInvalido.class).when(servicioPedido).consultarRango(CALLE,ALTURA);
     }
 
-    private void thenElPedidoNoEstaVacio(ModelAndView modelAndView) {
-        ArrayList<Producto> productosPedidos = (ArrayList<Producto>) modelAndView.getModel().get("productosPedidos");
-        assertThat(productosPedidos.size()).isEqualTo(1);
+    private void thenMeAvisaQueEstoyFueraDelRango() {
+        assertThat(mav.getViewName()).isEqualTo("redirect:consultaRangoError");
     }
+
+    @Test
+    public void queSePuedaGenerarUnPedido(){
+
+        givenUnPedidoNuevo();
+
+        whenQuieroGenerarElPedido();
+
+        thenObtengoElIdDelPedidoGenerado();
+
+    }
+
+    private void givenUnPedidoNuevo() {
+        when(servicioPedido.generarPedido()).thenReturn(1L);
+    }
+
+    private void whenQuieroGenerarElPedido() {
+        mav = controladorPedido.generarPedido();
+    }
+
+    private void thenObtengoElIdDelPedidoGenerado() {
+        assertThat(mav.getViewName()).isEqualTo("redirect:pedido?idPedido=1");
+
+    }
+
+    @Test
+    public void queSePuedaAgregarUnProductoAUnPedidoYQueSeCalculeElTotal(){
+
+        givenQueExisteUnPedidoSinProductos();
+
+        whenAgregoUnProducto();
+
+        thenMeDevuelveElPedidoConSusProductos();
+
+    }
+
+    private void givenQueExisteUnPedidoSinProductos() {
+        when(servicioPedido.agregarProductoAlPedido(idProducto,idPedido)).thenReturn(new Pedido());
+    }
+
+    private void whenAgregoUnProducto() {
+
+        mav = controladorPedido.agregarProductoAlPedido(idProducto,idPedido);
+    }
+
+    private void thenMeDevuelveElPedidoConSusProductos() {
+        assertThat(mav.getViewName()).isEqualTo("redirect:carrito?idPedido=2");
+    }
+
+
+
+
+
+
+
 
 }

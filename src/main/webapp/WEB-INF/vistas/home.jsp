@@ -7,6 +7,8 @@
 		<div class="form-group m-5">
 		<a href="listarProductos" class="btn btn-dark btn-lg">Ver menú</a>
 		<a href="reservar" class="btn btn-light btn-lg">Reservar mesa</a>
+<%--			<a href="consultar" class="btn btn-dark btn-lg">Hacer un pedido</a>--%>
+		<a href="generar-pedido" class="btn btn-dark btn-lg">Hacer un pedido</a>
 	</div>
 </header>
 

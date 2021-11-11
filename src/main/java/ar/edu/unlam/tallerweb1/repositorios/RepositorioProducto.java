@@ -19,4 +19,5 @@ public interface RepositorioProducto {
     Long actualizarProducto(Producto producto);
 
     List<Producto> buscarProductosConMasDe(int cantidad);
+
 }
