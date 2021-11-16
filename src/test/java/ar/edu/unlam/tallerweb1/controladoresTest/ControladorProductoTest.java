@@ -59,28 +59,6 @@ public class ControladorProductoTest {
     }
 
     @Test
-    public void queSePuedanListarLosProductosActivos(){
-
-        givenQueExisteUnaListaDeProductosActivos();
-
-        whenListoLosProductosActivos();
-
-        thenMeTraeLaListaDeProductosActivos();
-
-    }
-
-    @Test
-    public void queCuandoListeLosProductosActivosYLaListaEsteVaciaNosDeElMensaje(){
-
-        givenQueExisteUnaListaDeProductosActivosVacia();
-
-        whenListoLosProductosActivos();
-
-        thenMeDiceQueNoHayProductosActivosPorListar();
-
-    }
-
-    @Test
     public void queSePuedaBuscarUnProductoPorNombre(){
 
         givenQueExisteUnaListaDeProductos();
@@ -182,10 +160,8 @@ public class ControladorProductoTest {
         assertThat(mav.getViewName()).isEqualTo("redirect:/listarProductos");
     }
 
-
     private void givenQueNoExisteUnDeterminadoProducto() {
         when(servicioProducto.buscarProductoPorId(1L)).thenThrow(ProductoNoEncontrado.class);
-
     }
 
     private void thenMeMandaElMsjDeQueNoExiste() {
@@ -283,42 +259,6 @@ public class ControladorProductoTest {
         assertThat(mav.getViewName()).isEqualTo("productos");
 
     }
-
-    private void givenQueExisteUnaListaDeProductosActivosVacia() {
-        when(servicioProducto.listarProductosActivos()).thenThrow(ListaNoEncontrada.class);
-
-    }
-
-    private void thenMeDiceQueNoHayProductosActivosPorListar() {
-        assertThat(mav.getModel().get("msgError")).isEqualTo("No hay productos activos para mostrar");
-        assertThat(mav.getViewName()).isEqualTo("productos");
-    }
-
-    private void givenQueExisteUnaListaDeProductosActivos() {
-        List<Producto>productos = new ArrayList<>();
-        Producto p1 = new Producto();
-        Producto p2 = new Producto();
-        Producto p3 = new Producto();
-        p1.setActivo(true);
-        p2.setActivo(true);
-        p3.setActivo(true);
-        productos.add(p1);
-        productos.add(p2);
-        productos.add(p3);
-        when(servicioProducto.listarProductosActivos()).thenReturn(productos);
-
-    }
-
-    private void whenListoLosProductosActivos() {
-        mav = controladorProducto.listarProductosActivos();
-    }
-
-    private void thenMeTraeLaListaDeProductosActivos() {
-        assertThat(mav.getModel().get("listaProductos")).isEqualTo(this.servicioProducto.listarProductosActivos());
-        assertThat(mav.getViewName()).isEqualTo("productos");
-    }
-
-
 
     private void givenQueLaListaDeProductosEstaVacia() {
         when(servicioProducto.listarProductos()).thenThrow(ListaNoEncontrada.class);
