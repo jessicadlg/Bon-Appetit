@@ -4,7 +4,8 @@ package ar.edu.unlam.tallerweb1.modelo;
 import javax.persistence.*;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@DiscriminatorColumn(name = "PRODUCTO_TIPO",discriminatorType = DiscriminatorType.STRING)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Producto {
 
     @Id
@@ -13,11 +14,9 @@ public class Producto {
     private Long id;
     private String nombre;
     private double precio;
-    private String codigo;
     @JoinColumn(name = "ID_CATEGORIA")
     @ManyToOne(optional = true, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Categoria categoria;
-    private boolean activo;
     private Integer cantidadMeGusta;
     private String nombreImagen;
     private String descripcion;
@@ -26,12 +25,10 @@ public class Producto {
 
     }
 
-    public Producto(String nombre, double precio, String codigo, Categoria categoria, boolean activo, Integer cantidadMeGusta, String nombreImagen, String descripcion) {
+    public Producto(String nombre, double precio,  Categoria categoria, Integer cantidadMeGusta, String nombreImagen, String descripcion) {
         this.nombre = nombre;
         this.precio = precio;
-        this.codigo = codigo;
         this.categoria = categoria;
-        this.activo = activo;
         this.cantidadMeGusta = cantidadMeGusta;
         this.nombreImagen = nombreImagen;
         this.descripcion = descripcion;
@@ -69,28 +66,12 @@ public class Producto {
         this.precio = precio;
     }
 
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
-
     public Categoria getCategoria() {
         return categoria;
     }
 
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
-    }
-
-    public boolean isActivo() {
-        return activo;
-    }
-
-    public void setActivo(boolean activo) {
-        this.activo = activo;
     }
 
     public Integer getCantidadMeGusta() {
