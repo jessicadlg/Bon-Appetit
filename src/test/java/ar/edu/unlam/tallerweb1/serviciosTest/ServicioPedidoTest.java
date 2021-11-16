@@ -17,13 +17,13 @@ public class ServicioPedidoTest {
 
     private RepositorioPedido repositorioPedido = mock(RepositorioPedido.class);
     private RepositorioProducto repositorioProducto = mock(RepositorioProducto.class);
-    private ServicioPedido servicioPedido = new ServicioPedidoImpl(repositorioPedido,repositorioProducto);
+    private ServicioPedido servicioPedido = new ServicioPedidoImpl(repositorioPedido, repositorioProducto);
     Pedido pedido;
     private Long idProducto = 2L;
     private Long idPedido = 1L;
 
     @Test
-    public void queSePuedaGenerarUnPedido(){
+    public void queSePuedaGenerarUnPedido() {
 
         givenUnPedidoNuevo();
 
@@ -34,29 +34,47 @@ public class ServicioPedidoTest {
     }
 
     @Test
-    public void queSePuedaAgregarUnaComidaAUnPedidoYQueSeCalculeElTotalYElTiempoDeCoccion(){
+    public void queSePuedaAgregarDosVecesUnaComidaAUnPedidoYQueSeCalculeElTotalYElTiempoDeCoccion() {
+        givenQueExisteUnPedidoCon(20.0, 200.0);
+        whenAgregoUnaComidaCon(40.0, 750.0);
+        thenMeDevuelveUnPedidoCon(60.0, 950.0);
+    }
 
-        givenQueExisteUnPedidoSinComidas();
+    private void givenQueExisteUnPedidoCon(double tiempoCoccion, double costo) {
+        Pedido pedido = new Pedido();
+        Comida producto = new Comida();
+        producto.setPrecio(750.0);
+        producto.setTiempoDeCoccion(40.0);
+        ItemPedido itemPedido = new ItemPedido();
+        pedido.setTiempoPreparacion(tiempoCoccion);
+        pedido.setTotal(costo);
+        when(repositorioPedido.obtenerPedido(anyLong())).thenReturn(pedido);
+        when(repositorioProducto.buscarProductoPorId(anyLong())).thenReturn(producto);
+        when(repositorioPedido.obtenerItemPedido(anyLong(), anyLong())).thenReturn(itemPedido);
+    }
 
-        whenAgregoUnaComida();
+    private void whenAgregoUnaComidaCon(double tiempoCoccion, double costo) {
+        pedido = servicioPedido.agregarProductoAlPedido(idProducto, idPedido);
+    }
 
-        thenMeDevuelveElPedidoConSusProductos();
+    private void thenMeDevuelveUnPedidoCon(double tiempoCoccion, double costo) {
+        assertThat(pedido.getTotal()).isEqualTo(costo);
+        assertThat(pedido.getTiempoPreparacion()).isEqualTo(tiempoCoccion);
+    }
+
+    @Test
+    public void queSePuedaAgregarUnaBebidaAUnPedidoYQueSeCalculeElTotal() {
+
+        givenQueExisteUnPedidoSinBebidas();
+
+        whenAgregoUnaBebida();
+
+        thenMeDevuelveElPedido();
 
     }
 
     @Test
-    public void queSePuedaAgregarUnaBebidaAUnPedidoYQueSeCalculeElTotal(){
-
-     givenQueExisteUnPedidoSinBebidas();
-
-     whenAgregoUnaBebida();
-
-     thenMeDevuelveElPedido();
-
-    }
-
-    @Test
-    public void queSePuedaEliminarUnaComidaDeUnPedido(){
+    public void queSePuedaEliminarUnaComidaDeUnPedido() {
 
         givenQueExisteUnPedidoConProductosDentro();
 
@@ -81,12 +99,12 @@ public class ServicioPedidoTest {
 
         when(repositorioPedido.obtenerPedido(anyLong())).thenReturn(pedido);
         when(repositorioProducto.buscarProductoPorId(anyLong())).thenReturn(comida);
-        when(repositorioPedido.obtenerItemPedido(anyLong(),anyLong())).thenReturn(itemPedido);
+        when(repositorioPedido.obtenerItemPedido(anyLong(), anyLong())).thenReturn(itemPedido);
 
     }
 
     private void whenQuieroEliminarUnProducto() {
-        pedido = servicioPedido.eliminarComidaDeUnPedido(idProducto,idPedido);
+        pedido = servicioPedido.eliminarComidaDeUnPedido(idProducto, idPedido);
     }
 
     private void thenMeEliminaElProducto() {
@@ -103,40 +121,18 @@ public class ServicioPedidoTest {
         producto.setPrecio(50.0);
         when(repositorioPedido.obtenerPedido(anyLong())).thenReturn(pedido);
         when(repositorioProducto.buscarProductoPorId(anyLong())).thenReturn(producto);
-        when(repositorioPedido.obtenerItemPedido(anyLong(),anyLong())).thenReturn(itemPedido);
+        when(repositorioPedido.obtenerItemPedido(anyLong(), anyLong())).thenReturn(itemPedido);
 
     }
 
     private void whenAgregoUnaBebida() {
-        pedido = servicioPedido.agregarProductoAlPedido(idProducto,idPedido);
+        pedido = servicioPedido.agregarProductoAlPedido(idProducto, idPedido);
     }
 
     private void thenMeDevuelveElPedido() {
         assertThat(pedido).isNotNull();
         assertThat(pedido.getTotal()).isEqualTo(50.0);
         assertThat(pedido.getTiempoPreparacion()).isEqualTo(0.0);
-    }
-
-    private void givenQueExisteUnPedidoSinComidas() {
-        Pedido pedido = new Pedido();
-        Comida producto = new Comida();
-        ItemPedido itemPedido = new ItemPedido();
-        producto.setPrecio(50.0);
-        producto.setTiempoDeCoccion(100.0);
-        when(repositorioPedido.obtenerPedido(anyLong())).thenReturn(pedido);
-        when(repositorioProducto.buscarProductoPorId(anyLong())).thenReturn(producto);
-        when(repositorioPedido.obtenerItemPedido(anyLong(),anyLong())).thenReturn(itemPedido);
-    }
-
-    private void whenAgregoUnaComida() {
-        pedido = servicioPedido.agregarProductoAlPedido(idProducto,idPedido);
-    }
-
-    private void thenMeDevuelveElPedidoConSusProductos() {
-        assertThat(pedido).isNotNull();
-        assertThat(pedido.getTotal()).isEqualTo(50.0);
-        assertThat(pedido.getTiempoPreparacion()).isEqualTo(100.0);
-      //  verify(repositorioPedido.actualizarPedido(anyObject(),times(1).equals(1));
     }
 
     private void givenUnPedidoNuevo() {
