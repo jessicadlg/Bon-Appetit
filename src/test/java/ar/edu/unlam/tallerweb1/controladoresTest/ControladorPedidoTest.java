@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.controladoresTest;
 import ar.edu.unlam.tallerweb1.Excepciones.RangoInvalido;
 import ar.edu.unlam.tallerweb1.controladores.ControladorPedido;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
+import ar.edu.unlam.tallerweb1.modelo.Producto;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCategoria;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPedido;
 import ar.edu.unlam.tallerweb1.servicios.ServicioProducto;

@@ -1,12 +1,12 @@
 package ar.edu.unlam.tallerweb1.repositorios;
 
-import ar.edu.unlam.tallerweb1.modelo.ItemPedido;
-import ar.edu.unlam.tallerweb1.modelo.Pedido;
+import ar.edu.unlam.tallerweb1.modelo.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -66,6 +66,19 @@ public class RepositorioPedidoImpl implements RepositorioPedido{
     public void eliminarItemPedido(ItemPedido itemPedido){
         final Session session = this.sessionFactory.getCurrentSession();
         session.delete("ItemPedido",itemPedido);
+    }
+
+    @Override
+    public Ubicacion obtenerLatitudLongitud(String calle, String altura) {
+
+        RestTemplate restTemplate = new RestTemplate();
+        Direcciones direccion = restTemplate.getForObject("https://apis.datos.gob.ar/georef/api/direcciones?direccion="+calle + altura +"&provincia=06", Direcciones.class);
+        return direccion.getUbicacion();
+    }
+
+    @Override
+    public Viaje consultarDistanciaDelViaje(Ubicacion ubicacion) {
+        return null;
     }
 
 }

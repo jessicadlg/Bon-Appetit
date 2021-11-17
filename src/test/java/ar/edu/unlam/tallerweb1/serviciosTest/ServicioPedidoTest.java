@@ -1,14 +1,12 @@
 package ar.edu.unlam.tallerweb1.serviciosTest;
 
+import ar.edu.unlam.tallerweb1.Excepciones.RangoInvalido;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPedido;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioProducto;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPedido;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPedidoImpl;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
@@ -21,6 +19,8 @@ public class ServicioPedidoTest {
     Pedido pedido;
     private Long idProducto = 2L;
     private Long idPedido = 1L;
+    private final String CALLE = "Calle falsa";
+    private final String ALTURA = "123";
 
     @Test
     public void queSePuedaGenerarUnPedido() {
@@ -82,6 +82,52 @@ public class ServicioPedidoTest {
 
         thenMeEliminaElProducto();
 
+    }
+
+    @Test
+    public void quePuedaConsultarSiEstaDentroDelRangoDeEnvios(){
+
+        givenUnaCalleYUnaAlturaDentroDelRango();
+
+        whenConsultoElRango();
+
+        thenPuedoAgregarLosProductos();
+
+    }
+
+    @Test(expected = RangoInvalido.class)
+    public void quePuedaConsultarSiEstaFueraDelRangoDeEnvios(){
+
+        givenUnaCalleYUnaAlturaFueraDelRango();
+
+        whenConsultoElRango();
+
+
+    }
+
+    private void givenUnaCalleYUnaAlturaFueraDelRango() {
+        Viaje viaje = new Viaje();
+        Ubicacion ubicacion = new Ubicacion();
+        viaje.setDistance(4500.0);
+        when(repositorioPedido.obtenerLatitudLongitud(CALLE,ALTURA)).thenReturn(ubicacion);
+        when(repositorioPedido.consultarDistanciaDelViaje(anyObject())).thenReturn(viaje);
+    }
+
+
+    private void givenUnaCalleYUnaAlturaDentroDelRango() {
+        Viaje viaje = new Viaje();
+        viaje.setDistance(3000.0);
+        when(repositorioPedido.obtenerLatitudLongitud(CALLE,ALTURA)).thenReturn(anyObject());
+        when(repositorioPedido.consultarDistanciaDelViaje(anyObject())).thenReturn(viaje);
+
+    }
+
+    private void whenConsultoElRango() {
+        servicioPedido.consultarRango(CALLE, ALTURA);
+    }
+
+    private void thenPuedoAgregarLosProductos() {
+        //si no lanza la excepcion, funciona :)
     }
 
     private void givenQueExisteUnPedidoConProductosDentro() {

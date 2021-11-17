@@ -2,10 +2,8 @@ package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.Excepciones.PedidoInexistente;
 import ar.edu.unlam.tallerweb1.Excepciones.PedidoVacio;
-import ar.edu.unlam.tallerweb1.modelo.Comida;
-import ar.edu.unlam.tallerweb1.modelo.ItemPedido;
-import ar.edu.unlam.tallerweb1.modelo.Pedido;
-import ar.edu.unlam.tallerweb1.modelo.Producto;
+import ar.edu.unlam.tallerweb1.Excepciones.RangoInvalido;
+import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPedido;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioProducto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,6 +125,12 @@ public class ServicioPedidoImpl implements ServicioPedido {
     @Override
     public void consultarRango(String calle, String altura) {
 
+       Ubicacion ubicacion = repositorioPedido.obtenerLatitudLongitud(calle,altura);
+       Viaje viaje =  repositorioPedido.consultarDistanciaDelViaje(ubicacion);
+
+       if(viaje.getDistance()>4000.0){
+           throw new RangoInvalido();
+       }
     }
 
     private Double calcularTotal(String operacion, Double montoTotal, Double cantidadActualizar) {

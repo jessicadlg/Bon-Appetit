@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.repositorioTest;
 import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
 import ar.edu.unlam.tallerweb1.modelo.Producto;
+import ar.edu.unlam.tallerweb1.modelo.Ubicacion;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPedido;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioProducto;
 import org.junit.Test;
@@ -17,6 +18,7 @@ public class RepositorioPedidoTest extends SpringTest {
 
     @Autowired
     private RepositorioPedido repositorioPedido;
+    private Ubicacion ubicacion;
 
     @Test
     @Rollback
@@ -29,6 +31,25 @@ public class RepositorioPedidoTest extends SpringTest {
 
         thenMeDevuelveElPedidoBuscado(idPedido, pedidoObtenido);
 
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    public void queSePuedaObtenerLatitudYLongitud(){
+
+        whenBuscoLaLatidudYLongitud();
+
+        thenMeDevuelveLaUbicacion();
+
+    }
+
+    private void whenBuscoLaLatidudYLongitud() {
+        ubicacion = repositorioPedido.obtenerLatitudLongitud("Jose Ignacio Rucci","592");
+    }
+
+    private void thenMeDevuelveLaUbicacion() {
+        System.out.println(ubicacion);
     }
 
     private Long givenQueExisteUnPedido() {
