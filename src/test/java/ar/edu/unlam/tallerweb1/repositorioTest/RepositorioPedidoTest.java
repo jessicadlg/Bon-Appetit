@@ -49,14 +49,14 @@ public class RepositorioPedidoTest extends SpringTest {
     }
 
     private void thenMeDevuelveLaUbicacion() {
-        System.out.println(ubicacion);
+        assertThat(ubicacion).isNotNull();
+        assertThat(ubicacion.getLat()).isEqualTo(-34.68837769963411);
+        assertThat(ubicacion.getLon()).isEqualTo(-58.596913157319044);
     }
 
     private Long givenQueExisteUnPedido() {
         Pedido p1 = new Pedido();
         return (Long) session().save(p1);
-
-
     }
 
     private Pedido whenBuscoUnPedidoPorId(Long idPedido) {

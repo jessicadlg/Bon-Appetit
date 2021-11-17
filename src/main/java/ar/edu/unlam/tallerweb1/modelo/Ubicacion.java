@@ -2,31 +2,24 @@ package ar.edu.unlam.tallerweb1.modelo;
 
 public class Ubicacion {
 
-    private String latitud;
+    private double lat;
 
-    private String longitud;
+    private double lon;
 
-    public String getLatitud() {
-        return latitud;
+    public double getLat() {
+        return lat;
     }
 
-    public void setLatitud(String latitud) {
-        this.latitud = latitud;
+    public void setLat(double lat) {
+        this.lat = lat;
     }
 
-    public String getLongitud() {
-        return longitud;
+    public double getLon() {
+        return lon;
     }
 
-    public void setLongitud(String longitud) {
-        this.longitud = longitud;
+    public void setLon(double lon) {
+        this.lon = lon;
     }
 
-    @Override
-    public String toString() {
-        return "Ubicacion{" +
-                "latitud='" + latitud + '\'' +
-                ", longitud='" + longitud + '\'' +
-                '}';
-    }
 }

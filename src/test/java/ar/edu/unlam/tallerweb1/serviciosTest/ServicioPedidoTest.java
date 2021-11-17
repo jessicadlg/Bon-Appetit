@@ -117,7 +117,7 @@ public class ServicioPedidoTest {
     private void givenUnaCalleYUnaAlturaDentroDelRango() {
         Viaje viaje = new Viaje();
         viaje.setDistance(3000.0);
-        when(repositorioPedido.obtenerLatitudLongitud(CALLE,ALTURA)).thenReturn(anyObject());
+        when(repositorioPedido.obtenerLatitudLongitud(CALLE,ALTURA)).thenReturn(new Ubicacion());
         when(repositorioPedido.consultarDistanciaDelViaje(anyObject())).thenReturn(viaje);
 
     }

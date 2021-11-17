@@ -14,6 +14,7 @@ import java.util.List;
 public class RepositorioPedidoImpl implements RepositorioPedido{
 
     private SessionFactory sessionFactory;
+    //private Ubicacion UBICACION_FACULTAD = new Ubicacion(-34.67052234258952, -58.56302836691231);
 
     @Autowired
     public RepositorioPedidoImpl(SessionFactory sessionFactory){
@@ -70,10 +71,10 @@ public class RepositorioPedidoImpl implements RepositorioPedido{
 
     @Override
     public Ubicacion obtenerLatitudLongitud(String calle, String altura) {
-
         RestTemplate restTemplate = new RestTemplate();
-        Direcciones direccion = restTemplate.getForObject("https://apis.datos.gob.ar/georef/api/direcciones?direccion="+calle + altura +"&provincia=06", Direcciones.class);
-        return direccion.getUbicacion();
+        String localidad = "06427010014";
+        Direcciones direccion = restTemplate.getForObject("https://apis.datos.gob.ar/georef/api/direcciones?direccion=" + calle + " " + altura + "&provincia=06&departamento=06427&localidad=" + localidad + "&max=1&exacto=true", Direcciones.class);
+        return direccion.getDirecciones().get(0).getUbicacion();
     }
 
     @Override
