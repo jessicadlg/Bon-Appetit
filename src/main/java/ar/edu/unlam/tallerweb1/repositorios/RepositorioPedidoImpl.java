@@ -14,11 +14,13 @@ import java.util.List;
 public class RepositorioPedidoImpl implements RepositorioPedido{
 
     private SessionFactory sessionFactory;
-    //private Ubicacion UBICACION_FACULTAD = new Ubicacion(-34.67052234258952, -58.56302836691231);
+    private RestTemplate restTemplate;
+    private Ubicacion UBICACION_RESTAURANTE = new Ubicacion(-58.56302836691231,-34.67052234258952);
 
     @Autowired
     public RepositorioPedidoImpl(SessionFactory sessionFactory){
         this.sessionFactory = sessionFactory;
+        this.restTemplate = new RestTemplate();
     }
 
     @Override
@@ -70,16 +72,15 @@ public class RepositorioPedidoImpl implements RepositorioPedido{
     }
 
     @Override
-    public Ubicacion obtenerLatitudLongitud(String calle, String altura) {
-        RestTemplate restTemplate = new RestTemplate();
-        String localidad = "06427010014";
-        Direcciones direccion = restTemplate.getForObject("https://apis.datos.gob.ar/georef/api/direcciones?direccion=" + calle + " " + altura + "&provincia=06&departamento=06427&localidad=" + localidad + "&max=1&exacto=true", Direcciones.class);
+    public Ubicacion obtenerLatitudLongitud(String calle, String altura, String localidad) {
+        Direcciones direccion = this.restTemplate.getForObject("https://apis.datos.gob.ar/georef/api/direcciones?direccion=" + calle + " " + altura + "&provincia=06&departamento=06427&localidad=" + localidad + "&max=1&exacto=true", Direcciones.class);
         return direccion.getDirecciones().get(0).getUbicacion();
     }
 
     @Override
-    public Viaje consultarDistanciaDelViaje(Ubicacion ubicacion) {
-        return null;
+    public Routes consultarDistanciaDelViaje(Ubicacion ubicacion) {
+        Viaje viajes = this.restTemplate.getForObject("http://router.project-osrm.org/route/v1/foot/" + ubicacion.getLon() + "," + ubicacion.getLat() + ";" + this.UBICACION_RESTAURANTE.getLon() + "," + this.UBICACION_RESTAURANTE.getLat(), Viaje.class);
+        return viajes.getRoutes().get(0);
     }
 
 }

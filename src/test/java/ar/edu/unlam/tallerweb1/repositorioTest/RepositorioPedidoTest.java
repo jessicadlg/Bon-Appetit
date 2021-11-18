@@ -2,15 +2,16 @@ package ar.edu.unlam.tallerweb1.repositorioTest;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
-import ar.edu.unlam.tallerweb1.modelo.Producto;
+import ar.edu.unlam.tallerweb1.modelo.Routes;
 import ar.edu.unlam.tallerweb1.modelo.Ubicacion;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPedido;
-import ar.edu.unlam.tallerweb1.repositorios.RepositorioProducto;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 
 import javax.transaction.Transactional;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -45,7 +46,32 @@ public class RepositorioPedidoTest extends SpringTest {
     }
 
     private void whenBuscoLaLatidudYLongitud() {
-        ubicacion = repositorioPedido.obtenerLatitudLongitud("Jose Ignacio Rucci","592");
+        ubicacion = repositorioPedido.obtenerLatitudLongitud("Jose Ignacio Rucci","592","06427010014");
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    public void queSePuedaObtenerLaDistanciaYEltiempoDeUnViaje(){
+        Ubicacion ubicacion = givenUnaUbicacio();
+        Routes ruta = whenConsultoLaDistanciaYElTiempo(ubicacion);
+        thenLaDistanciaEsYElTiempoDelViajeEs(4578.7,343.3, ruta);
+    }
+
+    private Ubicacion givenUnaUbicacio() {
+        Ubicacion ubicacion1 = new Ubicacion();
+        ubicacion1.setLon(-58.596913157319044);
+        ubicacion1.setLat(-34.68837769963411);
+        return ubicacion1;
+    }
+
+    private Routes whenConsultoLaDistanciaYElTiempo(Ubicacion ubicacion) {
+        return repositorioPedido.consultarDistanciaDelViaje(ubicacion);
+    }
+
+    private void thenLaDistanciaEsYElTiempoDelViajeEs(Double distancia, Double duracion, Routes ruta) {
+        assertThat(ruta.getDistance()).isEqualTo(distancia);
+        assertThat(ruta.getDuration()).isEqualTo(duracion);
     }
 
     private void thenMeDevuelveLaUbicacion() {
@@ -67,5 +93,4 @@ public class RepositorioPedidoTest extends SpringTest {
         assertThat(pedidoObtenido).isNotNull();
         assertThat(idPedido).isEqualTo(pedidoObtenido.getId());
     }
-
 }

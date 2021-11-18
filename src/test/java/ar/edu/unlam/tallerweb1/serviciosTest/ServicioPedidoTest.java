@@ -21,6 +21,7 @@ public class ServicioPedidoTest {
     private Long idPedido = 1L;
     private final String CALLE = "Calle falsa";
     private final String ALTURA = "123";
+    private String LOCALIDAD = "06427010014";
 
     @Test
     public void queSePuedaGenerarUnPedido() {
@@ -106,24 +107,24 @@ public class ServicioPedidoTest {
     }
 
     private void givenUnaCalleYUnaAlturaFueraDelRango() {
-        Viaje viaje = new Viaje();
+        Routes ruta = new Routes();
         Ubicacion ubicacion = new Ubicacion();
-        viaje.setDistance(4500.0);
-        when(repositorioPedido.obtenerLatitudLongitud(CALLE,ALTURA)).thenReturn(ubicacion);
-        when(repositorioPedido.consultarDistanciaDelViaje(anyObject())).thenReturn(viaje);
+        ruta.setDistance(4500.0);
+        when(repositorioPedido.obtenerLatitudLongitud(CALLE,ALTURA,LOCALIDAD)).thenReturn(ubicacion);
+        when(repositorioPedido.consultarDistanciaDelViaje(anyObject())).thenReturn(ruta);
     }
 
 
     private void givenUnaCalleYUnaAlturaDentroDelRango() {
-        Viaje viaje = new Viaje();
-        viaje.setDistance(3000.0);
-        when(repositorioPedido.obtenerLatitudLongitud(CALLE,ALTURA)).thenReturn(new Ubicacion());
-        when(repositorioPedido.consultarDistanciaDelViaje(anyObject())).thenReturn(viaje);
+        Routes ruta = new Routes();
+        ruta.setDistance(3000.0);
+        when(repositorioPedido.obtenerLatitudLongitud(CALLE,ALTURA,LOCALIDAD)).thenReturn(new Ubicacion());
+        when(repositorioPedido.consultarDistanciaDelViaje(anyObject())).thenReturn(ruta);
 
     }
 
     private void whenConsultoElRango() {
-        servicioPedido.consultarRango(CALLE, ALTURA);
+        servicioPedido.consultarRango(CALLE, ALTURA, LOCALIDAD);
     }
 
     private void thenPuedoAgregarLosProductos() {

@@ -18,6 +18,5 @@ public interface ServicioPedido {
 
     List<ItemPedido> obtenerItemsPedido(Long idPedido);
 
-    void consultarRango(String calle, String altura);
-
+    void consultarRango(String calle, String altura, String localidad);
 }

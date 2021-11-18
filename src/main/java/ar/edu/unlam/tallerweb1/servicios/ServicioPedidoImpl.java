@@ -19,6 +19,7 @@ public class ServicioPedidoImpl implements ServicioPedido {
 
     private RepositorioPedido repositorioPedido;
     private RepositorioProducto repositorioProducto;
+    private Ubicacion UBICACION_RESTAURANTE = new Ubicacion(-58.56302836691231,-34.67052234258952);
 
     @Autowired
     public ServicioPedidoImpl(RepositorioPedido repositorioPedido, RepositorioProducto repositorioProducto) {
@@ -123,10 +124,10 @@ public class ServicioPedidoImpl implements ServicioPedido {
     }
 
     @Override
-    public void consultarRango(String calle, String altura) {
+    public void consultarRango(String calle, String altura, String localidad) {
 
-       Ubicacion ubicacion = repositorioPedido.obtenerLatitudLongitud(calle,altura);
-       Viaje viaje =  repositorioPedido.consultarDistanciaDelViaje(ubicacion);
+       Ubicacion ubicacion = repositorioPedido.obtenerLatitudLongitud(calle,altura,localidad);
+       Routes viaje =  repositorioPedido.consultarDistanciaDelViaje(ubicacion);
 
        if(viaje.getDistance()>4000.0){
            throw new RangoInvalido();

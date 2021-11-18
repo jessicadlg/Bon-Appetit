@@ -1,9 +1,6 @@
 package ar.edu.unlam.tallerweb1.repositorios;
 
-import ar.edu.unlam.tallerweb1.modelo.ItemPedido;
-import ar.edu.unlam.tallerweb1.modelo.Pedido;
-import ar.edu.unlam.tallerweb1.modelo.Ubicacion;
-import ar.edu.unlam.tallerweb1.modelo.Viaje;
+import ar.edu.unlam.tallerweb1.modelo.*;
 
 import java.util.List;
 
@@ -22,7 +19,7 @@ public interface RepositorioPedido {
 
     void eliminarItemPedido(ItemPedido itemPedido);
 
-    Ubicacion obtenerLatitudLongitud(String calle, String altura);
+    Ubicacion obtenerLatitudLongitud(String calle, String altura, String localidad);
 
-    Viaje consultarDistanciaDelViaje(Ubicacion ubicacion);
+    Routes consultarDistanciaDelViaje(Ubicacion ubicacion);
 }

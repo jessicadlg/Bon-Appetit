@@ -2,15 +2,24 @@ package ar.edu.unlam.tallerweb1.modelo;
 
 public class Ubicacion {
 
-    private double lat;
+    private Double lat;
 
-    private double lon;
+    private Double lon;
 
-    public double getLat() {
+    public Ubicacion(){
+
+    }
+
+    public Ubicacion(Double lon, Double lat) {
+        this.lon = lon;
+        this.lat = lat;
+    }
+
+    public Double getLat() {
         return lat;
     }
 
-    public void setLat(double lat) {
+    public void setLat(Double lat) {
         this.lat = lat;
     }
 
@@ -18,7 +27,7 @@ public class Ubicacion {
         return lon;
     }
 
-    public void setLon(double lon) {
+    public void setLon(Double lon) {
         this.lon = lon;
     }
 

@@ -119,9 +119,9 @@ public class ControladorPedido {
     }
 
     @RequestMapping(path = "consultarRango")
-    public ModelAndView consultarRango(String calle, String altura) {
+    public ModelAndView consultarRango(String calle, String altura, String localidad) {
         try {
-            servicioPedido.consultarRango(calle,altura);
+            servicioPedido.consultarRango(calle,altura, localidad);
             return new ModelAndView("redirect:generar-pedido");
         } catch (RangoInvalido e) {
             return new ModelAndView("redirect:consultaRangoError");

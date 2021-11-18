@@ -25,6 +25,7 @@ public class ControladorPedidoTest {
     private Long idPedido = 2L;
     private final String CALLE = "Estrada";
     private final String ALTURA = "123";
+    private String LOCALIDAD = "06427010014";
 
 
     @Before
@@ -49,7 +50,7 @@ public class ControladorPedidoTest {
     }
 
     private void whenConsultoElRango() {
-        mav = controladorPedido.consultarRango(CALLE,ALTURA);
+        mav = controladorPedido.consultarRango(CALLE,ALTURA, LOCALIDAD);
     }
 
     private void thenPuedoAgregarLosProductos() {
@@ -68,7 +69,7 @@ public class ControladorPedidoTest {
     }
 
     private void givenUnaCalleYUnaAlturaFueraDelRango() {
-        doThrow(RangoInvalido.class).when(servicioPedido).consultarRango(CALLE,ALTURA);
+        doThrow(RangoInvalido.class).when(servicioPedido).consultarRango(CALLE,ALTURA,LOCALIDAD);
     }
 
     private void thenMeAvisaQueEstoyFueraDelRango() {

@@ -4,10 +4,6 @@ public class Direccion {
 
     private Ubicacion ubicacion;
 
-    public Direccion(){
-        this.ubicacion = new Ubicacion();
-    }
-
     public Ubicacion getUbicacion() {
         return ubicacion;
     }

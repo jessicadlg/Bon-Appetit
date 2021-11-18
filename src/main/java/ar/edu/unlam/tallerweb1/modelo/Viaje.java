@@ -1,24 +1,16 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
+import java.util.List;
+
 public class Viaje {
 
-    private Double duration;
+    private List<Routes> routes;
 
-    private Double distance;
-
-    public Double getDuration() {
-        return duration;
+    public List<Routes> getRoutes() {
+        return routes;
     }
 
-    public void setDuration(Double duration) {
-        this.duration = duration;
-    }
-
-    public Double getDistance() {
-        return distance;
-    }
-
-    public void setDistance(Double distance) {
-        this.distance = distance;
+    public void setRoutes(List<Routes> routes) {
+        this.routes = routes;
     }
 }
