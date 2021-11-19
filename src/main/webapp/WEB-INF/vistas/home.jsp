@@ -5,10 +5,9 @@
 <header class="masthead">
 	<div class="masthead-heading">Bienvenido a Bon-Appetit!</div>
 		<div class="form-group m-5">
-		<a href="listarProductos" class="btn btn-dark btn-lg">Ver menú</a>
-		<a href="reservar" class="btn btn-light btn-lg">Reservar mesa</a>
-<%--			<a href="consultar" class="btn btn-dark btn-lg">Hacer un pedido</a>--%>
-		<a href="generar-pedido" class="btn btn-dark btn-lg">Hacer un pedido</a>
+		<a href="listarProductos" class="btn btn-dark btn-lg">Ver Menú</a>
+		<a href="reservar" class="btn btn-light btn-lg">Reservar Mesa</a>
+		<a href="consultar" class="btn btn-dark btn-lg">Iniciar Pedido</a>
 	</div>
 </header>
 

@@ -8,6 +8,9 @@ import ar.edu.unlam.tallerweb1.servicios.ServicioPedido;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPedidoImpl;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
 
@@ -103,7 +106,39 @@ public class ServicioPedidoTest {
 
         whenConsultoElRango();
 
+    }
 
+    @Test
+    public void queSePuedanListarLasCallesYLocalidades(){
+
+        givenQueExisteLasCalles();
+
+        Calles calles = whenListoLasCalles();
+
+        thenMeDevuelveLasCallesYLocalidades(calles);
+
+    }
+
+    private void givenQueExisteLasCalles() {
+        Calles calles = new Calles();
+        Calle c1 = new Calle();
+        Calle c2 = new Calle();
+        Calle c3 = new Calle();
+        List<Calle> callesLista = new ArrayList<>();
+        callesLista.add(c1);
+        callesLista.add(c2);
+        callesLista.add(c3);
+        calles.setCalles(callesLista);
+        when(repositorioPedido.listarCalles()).thenReturn(calles);
+    }
+
+    private Calles whenListoLasCalles() {
+        return servicioPedido.listarCalles();
+    }
+
+    private void thenMeDevuelveLasCallesYLocalidades(Calles calles) {
+        assertThat(calles).isNotNull();
+        assertThat(calles.getCalles()).hasSize(3);
     }
 
     private void givenUnaCalleYUnaAlturaFueraDelRango() {

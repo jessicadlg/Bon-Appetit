@@ -1,6 +1,6 @@
 package ar.edu.unlam.tallerweb1.modelo;
 
-public class Calle {
+public class Localidad {
 
     private Long id;
 

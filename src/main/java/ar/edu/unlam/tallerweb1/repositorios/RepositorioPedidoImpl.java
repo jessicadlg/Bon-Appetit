@@ -83,4 +83,16 @@ public class RepositorioPedidoImpl implements RepositorioPedido{
         return viajes.getRoutes().get(0);
     }
 
+    @Override
+    public Calles listarCalles() {
+
+        Calles calleRespuesta = restTemplate.getForObject("https://apis.datos.gob.ar/georef/api/calles?departamento=06427&aplanar=true&campos=estandar&max=3000&exacto=true\" -H \"accept: application/json", Calles.class);
+
+        Localidades localidadesRespuesta = restTemplate.getForObject("https://apis.datos.gob.ar/georef/api/localidades?provincia=06&departamento=06427&campos=id,nombre&max=20&exacto=true", Localidades.class);
+
+        calleRespuesta.setLocalidad(localidadesRespuesta);
+
+        return calleRespuesta;
+    }
+
 }

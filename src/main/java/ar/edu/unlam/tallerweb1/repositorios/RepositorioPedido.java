@@ -22,4 +22,6 @@ public interface RepositorioPedido {
     Ubicacion obtenerLatitudLongitud(String calle, String altura, String localidad);
 
     Routes consultarDistanciaDelViaje(Ubicacion ubicacion);
+
+    Calles listarCalles();
 }

@@ -10,10 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ControladorPedido {
@@ -28,7 +29,6 @@ public class ControladorPedido {
         this.servicioProducto = servicioProducto;
         this.servicioCategoria = servicioCategoria;
     }
-
 
     @RequestMapping("generar-pedido")
     public ModelAndView generarPedido() {
@@ -113,6 +113,7 @@ public class ControladorPedido {
         return new ModelAndView("redirect:carrito?idPedido=" + idPedido);
 
     }
+
     @RequestMapping("consultar")
     public ModelAndView consultarFormulario() {
         return procesarConsultaRango(null);
@@ -120,8 +121,18 @@ public class ControladorPedido {
 
     @RequestMapping(path = "consultarRango")
     public ModelAndView consultarRango(String calle, String altura, String localidad) {
+        ModelMap model = new ModelMap();
+
+        Map<String, String> validarConsultaRango = validarConsultaRango(calle, altura, localidad);
+        if (validarConsultaRango.size() > 0) {
+            model.put("validacionesRango",validarConsultaRango);
+            Calles calles = servicioPedido.listarCalles();
+            model.put("calles", calles);
+            return new ModelAndView("formularioConsultaRango",model);
+        }
+
         try {
-            servicioPedido.consultarRango(calle,altura, localidad);
+            servicioPedido.consultarRango(calle, altura, localidad);
             return new ModelAndView("redirect:generar-pedido");
         } catch (RangoInvalido e) {
             return new ModelAndView("redirect:consultaRangoError");
@@ -138,7 +149,22 @@ public class ControladorPedido {
         if (mensajeConsulta != null) {
             modelMap.put("errorConsultaRango", mensajeConsulta);
         }
+        Calles calles = servicioPedido.listarCalles();
+        modelMap.put("calles", calles);
         return new ModelAndView("formularioConsultaRango", modelMap);
     }
 
+    private Map<String, String> validarConsultaRango(String calle, String altura, String localidad) {
+        Map<String, String> validacionesRango = new HashMap<>();
+        if (calle == null || calle == "") {
+            validacionesRango.put("calleError", "Ingrese una calle");
+        } else if (altura == null || altura.trim() == "") {
+            validacionesRango.put("alturaError", "Ingrese una altura");
+        } else if(Integer.parseInt(altura)<0){
+            validacionesRango.put("alturaError", "La altura debe ser mayor a cero");
+        } else if (localidad == null || localidad == "") {
+            validacionesRango.put("localidadError", "Ingrese una localidad");
+        }
+        return validacionesRango;
+    }
 }

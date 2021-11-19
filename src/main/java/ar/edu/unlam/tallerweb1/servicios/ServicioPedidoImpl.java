@@ -134,6 +134,13 @@ public class ServicioPedidoImpl implements ServicioPedido {
        }
     }
 
+    @Override
+    public Calles listarCalles() {
+        Calles calles = this.repositorioPedido.listarCalles();
+
+        return calles;
+    }
+
     private Double calcularTotal(String operacion, Double montoTotal, Double cantidadActualizar) {
 
         Double total = montoTotal;

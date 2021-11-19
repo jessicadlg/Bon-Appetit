@@ -1,6 +1,7 @@
 package ar.edu.unlam.tallerweb1.repositorioTest;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
+import ar.edu.unlam.tallerweb1.modelo.Calles;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
 import ar.edu.unlam.tallerweb1.modelo.Routes;
 import ar.edu.unlam.tallerweb1.modelo.Ubicacion;
@@ -56,6 +57,24 @@ public class RepositorioPedidoTest extends SpringTest {
         Ubicacion ubicacion = givenUnaUbicacio();
         Routes ruta = whenConsultoLaDistanciaYElTiempo(ubicacion);
         thenLaDistanciaEsYElTiempoDelViajeEs(4578.7,343.3, ruta);
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    public void queSePuedanListarTodasLasCalles(){
+
+        Calles calles = whenListoLasCalles();
+
+        thenMeDevuelveLasCalles(calles);
+    }
+
+    private Calles whenListoLasCalles() {
+        return  repositorioPedido.listarCalles();
+    }
+
+    private void thenMeDevuelveLasCalles(Calles calles) {
+        System.out.println(calles);
     }
 
     private Ubicacion givenUnaUbicacio() {

@@ -4,13 +4,23 @@ import java.util.List;
 
 public class Calles {
 
-    private List<Calle> listaCalles;
+    private List<Calle> calles;
 
-    public List<Calle> getListaCalles() {
-        return listaCalles;
+    private Localidades localidad;
+
+    public Localidades getLocalidad() {
+        return localidad;
     }
 
-    public void setListaCalles(List<Calle> listaCalles) {
-        this.listaCalles = listaCalles;
+    public void setLocalidad(Localidades localidad) {
+        this.localidad = localidad;
+    }
+
+    public List<Calle> getCalles() {
+        return calles;
+    }
+
+    public void setCalles(List<Calle> calles) {
+        this.calles = calles;
     }
 }
