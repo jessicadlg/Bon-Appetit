@@ -15,17 +15,12 @@ import java.util.List;
 public class RepositorioPedidoImpl implements RepositorioPedido{
 
     private SessionFactory sessionFactory;
-    private RestTemplate restTemplate = new RestTemplate();
     private Ubicacion UBICACION_RESTAURANTE = new Ubicacion(-58.56302836691231,-34.67052234258952);
 
     @Autowired
     public RepositorioPedidoImpl(SessionFactory sessionFactory){
         this.sessionFactory = sessionFactory;
     }
-
-    public RepositorioPedidoImpl(){
-    }
-
 
     @Override
     public Pedido obtenerPedido(Long idPedido) {
@@ -77,7 +72,8 @@ public class RepositorioPedidoImpl implements RepositorioPedido{
 
     @Override
     public Ubicacion obtenerLatitudLongitud(String calle, String altura, String localidad) {
-        Direcciones direccion = this.restTemplate.getForObject("https://apis.datos.gob.ar/georef/api/direcciones?direccion=" + calle + " " + altura + "&provincia=06&departamento=06427&localidad=" + localidad + "&max=1&exacto=true", Direcciones.class);
+        RestTemplate restTemplate = new RestTemplate();
+        Direcciones direccion = restTemplate.getForObject("https://apis.datos.gob.ar/georef/api/direcciones?direccion=" + calle + " " + altura + "&provincia=06&departamento=06427&localidad=" + localidad + "&max=1&exacto=true", Direcciones.class);
         if(direccion.getDirecciones().size()<1){
             return null;
         }
@@ -86,13 +82,14 @@ public class RepositorioPedidoImpl implements RepositorioPedido{
 
     @Override
     public Routes consultarDistanciaDelViaje(Ubicacion ubicacion) {
-        Viaje viajes = this.restTemplate.getForObject("http://router.project-osrm.org/route/v1/foot/" + ubicacion.getLon() + "," + ubicacion.getLat() + ";" + this.UBICACION_RESTAURANTE.getLon() + "," + this.UBICACION_RESTAURANTE.getLat(), Viaje.class);
+        RestTemplate restTemplate = new RestTemplate();
+        Viaje viajes = restTemplate.getForObject("http://router.project-osrm.org/route/v1/foot/" + ubicacion.getLon() + "," + ubicacion.getLat() + ";" + this.UBICACION_RESTAURANTE.getLon() + "," + this.UBICACION_RESTAURANTE.getLat(), Viaje.class);
         return viajes.getRoutes().get(0);
     }
 
     @Override
     public Calles listarCalles() {
-
+        RestTemplate restTemplate = new RestTemplate();
         Calles calleRespuesta = restTemplate.getForObject("https://apis.datos.gob.ar/georef/api/calles?departamento=06427&aplanar=true&campos=estandar&max=3000&exacto=true\" -H \"accept: application/json", Calles.class);
 
         Localidades localidadesRespuesta = restTemplate.getForObject("https://apis.datos.gob.ar/georef/api/localidades?provincia=06&departamento=06427&campos=id,nombre&max=20&exacto=true", Localidades.class);
@@ -104,6 +101,7 @@ public class RepositorioPedidoImpl implements RepositorioPedido{
 
     @Override
     public Localidades obtenerLocalidad(String idLocalidad) {
+        RestTemplate restTemplate = new RestTemplate();
         Localidades localidadesRespuesta = restTemplate.getForObject("https://apis.datos.gob.ar/georef/api/localidades?id=6427010010&aplanar=true&campos=estandar&max=1&exacto=true", Localidades.class);
         return localidadesRespuesta;
     }
