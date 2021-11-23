@@ -162,13 +162,12 @@ public class ControladorPedido {
     }
 
     private Map<String, String> validarConsultaRango(String calle, String altura, String localidad) {
-        Integer alturaInteger = Integer.parseInt(altura);
         Map<String, String> validacionesRango = new HashMap<>();
         if (calle == null || calle == "") {
             validacionesRango.put("calleError", "Ingrese una calle");
         } else if (altura == null || altura.trim() == "") {
             validacionesRango.put("alturaError", "Ingrese una altura");
-        } else if (alturaInteger < 1) {
+        } else if (Integer.parseInt(altura) < 1) {
             validacionesRango.put("alturaError", "La altura debe ser mayor a cero");
         } else if (localidad == null || localidad == "") {
             validacionesRango.put("localidadError", "Ingrese una localidad");
