@@ -1,8 +1,13 @@
 package ar.edu.unlam.tallerweb1.controladoresTest;
 
+import ar.edu.unlam.tallerweb1.AttributeModel.DatosConfirmacion;
+import ar.edu.unlam.tallerweb1.Excepciones.DireccionInexistente;
+import ar.edu.unlam.tallerweb1.Excepciones.PedidoInexistente;
 import ar.edu.unlam.tallerweb1.Excepciones.RangoInvalido;
 import ar.edu.unlam.tallerweb1.controladores.ControladorPedido;
+import ar.edu.unlam.tallerweb1.modelo.ItemPedido;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
+import ar.edu.unlam.tallerweb1.modelo.Producto;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCategoria;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPedido;
 import ar.edu.unlam.tallerweb1.servicios.ServicioProducto;
@@ -10,6 +15,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import static org.mockito.Mockito.*;
@@ -28,6 +35,9 @@ public class ControladorPedidoTest {
     private final String ALTURA = "123";
     private String LOCALIDAD = "06427010014";
 
+    private DatosConfirmacion datosConfirmacion = new DatosConfirmacion("Calle","Altura","Localidad","Nombre","telefono","400.0","60.0");
+    private DatosConfirmacion datosConfirmacionIncompletoNombre = new DatosConfirmacion("Calle","Altura","Localidad",null,"telefono","400.0","60.0");
+    private DatosConfirmacion datosConfirmacionIncompletoTelefono = new DatosConfirmacion("Calle","Altura","Localidad","Nombre",null,"400.0","60.0");
 
     @Before
     public void init() {
@@ -59,7 +69,7 @@ public class ControladorPedidoTest {
     }
 
     @Test
-    public void quePuedaConsultarSiEstaFueraDelRangoDeEnvios(){
+    public void quePuedaConsultarSiEstaFueraDelRangoDeEnvios() throws DireccionInexistente {
 
         givenUnaCalleYUnaAlturaFueraDelRango();
 
@@ -69,7 +79,27 @@ public class ControladorPedidoTest {
 
     }
 
-    private void givenUnaCalleYUnaAlturaFueraDelRango() {
+    @Test
+    public void queSiIngresoUnaDireccionInvalidaMandeElMsj() throws DireccionInexistente {
+
+        givenQueIngresoUnaDireccionInvalida();
+
+        whenConsultoElRango();
+
+        thenMeMandaElMsjDeDireccionInexistente();
+
+    }
+
+    private void givenQueIngresoUnaDireccionInvalida() throws DireccionInexistente {
+        when(servicioPedido.consultarRango(anyString(),anyString(),anyString())).thenThrow(DireccionInexistente.class);
+    }
+
+    private void thenMeMandaElMsjDeDireccionInexistente() {
+        assertThat(mav.getViewName()).isEqualTo("formularioConsultaRango");
+        assertThat(mav.getModel().get("errorConsultaRango")).isEqualTo("Direccion inexistente, por favor vuelva a intentar");
+    }
+
+    private void givenUnaCalleYUnaAlturaFueraDelRango() throws DireccionInexistente {
         doThrow(RangoInvalido.class).when(servicioPedido).consultarRango(CALLE,ALTURA,LOCALIDAD);
     }
 
@@ -156,7 +186,7 @@ public class ControladorPedidoTest {
     }
 
     @Test
-    public void queSePuedaConfirmarUnPedido(){
+    public void queSePuedaConfirmarLosProductosDeUnPedido(){
 
         givenQueExisteUnPedidoConProductos();
 
@@ -166,13 +196,108 @@ public class ControladorPedidoTest {
 
     }
 
+    @Test
+    public void queSiConfirmoLosProductosDeUnPedidoInexistenteMeMandeElMsj(){
+
+        givenQueSeConfirmaUnPedidoInexistente();
+
+        whenConfirmoElPedido();
+
+        thenMeMandaElMsjDePedidoInexistente();
+
+    }
+
+    @Test
+    public void queAlConfirmarUnaCompraSinIngresarSuNombreMeMandeElMsj(){
+
+        givenQueSeConfirmaUnaCompraSinHaberIngresadoElNombre();
+
+        whenConfirmoLaCompra(datosConfirmacionIncompletoNombre);
+
+        thenMeMandaElMsjDeNombreIncompleto();
+
+    }
+
+    @Test
+    public void queAlConfirmarUnaCompraSinIngresarSuTelefonoMeMandeElMsj(){
+
+        givenQueSeConfirmaUnaCompraSinHaberIngresadoElTelefono();
+
+        whenConfirmoLaCompra(datosConfirmacionIncompletoTelefono);
+
+        thenMeMandaElMsjDeTelefonoIncompleto();
+
+    }
+
+    @Test
+    public void queSePuedaGenerarUnaCompraExitosa(){
+
+        givenQueExisteUnaCompraExitosa();
+
+        whenConfirmoLaCompra(datosConfirmacion);
+
+        thenMeDiceQueLaCompraEsExitosa();
+
+    }
+
+    private void givenQueExisteUnaCompraExitosa() {
+    }
+
+    private void thenMeDiceQueLaCompraEsExitosa() {
+        assertThat(mav.getViewName()).isEqualTo("redirect:compra-exitosa");
+    }
+
+    private void givenQueSeConfirmaUnaCompraSinHaberIngresadoElTelefono() {
+    }
+
+    private void thenMeMandaElMsjDeTelefonoIncompleto() {
+        Map<String,String> errores = (Map<String, String>) mav.getModel().get("validacionesCompra");
+        assertThat(mav.getViewName()).isEqualTo("formularioPedido");
+        assertThat(errores.get("telefonoError")).isEqualTo("Por favor ingrese un número de telefono");
+    }
+
+    private void givenQueSeConfirmaUnaCompraSinHaberIngresadoElNombre() {
+    }
+
+    private void whenConfirmoLaCompra(DatosConfirmacion datosConfirmacion) {
+        mav = controladorPedido.procesarCompra(datosConfirmacion);
+    }
+
+    private void thenMeMandaElMsjDeNombreIncompleto() {
+        Map<String,String> errores = (Map<String, String>) mav.getModel().get("validacionesCompra");
+        assertThat(mav.getViewName()).isEqualTo("formularioPedido");
+        assertThat(errores.get("nombreError")).isEqualTo("Por favor ingrese su nombre");
+    }
+
+    private void givenQueSeConfirmaUnPedidoInexistente() {
+        when(servicioPedido.obtenerPedido(anyLong())).thenThrow(PedidoInexistente.class);
+    }
+
+    private void thenMeMandaElMsjDePedidoInexistente() {
+        assertThat(mav.getViewName()).isEqualTo("formularioPedido");
+        assertThat(mav.getModel().get("pedidoInexistente")).isEqualTo("Este pedido no existe");
+    }
+
     private void givenQueExisteUnPedidoConProductos() {
+        Pedido pedido = new Pedido();
+        List<ItemPedido> listaPedidos = new ArrayList<>();
+        Producto p1 = new Producto();
+        ItemPedido itemPedido = new ItemPedido();
+        itemPedido.setProducto(p1);
+        listaPedidos.add(itemPedido);
+        itemPedido.setPedido(pedido);
+        when(servicioPedido.obtenerPedido(anyLong())).thenReturn(pedido);
+        when(servicioPedido.obtenerItemsPedido(anyLong())).thenReturn(listaPedidos);
     }
 
     private void whenConfirmoElPedido() {
+        mav = controladorPedido.irAformularioConfirmacion(idPedido);
     }
 
     private void thenObtengoELTiempoDeDemoraDelPedido() {
+        assertThat(mav.getViewName()).isEqualTo("formularioPedido");
+        assertThat(mav.getModel().get("pedido")).isEqualTo(servicioPedido.obtenerPedido(idPedido));
+        assertThat(mav.getModel().get("itemsPedido")).isEqualTo(servicioPedido.obtenerItemsPedido(idPedido));
     }
 
     private void whenConsultoElRangoSinPonerLaCalle() {

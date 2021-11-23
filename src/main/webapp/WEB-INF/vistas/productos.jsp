@@ -186,7 +186,7 @@
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <a href="confirmar-pedido?idPedido=${pedido.id}" class="btn btn-primary btn-block">Confirmar
+                                    <a href="confirmarPedido?idPedido=${pedido.id}" class="btn btn-primary btn-block">Confirmar
                                         pedido</a>
                                 </div>
                             </div>

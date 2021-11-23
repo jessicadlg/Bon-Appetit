@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.AttributeModel.DatosConfirmacion;
+import ar.edu.unlam.tallerweb1.Excepciones.DireccionInexistente;
 import ar.edu.unlam.tallerweb1.Excepciones.PedidoInexistente;
 import ar.edu.unlam.tallerweb1.Excepciones.PedidoVacio;
 import ar.edu.unlam.tallerweb1.Excepciones.RangoInvalido;
@@ -106,7 +108,7 @@ public class ServicioPedidoImpl implements ServicioPedido {
     public Long generarPedido() {
         Pedido pedido = new Pedido();
 
-       Long idPedido = repositorioPedido.generarPedido(pedido);
+        Long idPedido = repositorioPedido.generarPedido(pedido);
 
 
         return idPedido;
@@ -124,14 +126,23 @@ public class ServicioPedidoImpl implements ServicioPedido {
     }
 
     @Override
-    public void consultarRango(String calle, String altura, String localidad) {
+    public Routes consultarRango(String calle, String altura, String localidad) throws DireccionInexistente {
 
        Ubicacion ubicacion = repositorioPedido.obtenerLatitudLongitud(calle,altura,localidad);
+       if(ubicacion==null){
+           throw new DireccionInexistente("No existe la direccion");
+       }
        Routes viaje =  repositorioPedido.consultarDistanciaDelViaje(ubicacion);
 
        if(viaje.getDistance()>4000.0){
            throw new RangoInvalido();
        }
+
+       Localidades localidades = repositorioPedido.obtenerLocalidad(localidad);
+       viaje.setLocalidad(localidades.getLocalidades().get(0).getNombre());
+       viaje.setAltura(altura);
+       viaje.setCalle(calle);
+       return viaje;
     }
 
     @Override
@@ -139,6 +150,22 @@ public class ServicioPedidoImpl implements ServicioPedido {
         Calles calles = this.repositorioPedido.listarCalles();
 
         return calles;
+    }
+
+    @Override
+    public void confirmarCompra(DatosConfirmacion datosConfirmacion) {
+        Pedido pedido = obtenerPedido(datosConfirmacion.getIdPedido());
+
+        pedido.setTiempoPreparacion(Double.parseDouble(datosConfirmacion.getTiempoPreparacion()));
+        pedido.setTotal(Double.parseDouble(datosConfirmacion.getTotal()));
+        pedido.setAltura(datosConfirmacion.getAltura());
+        pedido.setCalle(datosConfirmacion.getCalle());
+        pedido.setTelefono(datosConfirmacion.getTelefono());
+        pedido.setNombre(datosConfirmacion.getNombre());
+        pedido.setLocalidad(datosConfirmacion.getLocalidad());
+
+        repositorioPedido.actualizarPedido(pedido);
+
     }
 
     private Double calcularTotal(String operacion, Double montoTotal, Double cantidadActualizar) {

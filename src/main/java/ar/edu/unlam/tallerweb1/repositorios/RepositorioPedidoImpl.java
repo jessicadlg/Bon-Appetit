@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -74,6 +75,9 @@ public class RepositorioPedidoImpl implements RepositorioPedido{
     @Override
     public Ubicacion obtenerLatitudLongitud(String calle, String altura, String localidad) {
         Direcciones direccion = this.restTemplate.getForObject("https://apis.datos.gob.ar/georef/api/direcciones?direccion=" + calle + " " + altura + "&provincia=06&departamento=06427&localidad=" + localidad + "&max=1&exacto=true", Direcciones.class);
+        if(direccion.getDirecciones().size()<1){
+            return null;
+        }
         return direccion.getDirecciones().get(0).getUbicacion();
     }
 
@@ -93,6 +97,12 @@ public class RepositorioPedidoImpl implements RepositorioPedido{
         calleRespuesta.setLocalidad(localidadesRespuesta);
 
         return calleRespuesta;
+    }
+
+    @Override
+    public Localidades obtenerLocalidad(String idLocalidad) {
+        Localidades localidadesRespuesta = restTemplate.getForObject("https://apis.datos.gob.ar/georef/api/localidades?id=6427010010&aplanar=true&campos=estandar&max=1&exacto=true", Localidades.class);
+        return localidadesRespuesta;
     }
 
 }

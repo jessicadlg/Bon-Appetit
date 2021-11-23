@@ -1,5 +1,6 @@
 package ar.edu.unlam.tallerweb1.serviciosTest;
 
+import ar.edu.unlam.tallerweb1.Excepciones.DireccionInexistente;
 import ar.edu.unlam.tallerweb1.Excepciones.RangoInvalido;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPedido;
@@ -89,7 +90,7 @@ public class ServicioPedidoTest {
     }
 
     @Test
-    public void quePuedaConsultarSiEstaDentroDelRangoDeEnvios(){
+    public void quePuedaConsultarSiEstaDentroDelRangoDeEnvios() throws DireccionInexistente {
 
         givenUnaCalleYUnaAlturaDentroDelRango();
 
@@ -100,7 +101,7 @@ public class ServicioPedidoTest {
     }
 
     @Test(expected = RangoInvalido.class)
-    public void quePuedaConsultarSiEstaFueraDelRangoDeEnvios(){
+    public void quePuedaConsultarSiEstaFueraDelRangoDeEnvios() throws DireccionInexistente {
 
         givenUnaCalleYUnaAlturaFueraDelRango();
 
@@ -118,6 +119,22 @@ public class ServicioPedidoTest {
         thenMeDevuelveLasCallesYLocalidades(calles);
 
     }
+
+    @Test(expected = DireccionInexistente.class)
+    public void queSiBuscoUnaDireccionInexistenteLanzeUnDireccionInexistenteException() throws DireccionInexistente {
+
+        givenQueBuscoUnaDireccionInexistente();
+
+        whenConsultoElRango();
+
+
+    }
+
+
+    private void givenQueBuscoUnaDireccionInexistente() {
+        when(repositorioPedido.obtenerLatitudLongitud(CALLE,ALTURA,LOCALIDAD)).thenReturn(null);
+    }
+
 
     private void givenQueExisteLasCalles() {
         Calles calles = new Calles();
@@ -153,12 +170,17 @@ public class ServicioPedidoTest {
     private void givenUnaCalleYUnaAlturaDentroDelRango() {
         Routes ruta = new Routes();
         ruta.setDistance(3000.0);
+        Localidades localidades = new Localidades();
+        Localidad localidad = new Localidad();
+        localidad.setNombre("SAN JUSTO");
+        localidades.getLocalidades().add(localidad);
+        when(repositorioPedido.obtenerLocalidad(anyString())).thenReturn(localidades);
         when(repositorioPedido.obtenerLatitudLongitud(CALLE,ALTURA,LOCALIDAD)).thenReturn(new Ubicacion());
         when(repositorioPedido.consultarDistanciaDelViaje(anyObject())).thenReturn(ruta);
 
     }
 
-    private void whenConsultoElRango() {
+    private void whenConsultoElRango() throws DireccionInexistente {
         servicioPedido.consultarRango(CALLE, ALTURA, LOCALIDAD);
     }
 

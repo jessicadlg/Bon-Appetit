@@ -1,18 +1,13 @@
 package ar.edu.unlam.tallerweb1.repositorioTest;
 
 import ar.edu.unlam.tallerweb1.SpringTest;
-import ar.edu.unlam.tallerweb1.modelo.Calles;
-import ar.edu.unlam.tallerweb1.modelo.Pedido;
-import ar.edu.unlam.tallerweb1.modelo.Routes;
-import ar.edu.unlam.tallerweb1.modelo.Ubicacion;
+import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPedido;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 
 import javax.transaction.Transactional;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -56,7 +51,7 @@ public class RepositorioPedidoTest extends SpringTest {
     public void queSePuedaObtenerLaDistanciaYEltiempoDeUnViaje(){
         Ubicacion ubicacion = givenUnaUbicacio();
         Routes ruta = whenConsultoLaDistanciaYElTiempo(ubicacion);
-        thenLaDistanciaEsYElTiempoDelViajeEs(4578.7,343.3, ruta);
+        thenLaDistanciaEsYElTiempoDelViajeEs(4578.7,343.3/60, ruta);
     }
 
     @Test
@@ -67,6 +62,27 @@ public class RepositorioPedidoTest extends SpringTest {
         Calles calles = whenListoLasCalles();
 
         thenMeDevuelveLasCalles(calles);
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    public void queSePuedaBuscarUnaLocalidadPorId(){
+
+       Localidades localidad =  whenBuscoUnaLocalidad();
+
+       thenObtengoElNombreDeLaLocalidad(localidad);
+
+    }
+
+    private Localidades whenBuscoUnaLocalidad() {
+        return repositorioPedido.obtenerLocalidad("6427010010");
+    }
+
+    private void thenObtengoElNombreDeLaLocalidad(Localidades localidad) {
+        assertThat(localidad).isNotNull();
+        assertThat(localidad.getLocalidades().get(0).getNombre()).isEqualTo("SAN JUSTO");
+
     }
 
     private Calles whenListoLasCalles() {
