@@ -159,13 +159,13 @@ public class ControladorPedidoTest {
 
     }
 
-    @Test
-    public void queNoPermitaConsultarRangoSiIngresoEspaciosEnBlancoConLaAltura(){
-
-        whenConsultoElRangoPoniendoEspaciosEnBlancoConLaAltura();
-
-        thenNoMeDejaConsultarElRangoPorLaAltura();
-    }
+//    @Test
+//    public void queNoPermitaConsultarRangoSiIngresoEspaciosEnBlancoConLaAltura(){
+//
+//        whenConsultoElRangoPoniendoEspaciosEnBlancoConLaAltura();
+//
+//        thenNoMeDejaConsultarElRangoPorLaAltura();
+//    }
 
     @Test
     public void queNoPermitaConsultarRangoSiIngresoUnaAlturaNegativa(){
