@@ -21,10 +21,19 @@ public class Pedido {
     private String telefono;
     private String calle;
     private String altura;
+    private String localidad;
 
     public Pedido(){
         this.total = 0.0;
         this.tiempoPreparacion= 0.0;
+    }
+
+    public String getLocalidad() {
+        return localidad;
+    }
+
+    public void setLocalidad(String localidad) {
+        this.localidad = localidad;
     }
 
     public String getNombre() {

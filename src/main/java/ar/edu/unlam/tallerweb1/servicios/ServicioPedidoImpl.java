@@ -1,11 +1,11 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
+import ar.edu.unlam.tallerweb1.AttributeModel.DatosConfirmacion;
+import ar.edu.unlam.tallerweb1.Excepciones.DireccionInexistente;
 import ar.edu.unlam.tallerweb1.Excepciones.PedidoInexistente;
 import ar.edu.unlam.tallerweb1.Excepciones.PedidoVacio;
-import ar.edu.unlam.tallerweb1.modelo.Comida;
-import ar.edu.unlam.tallerweb1.modelo.ItemPedido;
-import ar.edu.unlam.tallerweb1.modelo.Pedido;
-import ar.edu.unlam.tallerweb1.modelo.Producto;
+import ar.edu.unlam.tallerweb1.Excepciones.RangoInvalido;
+import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPedido;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioProducto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,7 @@ public class ServicioPedidoImpl implements ServicioPedido {
 
     private RepositorioPedido repositorioPedido;
     private RepositorioProducto repositorioProducto;
+    private Ubicacion UBICACION_RESTAURANTE = new Ubicacion(-58.56302836691231,-34.67052234258952);
 
     @Autowired
     public ServicioPedidoImpl(RepositorioPedido repositorioPedido, RepositorioProducto repositorioProducto) {
@@ -107,7 +108,7 @@ public class ServicioPedidoImpl implements ServicioPedido {
     public Long generarPedido() {
         Pedido pedido = new Pedido();
 
-       Long idPedido = repositorioPedido.generarPedido(pedido);
+        Long idPedido = repositorioPedido.generarPedido(pedido);
 
 
         return idPedido;
@@ -125,7 +126,45 @@ public class ServicioPedidoImpl implements ServicioPedido {
     }
 
     @Override
-    public void consultarRango(String calle, String altura) {
+    public Routes consultarRango(String calle, String altura, String localidad) throws DireccionInexistente {
+
+       Ubicacion ubicacion = repositorioPedido.obtenerLatitudLongitud(calle,altura,localidad);
+       if(ubicacion==null){
+           throw new DireccionInexistente("No existe la direccion");
+       }
+       Routes viaje =  repositorioPedido.consultarDistanciaDelViaje(ubicacion);
+
+       if(viaje.getDistance()>4000.0){
+           throw new RangoInvalido();
+       }
+
+       Localidades localidades = repositorioPedido.obtenerLocalidad(localidad);
+       viaje.setLocalidad(localidades.getLocalidades().get(0).getNombre());
+       viaje.setAltura(altura);
+       viaje.setCalle(calle);
+       return viaje;
+    }
+
+    @Override
+    public Calles listarCalles() {
+        Calles calles = this.repositorioPedido.listarCalles();
+
+        return calles;
+    }
+
+    @Override
+    public void confirmarCompra(DatosConfirmacion datosConfirmacion) {
+        Pedido pedido = obtenerPedido(datosConfirmacion.getIdPedido());
+
+        pedido.setTiempoPreparacion(Double.parseDouble(datosConfirmacion.getTiempoPreparacion()));
+        pedido.setTotal(Double.parseDouble(datosConfirmacion.getTotal()));
+        pedido.setAltura(datosConfirmacion.getAltura());
+        pedido.setCalle(datosConfirmacion.getCalle());
+        pedido.setTelefono(datosConfirmacion.getTelefono());
+        pedido.setNombre(datosConfirmacion.getNombre());
+        pedido.setLocalidad(datosConfirmacion.getLocalidad());
+
+        repositorioPedido.actualizarPedido(pedido);
 
     }
 

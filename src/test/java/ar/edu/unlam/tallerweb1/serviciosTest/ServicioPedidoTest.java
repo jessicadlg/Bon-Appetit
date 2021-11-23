@@ -1,5 +1,7 @@
 package ar.edu.unlam.tallerweb1.serviciosTest;
 
+import ar.edu.unlam.tallerweb1.Excepciones.DireccionInexistente;
+import ar.edu.unlam.tallerweb1.Excepciones.RangoInvalido;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPedido;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioProducto;
@@ -21,6 +23,9 @@ public class ServicioPedidoTest {
     Pedido pedido;
     private Long idProducto = 2L;
     private Long idPedido = 1L;
+    private final String CALLE = "Calle falsa";
+    private final String ALTURA = "123";
+    private String LOCALIDAD = "06427010014";
 
     @Test
     public void queSePuedaGenerarUnPedido() {
@@ -82,6 +87,105 @@ public class ServicioPedidoTest {
 
         thenMeEliminaElProducto();
 
+    }
+
+    @Test
+    public void quePuedaConsultarSiEstaDentroDelRangoDeEnvios() throws DireccionInexistente {
+
+        givenUnaCalleYUnaAlturaDentroDelRango();
+
+        whenConsultoElRango();
+
+        thenPuedoAgregarLosProductos();
+
+    }
+
+    @Test(expected = RangoInvalido.class)
+    public void quePuedaConsultarSiEstaFueraDelRangoDeEnvios() throws DireccionInexistente {
+
+        givenUnaCalleYUnaAlturaFueraDelRango();
+
+        whenConsultoElRango();
+
+    }
+
+    @Test
+    public void queSePuedanListarLasCallesYLocalidades(){
+
+        givenQueExisteLasCalles();
+
+        Calles calles = whenListoLasCalles();
+
+        thenMeDevuelveLasCallesYLocalidades(calles);
+
+    }
+
+    @Test(expected = DireccionInexistente.class)
+    public void queSiBuscoUnaDireccionInexistenteLanzeUnDireccionInexistenteException() throws DireccionInexistente {
+
+        givenQueBuscoUnaDireccionInexistente();
+
+        whenConsultoElRango();
+
+
+    }
+
+
+    private void givenQueBuscoUnaDireccionInexistente() {
+        when(repositorioPedido.obtenerLatitudLongitud(CALLE,ALTURA,LOCALIDAD)).thenReturn(null);
+    }
+
+
+    private void givenQueExisteLasCalles() {
+        Calles calles = new Calles();
+        Calle c1 = new Calle();
+        Calle c2 = new Calle();
+        Calle c3 = new Calle();
+        List<Calle> callesLista = new ArrayList<>();
+        callesLista.add(c1);
+        callesLista.add(c2);
+        callesLista.add(c3);
+        calles.setCalles(callesLista);
+        when(repositorioPedido.listarCalles()).thenReturn(calles);
+    }
+
+    private Calles whenListoLasCalles() {
+        return servicioPedido.listarCalles();
+    }
+
+    private void thenMeDevuelveLasCallesYLocalidades(Calles calles) {
+        assertThat(calles).isNotNull();
+        assertThat(calles.getCalles()).hasSize(3);
+    }
+
+    private void givenUnaCalleYUnaAlturaFueraDelRango() {
+        Routes ruta = new Routes();
+        Ubicacion ubicacion = new Ubicacion();
+        ruta.setDistance(4500.0);
+        when(repositorioPedido.obtenerLatitudLongitud(CALLE,ALTURA,LOCALIDAD)).thenReturn(ubicacion);
+        when(repositorioPedido.consultarDistanciaDelViaje(anyObject())).thenReturn(ruta);
+    }
+
+
+    private void givenUnaCalleYUnaAlturaDentroDelRango() {
+        Routes ruta = new Routes();
+        ruta.setDistance(3000.0);
+        Localidades localidades = new Localidades();
+        Localidad localidad = new Localidad();
+        localidad.setNombre("SAN JUSTO");
+        localidades.getLocalidades().add(localidad);
+        when(repositorioPedido.obtenerLocalidad(anyString())).thenReturn(localidades);
+        when(repositorioPedido.obtenerLatitudLongitud(CALLE,ALTURA,LOCALIDAD)).thenReturn(new Ubicacion());
+        when(repositorioPedido.consultarDistanciaDelViaje(anyObject())).thenReturn(ruta);
+
+    }
+
+    private void whenConsultoElRango() throws DireccionInexistente {
+        servicioPedido.consultarRango(CALLE, ALTURA, LOCALIDAD);
+    }
+
+    private void thenPuedoAgregarLosProductos() {
+        //si no lanza la excepcion, funciona :)
     }
 
     private void givenQueExisteUnPedidoConProductosDentro() {

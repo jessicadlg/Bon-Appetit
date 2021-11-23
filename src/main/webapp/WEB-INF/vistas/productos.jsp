@@ -165,10 +165,10 @@
                                         </div>
                                         <div class="col-5">
                                             <!-- Product name-->
-                                            <h5 class="">${productos.producto.nombre}</h5>
+                                            <h5 class="font-weight-bold">${productos.producto.nombre}</h5>
                                             <!-- Product details-->
-                                            <span class="font-weight-light">Cantidad: ${productos.cantidad}</span>
-                                            <span class="font-weight-light">Precio: $${productos.producto.precio}</span>
+                                            <p class="font-weight-light">Cantidad: ${productos.cantidad}</p>
+                                            <p class="font-weight-light">Precio: $${productos.producto.precio}</p>
                                         </div>
                                         <div class="col-1">
                                             <a href="eliminar-producto?idProducto=${productos.producto.id}&idPedido=${pedido.id}">
@@ -180,13 +180,13 @@
                                 </div>
                             </c:forEach>
                             <div class="row">
-                                <div class="col">
-                                    <h4>Su total: ${pedido.total}</h4>
+                                <div class="col mt-3">
+                                    <h4>Su total: $${pedido.total}</h4>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <a href="confirmar-pedido?idPedido=${pedido.id}" class="btn btn-primary btn-block">Confirmar
+                                    <a href="confirmarPedido?idPedido=${pedido.id}" class="btn btn-primary btn-block">Confirmar
                                         pedido</a>
                                 </div>
                             </div>
