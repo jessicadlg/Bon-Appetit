@@ -23,6 +23,10 @@ public class RepositorioPedidoImpl implements RepositorioPedido{
         this.sessionFactory = sessionFactory;
     }
 
+    public RepositorioPedidoImpl(){
+    }
+
+
     @Override
     public Pedido obtenerPedido(Long idPedido) {
         final Session session = this.sessionFactory.getCurrentSession();
