@@ -15,13 +15,12 @@ import java.util.List;
 public class RepositorioPedidoImpl implements RepositorioPedido{
 
     private SessionFactory sessionFactory;
-    private RestTemplate restTemplate;
+    private RestTemplate restTemplate = new RestTemplate();
     private Ubicacion UBICACION_RESTAURANTE = new Ubicacion(-58.56302836691231,-34.67052234258952);
 
     @Autowired
     public RepositorioPedidoImpl(SessionFactory sessionFactory){
         this.sessionFactory = sessionFactory;
-        this.restTemplate = new RestTemplate();
     }
 
     @Override
