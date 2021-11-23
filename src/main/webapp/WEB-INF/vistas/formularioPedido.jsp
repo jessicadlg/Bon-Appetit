@@ -68,7 +68,7 @@
                         </div>
                         <div class="col">
                             <label for="telefono">*Telefono:</label>
-                            <input type="text" name="telefono" id="telefono" class="form-control" placeholder="Telefono" value="${validacionesCompra.get('telefonoDefault')}">
+                            <input type="number" name="telefono" id="telefono" class="form-control" placeholder="Telefono" value="${validacionesCompra.get('telefonoDefault')}">
                             <c:if test="${not empty validacionesCompra.get('telefonoError')}">
                                 <p class="text-danger">${validacionesCompra.get('telefonoError')}</p>
                             </c:if>

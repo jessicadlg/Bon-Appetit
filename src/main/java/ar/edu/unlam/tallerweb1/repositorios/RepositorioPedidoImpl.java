@@ -102,7 +102,7 @@ public class RepositorioPedidoImpl implements RepositorioPedido{
     @Override
     public Localidades obtenerLocalidad(String idLocalidad) {
         RestTemplate restTemplate = new RestTemplate();
-        Localidades localidadesRespuesta = restTemplate.getForObject("https://apis.datos.gob.ar/georef/api/localidades?id=6427010010&aplanar=true&campos=estandar&max=1&exacto=true", Localidades.class);
+        Localidades localidadesRespuesta = restTemplate.getForObject("https://apis.datos.gob.ar/georef/api/localidades?id=" + idLocalidad + "&aplanar=true&campos=estandar&max=1&exacto=true", Localidades.class);
         return localidadesRespuesta;
     }
 
