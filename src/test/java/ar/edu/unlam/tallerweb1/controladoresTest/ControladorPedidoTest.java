@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.controladoresTest;
 import ar.edu.unlam.tallerweb1.AttributeModel.DatosConfirmacion;
 import ar.edu.unlam.tallerweb1.Excepciones.DireccionInexistente;
 import ar.edu.unlam.tallerweb1.Excepciones.PedidoInexistente;
+import ar.edu.unlam.tallerweb1.Excepciones.PedidoVacio;
 import ar.edu.unlam.tallerweb1.Excepciones.RangoInvalido;
 import ar.edu.unlam.tallerweb1.controladores.ControladorPedido;
 import ar.edu.unlam.tallerweb1.modelo.ItemPedido;
@@ -55,19 +56,6 @@ public class ControladorPedidoTest {
 
         thenPuedoAgregarLosProductos();
     }
-
-    private void givenUnaCalleYUnaAlturaDentroDelRango() {
-
-    }
-
-    private void whenConsultoElRango() {
-        mav = controladorPedido.consultarRango(CALLE,ALTURA, LOCALIDAD);
-    }
-
-    private void thenPuedoAgregarLosProductos() {
-        assertThat(mav.getViewName()).isEqualTo("redirect:generar-pedido");
-    }
-
     @Test
     public void quePuedaConsultarSiEstaFueraDelRangoDeEnvios() throws DireccionInexistente {
 
@@ -90,21 +78,33 @@ public class ControladorPedidoTest {
 
     }
 
-    private void givenQueIngresoUnaDireccionInvalida() throws DireccionInexistente {
-        when(servicioPedido.consultarRango(anyString(),anyString(),anyString())).thenThrow(DireccionInexistente.class);
+    @Test
+    public void queNoPermitaConsultarRangoSiNoIngresoUnaCalle(){
+        whenConsultoElRangoSinPonerLaCalle();
+
+        thenNoMeDejaConsultarElRangoPorLaCalle();
     }
 
-    private void thenMeMandaElMsjDeDireccionInexistente() {
-        assertThat(mav.getViewName()).isEqualTo("formularioConsultaRango");
-        assertThat(mav.getModel().get("errorConsultaRango")).isEqualTo("Direccion inexistente, por favor vuelva a intentar");
+    @Test
+    public void  queNoPermitaConsultarRangoSiNoIngresoLaAltura(){
+        whenConsultoElRangoSinPonerLaAltura();
+
+        thenNoMeDejaConsultarElRangoPorLaAltura();
     }
 
-    private void givenUnaCalleYUnaAlturaFueraDelRango() throws DireccionInexistente {
-        doThrow(RangoInvalido.class).when(servicioPedido).consultarRango(CALLE,ALTURA,LOCALIDAD);
+    @Test
+    public void queNoPermitaConsultarRangoSiIngresoUnaAlturaNegativa(){
+
+        whenConsultoElRangoConUnaAlturaNegativa();
+
+        thenNoMeDejaConsultarElRangoPorLaAlturaNegativa();
     }
 
-    private void thenMeAvisaQueEstoyFueraDelRango() {
-        assertThat(mav.getViewName()).isEqualTo("redirect:consultaRangoError");
+    @Test
+    public void queNoPermitaConsultarRangoSiNoIngresoLaLocalidad(){
+        whenConsultoElRangoSinPonerLaLocalidad();
+
+        thenNoMeDejaConsultarElRangoPorLaLocalidad();
     }
 
     @Test
@@ -118,17 +118,14 @@ public class ControladorPedidoTest {
 
     }
 
-    private void givenUnPedidoNuevo() {
-        when(servicioPedido.generarPedido()).thenReturn(1L);
-    }
+    @Test
+    public void queCuandoIngresaAIniciarPedidoNosDeUnMensajeQueSuPedidoEstaVacio(){
 
-    private void whenQuieroGenerarElPedido() {
-        mav = controladorPedido.generarPedido();
-    }
+        givenQueInicioUnPedidoNuevo();
 
-    private void thenObtengoElIdDelPedidoGenerado() {
-        assertThat(mav.getViewName()).isEqualTo("redirect:pedido?idPedido=1");
+        whenSeMuestraElPedido();
 
+        thenMeInformaQueSeEncuentraVacio();
     }
 
     @Test
@@ -139,49 +136,6 @@ public class ControladorPedidoTest {
         whenAgregoUnProducto();
 
         thenMeDevuelveElPedidoConSusProductos();
-
-    }
-
-    @Test
-    public void queNoPermitaConsultarRangoSiNoIngresoLaLocalidad(){
-
-        whenConsultoElRangoSinPonerLaLocalidad();
-
-        thenNoMeDejaConsultarElRangoPorLaLocalidad();
-
-    }
-
-    @Test
-    public void  queNoPermitaConsultarRangoSiNoIngresoLaAltura(){
-        whenConsultoElRangoSinPonerLaAltura();
-
-        thenNoMeDejaConsultarElRangoPorLaAltura();
-
-    }
-
-//    @Test
-//    public void queNoPermitaConsultarRangoSiIngresoEspaciosEnBlancoConLaAltura(){
-//
-//        whenConsultoElRangoPoniendoEspaciosEnBlancoConLaAltura();
-//
-//        thenNoMeDejaConsultarElRangoPorLaAltura();
-//    }
-
-    @Test
-    public void queNoPermitaConsultarRangoSiIngresoUnaAlturaNegativa(){
-
-        whenConsultoElRangoConUnaAlturaNegativa();
-
-        thenNoMeDejaConsultarElRangoPorLaAlturaNegativa();
-    }
-
-    @Test
-    public void queNoPermitaConsultarRangoSiNoIngresoUnaCalle(){
-
-        whenConsultoElRangoSinPonerLaCalle();
-
-        thenNoMeDejaConsultarElRangoPorLaCalle();
-
 
     }
 
@@ -240,8 +194,7 @@ public class ControladorPedidoTest {
 
     }
 
-    private void givenQueExisteUnaCompraExitosa() {
-    }
+    private void givenQueExisteUnaCompraExitosa() {    }
 
     private void thenMeDiceQueLaCompraEsExitosa() {
         assertThat(mav.getViewName()).isEqualTo("redirect:compra-exitosa");
@@ -299,16 +252,51 @@ public class ControladorPedidoTest {
         assertThat(mav.getModel().get("pedido")).isEqualTo(servicioPedido.obtenerPedido(idPedido));
         assertThat(mav.getModel().get("itemsPedido")).isEqualTo(servicioPedido.obtenerItemsPedido(idPedido));
     }
-
-    private void whenConsultoElRangoSinPonerLaCalle() {
-        mav = controladorPedido.consultarRango(null,"8821","0213213");
-
+    private void givenQueExisteUnPedidoSinProductos() {
+        when(servicioPedido.agregarProductoAlPedido(idProducto,idPedido)).thenReturn(new Pedido());
     }
 
-    private void thenNoMeDejaConsultarElRangoPorLaCalle() {
+    private void whenAgregoUnProducto() {
+        mav = controladorPedido.agregarProductoAlPedido(idProducto,idPedido);
+    }
+
+    private void thenMeDevuelveElPedidoConSusProductos() {
+        assertThat(mav.getViewName()).isEqualTo("redirect:carrito?idPedido=2");
+    }
+
+    private void givenQueInicioUnPedidoNuevo() {
+        when(servicioPedido.obtenerPedido(idPedido)).thenThrow(PedidoVacio.class);
+    }
+
+    private void whenSeMuestraElPedido() {
+        mav= controladorPedido.mostrarPedido(idPedido);
+    }
+
+    private void thenMeInformaQueSeEncuentraVacio() {
+        assertThat(mav.getViewName()).isEqualTo("productos");
+        assertThat(mav.getModel().get("pedidoVacio")).isEqualTo("Su pedido está vacio");
+    }
+
+    private void givenUnPedidoNuevo() {
+        when(servicioPedido.generarPedido()).thenReturn(1L);
+    }
+
+    private void whenQuieroGenerarElPedido() {
+        mav = controladorPedido.generarPedido();
+    }
+
+    private void thenObtengoElIdDelPedidoGenerado() {
+        assertThat(mav.getViewName()).isEqualTo("redirect:pedido?idPedido=1");
+    }
+
+    private void whenConsultoElRangoSinPonerLaLocalidad() {
+        mav = controladorPedido.consultarRango("Calle falsa","8888",null);
+    }
+
+    private void thenNoMeDejaConsultarElRangoPorLaLocalidad() {
         Map<String,String> errores = (Map<String, String>) mav.getModel().get("validacionesRango");
         assertThat(mav.getViewName()).isEqualTo("formularioConsultaRango");
-        assertThat(errores.get("calleError")).isEqualTo("Ingrese una calle");
+        assertThat(errores.get("localidadError")).isEqualTo("Ingrese una localidad");
     }
 
     private void whenConsultoElRangoConUnaAlturaNegativa() {
@@ -322,11 +310,6 @@ public class ControladorPedidoTest {
         assertThat(errores.get("alturaError")).isEqualTo("La altura debe ser mayor a cero");
     }
 
-    private void whenConsultoElRangoPoniendoEspaciosEnBlancoConLaAltura() {
-        mav = controladorPedido.consultarRango("Calle falsa","  ","0213213");
-
-    }
-
     private void whenConsultoElRangoSinPonerLaAltura() {
         mav = controladorPedido.consultarRango("Calle falsa",null,"0213213");
     }
@@ -337,35 +320,41 @@ public class ControladorPedidoTest {
         assertThat(errores.get("alturaError")).isEqualTo("Ingrese una altura");
     }
 
-    private void whenConsultoElRangoSinPonerLaLocalidad() {
-        mav = controladorPedido.consultarRango("Calle falsa","8888",null);
+    private void whenConsultoElRangoSinPonerLaCalle() {
+        mav = controladorPedido.consultarRango(null,"8821","0213213");
     }
 
-
-    private void thenNoMeDejaConsultarElRangoPorLaLocalidad() {
+    private void thenNoMeDejaConsultarElRangoPorLaCalle() {
         Map<String,String> errores = (Map<String, String>) mav.getModel().get("validacionesRango");
         assertThat(mav.getViewName()).isEqualTo("formularioConsultaRango");
-        assertThat(errores.get("localidadError")).isEqualTo("Ingrese una localidad");
+        assertThat(errores.get("calleError")).isEqualTo("Ingrese una calle");
     }
 
-    private void givenQueExisteUnPedidoSinProductos() {
-        when(servicioPedido.agregarProductoAlPedido(idProducto,idPedido)).thenReturn(new Pedido());
+    private void givenQueIngresoUnaDireccionInvalida() throws DireccionInexistente {
+        when(servicioPedido.consultarRango(anyString(),anyString(),anyString())).thenThrow(DireccionInexistente.class);
     }
 
-    private void whenAgregoUnProducto() {
-
-        mav = controladorPedido.agregarProductoAlPedido(idProducto,idPedido);
+    private void thenMeMandaElMsjDeDireccionInexistente() {
+        assertThat(mav.getViewName()).isEqualTo("formularioConsultaRango");
+        assertThat(mav.getModel().get("errorConsultaRango")).isEqualTo("Direccion inexistente, por favor vuelva a intentar");
     }
 
-    private void thenMeDevuelveElPedidoConSusProductos() {
-        assertThat(mav.getViewName()).isEqualTo("redirect:carrito?idPedido=2");
+    private void givenUnaCalleYUnaAlturaFueraDelRango() throws DireccionInexistente {
+        doThrow(RangoInvalido.class).when(servicioPedido).consultarRango(CALLE,ALTURA,LOCALIDAD);
     }
 
+    private void thenMeAvisaQueEstoyFueraDelRango() {
+        assertThat(mav.getViewName()).isEqualTo("redirect:consultaRangoError");
+    }
 
+    private void givenUnaCalleYUnaAlturaDentroDelRango() {    }
 
+    private void whenConsultoElRango() {
+        mav = controladorPedido.consultarRango(CALLE,ALTURA, LOCALIDAD);
+    }
 
-
-
-
+    private void thenPuedoAgregarLosProductos() {
+        assertThat(mav.getViewName()).isEqualTo("redirect:generar-pedido");
+    }
 
 }
