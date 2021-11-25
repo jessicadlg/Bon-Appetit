@@ -41,10 +41,6 @@ public class RepositorioPedidoTest extends SpringTest {
 
     }
 
-    private void whenBuscoLaLatidudYLongitud() {
-        ubicacion = repositorioPedido.obtenerLatitudLongitud("Jose Ignacio Rucci","592","06427010014");
-    }
-
     @Test
     @Rollback
     @Transactional
@@ -82,7 +78,6 @@ public class RepositorioPedidoTest extends SpringTest {
     private void thenObtengoElNombreDeLaLocalidad(Localidades localidad) {
         assertThat(localidad).isNotNull();
         assertThat(localidad.getLocalidades().get(0).getNombre()).isEqualTo("SAN JUSTO");
-
     }
 
     private Calles whenListoLasCalles() {
@@ -90,7 +85,8 @@ public class RepositorioPedidoTest extends SpringTest {
     }
 
     private void thenMeDevuelveLasCalles(Calles calles) {
-        System.out.println(calles);
+        assertThat(calles).isNotNull();
+        assertThat(calles.getCalles().get(0).getNombre()).isEqualTo("1 DE MAYO");
     }
 
     private Ubicacion givenUnaUbicacio() {
@@ -107,6 +103,10 @@ public class RepositorioPedidoTest extends SpringTest {
     private void thenLaDistanciaEsYElTiempoDelViajeEs(Double distancia, Double duracion, Routes ruta) {
         assertThat(ruta.getDistance()).isEqualTo(distancia);
         assertThat(ruta.getDuration()).isEqualTo(duracion);
+    }
+
+    private void whenBuscoLaLatidudYLongitud() {
+        ubicacion = repositorioPedido.obtenerLatitudLongitud("Jose Ignacio Rucci","592","06427010014");
     }
 
     private void thenMeDevuelveLaUbicacion() {
