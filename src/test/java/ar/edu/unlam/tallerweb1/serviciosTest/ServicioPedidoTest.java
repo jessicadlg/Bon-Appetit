@@ -126,9 +126,9 @@ public class ServicioPedidoTest {
 
        DatosConfirmacion datosConfirmacion = givenQueExisteUnPedidoCompleto();
 
-        whenConfirmoLaCompraDelPedido(datosConfirmacion);
+       whenConfirmoLaCompraDelPedido(datosConfirmacion);
 
-        thenElPedidoSeActualiza();
+       thenElPedidoSeActualiza();
 
     }
 
@@ -251,8 +251,16 @@ public class ServicioPedidoTest {
     }
 
     private DatosConfirmacion givenQueExisteUnPedidoCompleto() {
+        DatosConfirmacion datosConfirmacion = new DatosConfirmacion();
+        datosConfirmacion.setAltura("200");
+        datosConfirmacion.setCalle("calle falsa");
+        datosConfirmacion.setLocalidad("La Matanza");
+        datosConfirmacion.setTelefono("3123131");
+        datosConfirmacion.setTiempoPreparacion("20.0");
+        datosConfirmacion.setNombre("Taller web");
+        datosConfirmacion.setTotal("500.0");
         when(repositorioPedido.obtenerPedido(anyLong())).thenReturn(new Pedido());
-        return new DatosConfirmacion();
+        return datosConfirmacion;
     }
 
     private void whenConfirmoLaCompraDelPedido(DatosConfirmacion datosConfirmacion) {

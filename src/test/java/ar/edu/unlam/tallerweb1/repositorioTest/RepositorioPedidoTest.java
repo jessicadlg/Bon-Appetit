@@ -91,19 +91,15 @@ public class RepositorioPedidoTest extends SpringTest {
     @Transactional
     public void queSePuedanListarPedidosPorUnEstadoEspecifico(){
 
-        List<Pedido> listaEsperada = givenQueExisteUnaListaDePedidos();
+        List<Pedido> listaEsperada = givenQueExisteUnaListaDePedidosConEstados();
 
         List<Pedido> listaObtenida = whenListoLosPedidosPorUnEstadoEspecifico();
 
-        thenMeDevuelveTodosLosPedidos(listaEsperada,listaObtenida);
+        thenMeDevuelveTodosLosPedidosConEseEstadoEspecifico(listaEsperada,listaObtenida);
 
     }
 
-    private List<Pedido> whenListoLosPedidosPorUnEstadoEspecifico() {
-        return repositorioPedido.listarPedidoPorEstado(EstadoPedido.PREPARANDO);
-    }
-
-    private List<Pedido> givenQueExisteUnaListaDePedidos() {
+    private List<Pedido> givenQueExisteUnaListaDePedidosConEstados() {
         List<Pedido> listaPedidos = new ArrayList<>();
         Pedido p1 = new Pedido();
         Pedido p2 = new Pedido();
@@ -129,13 +125,38 @@ public class RepositorioPedidoTest extends SpringTest {
         return listaPedidos;
     }
 
+
+    private List<Pedido> whenListoLosPedidosPorUnEstadoEspecifico() {
+        return repositorioPedido.listarPedidoPorEstado(EstadoPedido.PREPARANDO);
+    }
+
+    private void thenMeDevuelveTodosLosPedidosConEseEstadoEspecifico(List<Pedido> listaEsperada, List<Pedido> listaObtenida) {
+        assertThat(listaObtenida).isNotNull();
+        assertThat(listaEsperada).isEqualTo(listaObtenida);
+        assertThat(listaObtenida).hasSize(3);
+    }
+
+    private List<Pedido> givenQueExisteUnaListaDePedidos() {
+        List<Pedido> listaPedidos = new ArrayList<>();
+        Pedido p1 = new Pedido();
+        Pedido p2 = new Pedido();
+        Pedido p3 = new Pedido();
+        session().save(p1);
+        session().save(p2);
+        session().save(p3);
+        listaPedidos.add(p1);
+        listaPedidos.add(p2);
+        listaPedidos.add(p3);
+        return listaPedidos;
+    }
+
     private List<Pedido> whenListoLosPedidos() {
         return repositorioPedido.listarPedidos();
     }
 
     private void thenMeDevuelveTodosLosPedidos(List<Pedido> listaEsperada, List<Pedido> listaObtenida) {
         assertThat(listaObtenida).isNotNull();
-        assertThat(listaEsperada).isEqualTo(listaObtenida);
+        assertThat(listaObtenida).isEqualTo(listaEsperada);
         assertThat(listaObtenida).hasSize(3);
     }
 

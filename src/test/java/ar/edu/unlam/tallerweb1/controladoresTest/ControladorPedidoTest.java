@@ -409,7 +409,7 @@ public class ControladorPedidoTest {
     }
 
     private void thenObtengoElIdDelPedidoGenerado() {
-        assertThat(mav.getViewName()).isEqualTo("redirect:pedido?idPedido=1");
+        assertThat(mav.getViewName()).isEqualTo("redirect:pedido?idPedido=0");
     }
 
     private void whenConsultoElRangoSinPonerLaLocalidad() {
