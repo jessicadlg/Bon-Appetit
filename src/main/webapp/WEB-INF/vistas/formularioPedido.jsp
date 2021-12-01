@@ -45,17 +45,17 @@
                     <div class="row mt-3">
                         <div class="col">
                             <label for="calle">Calle:</label>
-                            <input type="text" name="calle" id="calle" readonly class="form-control" value="${viaje.calle}">
+                            <input type="text" name="calle" id="calle" readonly class="form-control" value="${pedido.calle}">
                         </div>
                         <div class="col">
                             <label for="altura">Altura:</label>
-                            <input type="text" name="altura" id="altura" readonly class="form-control" value="${viaje.altura}">
+                            <input type="text" name="altura" id="altura" readonly class="form-control" value="${pedido.altura}">
                         </div>
                     </div>
                     <div class="row mt-3">
                         <div class="col">
                             <label for="localidad">Localidad:</label>
-                            <input type="text" name="localidad" id="localidad" readonly class="form-control" value="${viaje.localidad}" placeholder="Nombre">
+                            <input type="text" name="localidad" id="localidad" readonly class="form-control" value="${pedido.localidad}" placeholder="Nombre">
                         </div>
                     </div>
                     <div class="row mt-3">

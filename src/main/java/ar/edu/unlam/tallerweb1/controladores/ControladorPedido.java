@@ -9,13 +9,14 @@ import ar.edu.unlam.tallerweb1.servicios.ServicioProducto;
 import org.dom4j.rule.Mode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.StringReader;
+import java.net.http.HttpRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +38,7 @@ public class ControladorPedido {
 
     @RequestMapping("generar-pedido")
     public ModelAndView generarPedido() {
-        Long idPedido = servicioPedido.generarPedido();
+        Long idPedido = servicioPedido.generarPedido(routes);
         return new ModelAndView("redirect:pedido?idPedido=" + idPedido);
     }
 
@@ -61,6 +62,8 @@ public class ControladorPedido {
             model.put("pedidoInexistente", "Este pedido no existe");
         } catch (PedidoVacio h) {
             model.put("pedidoVacio", "Su pedido está vacio");
+        } catch(Exception e){
+            model.put("msg",e.getMessage());
         }
 
         return new ModelAndView("productos", model);
@@ -230,5 +233,46 @@ public class ControladorPedido {
            validacionesCompra.put("telefonoError","Por favor ingrese un número de telefono");
        }
         return validacionesCompra;
+    }
+
+    @RequestMapping("lista-pedidos")
+    public ModelAndView listarPedidos() {
+        return redirigirListaPedido(null);
+    }
+
+    @RequestMapping(path = "lista-pedidos/{filtro}")
+    public ModelAndView filtrarPedidoPorEstado(@PathVariable String filtro) {
+        return redirigirListaPedido(filtro);
+    }
+
+    private ModelAndView redirigirListaPedido(String filtro){
+        ModelMap model = new ModelMap();
+        List<Pedido> listaPedidos;
+        try{
+            if(filtro!=null){
+                listaPedidos = servicioPedido.listarPedidosPorEstado(filtro);
+            }else{
+                listaPedidos = servicioPedido.listarPedidos();
+            }
+            model.put("listaPedidos",listaPedidos);
+        }catch (listaPedidosNoEncontrada e){
+            model.put("listaPedidosVacia","No hay pedidos que listar");
+        }
+        return new ModelAndView("lista-pedidos",model);
+    }
+
+    @RequestMapping(value = "cambiar-estado")
+    public ModelAndView cambiarEstadoDeUnPedido(@RequestParam Long idPedido,@RequestParam String estado) {
+
+        ModelMap model = new ModelMap();
+
+        try{
+            servicioPedido.cambiarEstadoDeUnPedido(idPedido,estado);
+        }catch (PedidoFinalizado e){
+            model.put("pedidoError","No se puede cambiar el estado de un pedido finalizado");
+            return new ModelAndView("lista-pedidos",model);
+        }
+
+        return new ModelAndView("redirect:lista-pedidos");
     }
 }

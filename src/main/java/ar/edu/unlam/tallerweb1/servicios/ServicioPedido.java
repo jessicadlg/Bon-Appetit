@@ -2,10 +2,7 @@ package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.AttributeModel.DatosConfirmacion;
 import ar.edu.unlam.tallerweb1.Excepciones.DireccionInexistente;
-import ar.edu.unlam.tallerweb1.modelo.Calles;
-import ar.edu.unlam.tallerweb1.modelo.ItemPedido;
-import ar.edu.unlam.tallerweb1.modelo.Pedido;
-import ar.edu.unlam.tallerweb1.modelo.Routes;
+import ar.edu.unlam.tallerweb1.modelo.*;
 
 import java.util.List;
 
@@ -18,7 +15,7 @@ public interface ServicioPedido {
 
     Pedido obtenerPedido(Long idPedido);
 
-    Long generarPedido();
+    Long generarPedido(Routes routes);
 
     List<ItemPedido> obtenerItemsPedido(Long idPedido);
 
@@ -27,4 +24,10 @@ public interface ServicioPedido {
     Calles listarCalles();
 
     void confirmarCompra(DatosConfirmacion datosConfirmacion);
+
+    List<Pedido> listarPedidos();
+
+    List<Pedido> listarPedidosPorEstado(String filtro);
+
+    void cambiarEstadoDeUnPedido(Long idPedido, String estado);
 }

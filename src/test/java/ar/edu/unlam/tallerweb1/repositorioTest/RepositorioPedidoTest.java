@@ -9,6 +9,9 @@ import org.springframework.test.annotation.Rollback;
 
 import javax.transaction.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class RepositorioPedidoTest extends SpringTest {
@@ -70,6 +73,72 @@ public class RepositorioPedidoTest extends SpringTest {
        thenObtengoElNombreDeLaLocalidad(localidad);
 
     }
+
+    @Test
+    @Rollback
+    @Transactional
+    public void queSePuedanListaTodosLosPedidos(){
+
+        List<Pedido> listaEsperada = givenQueExisteUnaListaDePedidos();
+
+        List<Pedido> listaObtenida = whenListoLosPedidos();
+
+        thenMeDevuelveTodosLosPedidos(listaEsperada,listaObtenida);
+    }
+
+    @Test
+    @Rollback
+    @Transactional
+    public void queSePuedanListarPedidosPorUnEstadoEspecifico(){
+
+        List<Pedido> listaEsperada = givenQueExisteUnaListaDePedidos();
+
+        List<Pedido> listaObtenida = whenListoLosPedidosPorUnEstadoEspecifico();
+
+        thenMeDevuelveTodosLosPedidos(listaEsperada,listaObtenida);
+
+    }
+
+    private List<Pedido> whenListoLosPedidosPorUnEstadoEspecifico() {
+        return repositorioPedido.listarPedidoPorEstado(EstadoPedido.PREPARANDO);
+    }
+
+    private List<Pedido> givenQueExisteUnaListaDePedidos() {
+        List<Pedido> listaPedidos = new ArrayList<>();
+        Pedido p1 = new Pedido();
+        Pedido p2 = new Pedido();
+        Pedido p3 = new Pedido();
+        Pedido p4 = new Pedido();
+        Pedido p5 = new Pedido();
+        Pedido p6 = new Pedido();
+        p1.setEstadoPedido(EstadoPedido.PREPARANDO);
+        p2.setEstadoPedido(EstadoPedido.PREPARANDO);
+        p3.setEstadoPedido(EstadoPedido.PREPARANDO);
+        p4.setEstadoPedido(EstadoPedido.FINALIZADO);
+        p5.setEstadoPedido(EstadoPedido.VIAJANDO);
+        p6.setEstadoPedido(EstadoPedido.VIAJANDO);
+        session().save(p1);
+        session().save(p2);
+        session().save(p3);
+        session().save(p4);
+        session().save(p5);
+        session().save(p6);
+        listaPedidos.add(p1);
+        listaPedidos.add(p2);
+        listaPedidos.add(p3);
+        return listaPedidos;
+    }
+
+    private List<Pedido> whenListoLosPedidos() {
+        return repositorioPedido.listarPedidos();
+    }
+
+    private void thenMeDevuelveTodosLosPedidos(List<Pedido> listaEsperada, List<Pedido> listaObtenida) {
+        assertThat(listaObtenida).isNotNull();
+        assertThat(listaEsperada).isEqualTo(listaObtenida);
+        assertThat(listaObtenida).hasSize(3);
+    }
+
 
     private Localidades whenBuscoUnaLocalidad() {
         return repositorioPedido.obtenerLocalidad("6427010010");
