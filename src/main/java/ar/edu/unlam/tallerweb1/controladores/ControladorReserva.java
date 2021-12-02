@@ -107,7 +107,7 @@ public class ControladorReserva {
     private HashMap<String, String> validarFormulario(DatosReserva datosReserva) {
         HashMap<String,String> validaciones = new HashMap<>();
         if(datosReserva.getNombre()==null||datosReserva.getNombre().trim().equals("")){
-            validaciones.put("nombreIncompleto","Complete este campo");
+            validaciones.put("nombreIncompleto","Debe agregar un nombre");
         }if(datosReserva.getNombre()==null||datosReserva.getCelular().trim().equals("")){
             validaciones.put("celularIncompleto","Debe agregar un número de telefono");
         } if (datosReserva.getNombre()==null||datosReserva.getFecha().trim().equals("")){

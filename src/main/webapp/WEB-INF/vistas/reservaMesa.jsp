@@ -2,7 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="/WEB-INF/includes/header.jsp"/>
-<!-- page content -->
 <div class="container mt-4">
     <div class="card-header bg-white card shadow-lg">
         <div class="row">
@@ -50,7 +49,6 @@
                         </select>
                     </c:if>
                     <c:if test="${not empty horariosDisponibles}">
-
                         <select name="hora" id="hora" class="form-control">
                             <option value="" selected disabled="disabled">Ingrese una opcion...</option>
                             <c:forEach items="${horariosDisponibles}" var="horarios">
@@ -81,7 +79,16 @@
         <div class="row">
             <div class="col">
                 <c:if test="${not empty mensajeReserva}">
-                    <p class="text-center text-dark">${mensajeReserva}</p>
+
+                    <div class="container mt-5">
+                        <div class="alert alert-success mt-3 " role="alert">
+                            <div class="row">
+                                <div class="col">
+                                    <p class="text-center text-success font-weight-bold">${mensajeReserva}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </c:if>
             </div>
         </div>

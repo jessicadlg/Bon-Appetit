@@ -42,9 +42,7 @@ public class ControladorProducto {
             modelo.put("listaCategorias", listaCategorias);
             modelo.put("destacados",destacados);
         } catch (ListaNoEncontrada e) {
-            modelo.put("msgError", "No hay productos");
-        }catch (ListaCategoriaNoEncontrada f) {
-            modelo.put("categoriasNoEncontradas", "No se encontro ninguna categoria por mostrar");
+            modelo.put("msgError", "Ups! No se encontró ninguna categoría ni productos por mostrar.");
         }
         return new ModelAndView("productos", modelo);
     }

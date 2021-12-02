@@ -56,7 +56,7 @@
                                 </div>
                             </div>
                         </div>
-                            <div class="row">
+                            <div class="row my-2">
                                 <div class="col mx-auto">
                                     <a href="home" class="btn btn-block btn btn-secondary">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"

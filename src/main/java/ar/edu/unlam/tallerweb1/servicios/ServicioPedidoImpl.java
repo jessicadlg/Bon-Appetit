@@ -94,7 +94,7 @@ public class ServicioPedidoImpl implements ServicioPedido {
     public Pedido obtenerPedido(Long idPedido) {
 
         if(repositorioPedido.obtenerPedido(idPedido)==null){
-            throw new PedidoInexistente();
+            throw new PedidoInexistente("Este pedido no existe");
         }
 
 
@@ -119,7 +119,7 @@ public class ServicioPedidoImpl implements ServicioPedido {
 
         List<ItemPedido> itemPedidos = repositorioPedido.obtenerItemsPedido(idPedido);
         if(itemPedidos.size()<1){
-            throw new PedidoVacio();
+            throw new PedidoVacio("Su pedido se encuentra vacío! Añada todos sus productos aquí.");
         }
 
         return itemPedidos;
@@ -135,7 +135,7 @@ public class ServicioPedidoImpl implements ServicioPedido {
        Routes viaje =  repositorioPedido.consultarDistanciaDelViaje(ubicacion);
 
        if(viaje.getDistance()>4000.0){
-           throw new RangoInvalido();
+           throw new RangoInvalido("Lamentablemente no se encuentra dentro del rango de envios.");
        }
 
        Localidades localidades = repositorioPedido.obtenerLocalidad(localidad);

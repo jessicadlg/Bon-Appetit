@@ -54,18 +54,9 @@ public class ControladorPedido {
             model.put("idPedido", idPedido);
             List<ItemPedido> itemsPedido = servicioPedido.obtenerItemsPedido(idPedido);
             model.put("itemsPedido", itemsPedido);
-        } catch (ListaNoEncontrada e) {
-            model.put("msgError", "No hay productos");
-        } catch (ListaCategoriaNoEncontrada f) {
-            model.put("categoriasNoEncontradas", "No se encontro ninguna categoria por mostrar");
-        } catch (PedidoInexistente g) {
-            model.put("pedidoInexistente", "Este pedido no existe");
-        } catch (PedidoVacio h) {
-            model.put("pedidoVacio", "Su pedido está vacio");
-        } catch(Exception e){
-            model.put("msg",e.getMessage());
+        }catch (Exception e) {
+            model.put("msgError", e.getMessage());
         }
-
         return new ModelAndView("productos", model);
     }
 
@@ -88,14 +79,8 @@ public class ControladorPedido {
             model.put("idPedido", idPedido);
             List<ItemPedido> itemsPedido = servicioPedido.obtenerItemsPedido(idPedido);
             model.put("itemsPedido", itemsPedido);
-        } catch (ListaNoEncontrada e) {
-            model.put("msgError", "No hay productos");
-        } catch (ListaCategoriaNoEncontrada f) {
-            model.put("categoriasNoEncontradas", "No se encontro ninguna categoria por mostrar");
-        } catch (PedidoInexistente f) {
-            model.put("pedidoInexistente", "Este pedido no existe");
-        } catch (PedidoVacio h) {
-            model.put("pedidoVacio", "Su pedido está vacio");
+        } catch (Exception e) {
+            model.put("msgError", e.getMessage());
         }
         return new ModelAndView("productos", model);
     }
@@ -151,7 +136,7 @@ public class ControladorPedido {
 
     @RequestMapping("consultaRangoError")
     public ModelAndView consultarRangoFallido() {
-        return procesarConsultaRango("Lamentablemente no se encuentra dentro del rango de envios");
+        return procesarConsultaRango("Lamentablemente no se encuentra dentro del rango de envios.");
     }
 
     private ModelAndView procesarConsultaRango(String mensajeConsulta) {
@@ -167,13 +152,13 @@ public class ControladorPedido {
     private Map<String, String> validarConsultaRango(String calle, String altura, String localidad) {
         Map<String, String> validacionesRango = new HashMap<>();
         if (calle == null || calle == "") {
-            validacionesRango.put("calleError", "Ingrese una calle");
+            validacionesRango.put("calleError", "Por favor, ingrese una calle.");
         } else if (altura == null || altura.trim() == "") {
-            validacionesRango.put("alturaError", "Ingrese una altura");
+            validacionesRango.put("alturaError", "Por favor, ingrese una altura.");
         } else if (Integer.parseInt(altura) < 1) {
-            validacionesRango.put("alturaError", "La altura debe ser mayor a cero");
+            validacionesRango.put("alturaError", "La altura debe ser mayor a cero.");
         } else if (localidad == null || localidad == "") {
-            validacionesRango.put("localidadError", "Ingrese una localidad");
+            validacionesRango.put("localidadError", "Por favor,ingrese una localidad.");
         }
         return validacionesRango;
     }
@@ -227,10 +212,10 @@ public class ControladorPedido {
        validacionesCompra.put("telefonoDefault",datosConfirmacion.getTelefono());
 
        if(datosConfirmacion.getNombre()==null||datosConfirmacion.getNombre().trim().equals("")){
-           validacionesCompra.put("nombreError","Por favor ingrese su nombre");
+           validacionesCompra.put("nombreError","Por favor ingrese su nombre.");
        }
        if(datosConfirmacion.getTelefono()==null||datosConfirmacion.getTelefono().trim().equals("")){
-           validacionesCompra.put("telefonoError","Por favor ingrese un número de telefono");
+           validacionesCompra.put("telefonoError","Por favor ingrese un número de telefono.");
        }
         return validacionesCompra;
     }
