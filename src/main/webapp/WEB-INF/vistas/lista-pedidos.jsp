@@ -15,9 +15,9 @@
                         Filtros
                     </button>
                     <div class="dropdown-menu">
-                        <a href="/Bon_Appetit/lista-pedidos/PREPARANDO" class="dropdown-item">PREPARANDO</a>
-                        <a href="/Bon_Appetit/lista-pedidos/VIAJANDO" class="dropdown-item">VIAJANDO</a>
-                        <a href="/Bon_Appetit/lista-pedidos/FINALIZADO" class="dropdown-item">FINALIZADO</a>
+                        <a href="/Bon_Appetit/lista-pedidos-filtro?filtro=PREPARANDO" class="dropdown-item">PREPARANDO</a>
+                        <a href="/Bon_Appetit/lista-pedidos-filtro?filtro=VIAJANDO" class="dropdown-item">VIAJANDO</a>
+                        <a href="/Bon_Appetit/lista-pedidos-filtro?filtro=FINALIZADO" class="dropdown-item">FINALIZADO</a>
                     </div>
                 </div>
                 <a href="/Bon_Appetit/lista-pedidos" class="btn btn-danger">
@@ -72,7 +72,7 @@
                             <c:choose>
                                 <c:when test="${pedidos.estadoPedido == 'FINALIZADO'}">
                                     <td class="text-center">
-                                        <form:form action="cambiar-estado" method="post">
+                                        <form:form action="cambiar-estado" method="get">
                                             <div class="row">
                                                 <div class="col-9 mx-0 px-0">
                                                     <select name="estado" disabled id="estado" class="form-control">
@@ -93,7 +93,7 @@
                                 </c:when>
                                 <c:otherwise>
                                     <td  class="text-center">
-                                        <form:form action="cambiar-estado" method="post">
+                                        <form:form action="cambiar-estado" method="get">
                                             <div class="row">
                                                 <div class="col-9 mx-0 px-0">
                                                     <select name="estado" id="estado" class="form-control">

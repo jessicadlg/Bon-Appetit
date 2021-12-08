@@ -225,8 +225,8 @@ public class ControladorPedido {
         return redirigirListaPedido(null);
     }
 
-    @RequestMapping(path = "lista-pedidos/{filtro}")
-    public ModelAndView filtrarPedidoPorEstado(@PathVariable String filtro) {
+    @RequestMapping(path = "lista-pedidos-filtro")
+    public ModelAndView filtrarPedidoPorEstado(@RequestParam String filtro) {
         return redirigirListaPedido(filtro);
     }
 
