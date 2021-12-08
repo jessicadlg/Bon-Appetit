@@ -51,7 +51,7 @@ public class ControladorReserva {
         if (validaciones.size() >= 1) {
             modelMap.put("validaciones", validaciones);
             modelMap.put("horaElegida", datosReserva.getHora());
-            modelMap.put("comensalesElegido", datosReserva.getCantidadComensales());
+            modelMap.put("comensalesElegidos", datosReserva.getCantidadComensales());
             modelMap.put("fechaConsulta", datosReserva.getFecha());
             modelMap.put("celularPuesto", datosReserva.getCelular());
             modelMap.put("nombrePuesto", datosReserva.getNombre());
@@ -75,8 +75,8 @@ public class ControladorReserva {
         HashMap<String, String> validaciones = validarFormularioConsulta(fecha, hora);
 
         model.put("fechaConsulta", fecha);
-        model.put("horaConsulta", hora);
-        model.put("comensalesConsulta", cantidadComensales);
+        model.put("horaElegida", hora);
+        model.put("comensalesElegidos", cantidadComensales);
         if (validaciones.size() >= 1) {
             model.put("validacionesConsulta", validaciones);
             return new ModelAndView("reservaMesa", model);

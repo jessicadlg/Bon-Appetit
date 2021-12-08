@@ -18,6 +18,9 @@
                     <c:if test="${not empty fechaInvalida}">
                         <p class="text-danger">${fechaInvalida}</p>
                     </c:if>
+                    <c:if test="${not empty fechaPasada}">
+                        <p class="text-danger">${fechaPasada}</p>
+                    </c:if>
                     <c:if test="${not empty validacionesConsulta.get('fechaConsultaVacia')}">
                         <p class="text-danger">${validacionesConsulta.get('fechaConsultaVacia')}</p>
                     </c:if>
@@ -28,12 +31,12 @@
                     <label class=" font-weight-bold my-2">Hora: </label>
                     <c:if test="${empty horariosDisponibles}">
                         <select name="hora" id="hora" class="form-control">
-                            <c:if test="${not empty horaConsulta}">
+                            <c:if test="${not empty horaElegida}">
                                 <optgroup label="Hora elegida">
-                                    <option value="${horaConsulta}" selected>${horaConsulta}</option>
+                                    <option value="${horaElegida}" selected>${horaElegida}</option>
                                 </optgroup>
                             </c:if>
-                            <c:if test="${empty horaConsulta}">
+                            <c:if test="${empty horaElegida}">
                                 <option value="" selected disabled="disabled">Ingrese una opcion...</option>
                             </c:if>
                             <option value="12:00">12:00</option>
@@ -60,7 +63,7 @@
                 <div class="col">
                     <label class=" font-weight-bold my-2">Comensales: </label>
                     <input type="number" name="cantidadComensales" id="comensales" class="form-control"
-                           placeholder="Cantidad" value="${comensalesConsulta}">
+                           placeholder="Cantidad" value="${comensalesElegidos}">
                     <c:if test="${not empty mnsjCantidadComensalesInvalida}">
                         <p><span class="text-danger">${mnsjCantidadComensalesInvalida}</span></p>
                     </c:if>
@@ -78,8 +81,10 @@
                 <c:if test="${not empty reservaNoDisponible}">
                     <p class="text-center text-danger">${reservaNoDisponible}</p>
                 </c:if>
-                <c:if test="${not empty reservaConfirmada}">
-                    <p class="text-success text-center display-4">${reservaConfirmada}</p>
+                <c:if test="${not empty mensajeReserva}">
+                    <div class="alert alert-success mt-3" role="alert">
+                        <p class="text-success text-center display-4">${mensajeReserva}</p>
+                    </div>
                 </c:if>
             </div>
         </div>
@@ -102,20 +107,18 @@
         </div>
         <div class="row mt-3">
             <div class="col-4">
-                <input type="date" name="fecha"  class="form-control" value="${fechaConsulta}"
+                <input type="date" name="fecha" class="form-control" value="${fechaConsulta}"
                        readonly/>
                 <c:if test="${not empty validaciones.get('fechaIncompleta')}">
                     <p class="text-danger">${validaciones.get('fechaIncompleta')}</p>
                 </c:if>
             </div>
 
-            <c:if test="${not empty horaConsulta or not empty validaciones}">
+            <c:if test="${not empty horaElegida or not empty validaciones}">
                 <div class="col-4">
-                    <input type="text" name="hora"  class="form-control"
-                           value="${horaConsulta}" readonly/>
-<%--                    <select name="hora" class="form-control" aria-readonly="true">--%>
-<%--                        <option value="${horaConsulta}" selected>${horaConsulta}</option>--%>
-<%--                    </select>--%>
+                    <input type="text" name="hora" class="form-control"
+                           value="${horaElegida}" readonly/>
+
                     <c:if test="${not empty validaciones.get('horaIncompleta')}">
                         <p class="text-danger">${validaciones.get('horaIncompleta')}</p>
                     </c:if>
@@ -123,8 +126,8 @@
             </c:if>
 
             <div class="col-4">
-                <input type="number" name="cantidadComensales"  class="form-control"
-                       value="${comensalesConsulta}" readonly/>
+                <input type="number" name="cantidadComensales" class="form-control"
+                       value="${comensalesElegidos}" readonly/>
                 <c:if test="${not empty validaciones.get('cantidadIncompleta')}">
                     <p class="text-danger">${validaciones.get('cantidadIncompleta')}</p>
                 </c:if>
