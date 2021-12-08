@@ -1,10 +1,7 @@
 package ar.edu.unlam.tallerweb1.servicios;
 
 import ar.edu.unlam.tallerweb1.AttributeModel.DatosConfirmacion;
-import ar.edu.unlam.tallerweb1.Excepciones.DireccionInexistente;
-import ar.edu.unlam.tallerweb1.Excepciones.PedidoInexistente;
-import ar.edu.unlam.tallerweb1.Excepciones.PedidoVacio;
-import ar.edu.unlam.tallerweb1.Excepciones.RangoInvalido;
+import ar.edu.unlam.tallerweb1.Excepciones.*;
 import ar.edu.unlam.tallerweb1.modelo.*;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioPedido;
 import ar.edu.unlam.tallerweb1.repositorios.RepositorioProducto;
@@ -97,7 +94,7 @@ public class ServicioPedidoImpl implements ServicioPedido {
     public Pedido obtenerPedido(Long idPedido) {
 
         if(repositorioPedido.obtenerPedido(idPedido)==null){
-            throw new PedidoInexistente();
+            throw new PedidoInexistente("Este pedido no existe");
         }
 
 
@@ -105,9 +102,12 @@ public class ServicioPedidoImpl implements ServicioPedido {
     }
 
     @Override
-    public Long generarPedido() {
+    public Long generarPedido(Routes routes) {
         Pedido pedido = new Pedido();
-
+        pedido.setCalle(routes.getCalle());
+        pedido.setAltura(routes.getAltura());
+        pedido.setLocalidad(routes.getLocalidad());
+        pedido.setEstadoPedido(EstadoPedido.PREPARANDO);
         Long idPedido = repositorioPedido.generarPedido(pedido);
 
 
@@ -119,7 +119,7 @@ public class ServicioPedidoImpl implements ServicioPedido {
 
         List<ItemPedido> itemPedidos = repositorioPedido.obtenerItemsPedido(idPedido);
         if(itemPedidos.size()<1){
-            throw new PedidoVacio();
+            throw new PedidoVacio("Su pedido se encuentra vacío! Añada todos sus productos aquí.");
         }
 
         return itemPedidos;
@@ -135,7 +135,7 @@ public class ServicioPedidoImpl implements ServicioPedido {
        Routes viaje =  repositorioPedido.consultarDistanciaDelViaje(ubicacion);
 
        if(viaje.getDistance()>4000.0){
-           throw new RangoInvalido();
+           throw new RangoInvalido("Lamentablemente no se encuentra dentro del rango de envios.");
        }
 
        Localidades localidades = repositorioPedido.obtenerLocalidad(localidad);
@@ -163,9 +163,64 @@ public class ServicioPedidoImpl implements ServicioPedido {
         pedido.setTelefono(datosConfirmacion.getTelefono());
         pedido.setNombre(datosConfirmacion.getNombre());
         pedido.setLocalidad(datosConfirmacion.getLocalidad());
+        pedido.setEstadoPedido(EstadoPedido.VIAJANDO);
 
         repositorioPedido.actualizarPedido(pedido);
 
+    }
+
+    @Override
+    public List<Pedido> listarPedidos() {
+        List<Pedido> listaPedido = repositorioPedido.listarPedidos();
+
+        if(listaPedido.size()<1){
+            throw new listaPedidosNoEncontrada();
+        }
+
+        return listaPedido;
+    }
+
+    @Override
+    public List<Pedido> listarPedidosPorEstado(String filtro) {
+
+        EstadoPedido estado = validarEstadoPedido(filtro);
+        if(estado==null){
+            return listarPedidos();
+        }
+
+        List<Pedido> listaPedido = repositorioPedido.listarPedidoPorEstado(estado);
+
+        if(listaPedido.size()<1){
+            throw new listaPedidosNoEncontrada();
+        }
+        return listaPedido;
+    }
+
+    @Override
+    public void cambiarEstadoDeUnPedido(Long idPedido, String cambio) {
+        Pedido pedido = repositorioPedido.obtenerPedido(idPedido);
+
+        if(pedido.getEstadoPedido()==EstadoPedido.FINALIZADO){
+            throw new PedidoFinalizado();
+        }
+
+        EstadoPedido estado = validarEstadoPedido(cambio);
+
+        pedido.setEstadoPedido(estado);
+        repositorioPedido.actualizarPedido(pedido);
+    }
+
+    private EstadoPedido validarEstadoPedido(String estado){
+        switch (estado){
+            case "PREPARANDO":
+                return EstadoPedido.PREPARANDO;
+            case "VIAJANDO":
+                return EstadoPedido.VIAJANDO;
+            case "FINALIZADO":
+                return EstadoPedido.FINALIZADO;
+            default:
+                return null;
+        }
     }
 
     private Double calcularTotal(String operacion, Double montoTotal, Double cantidadActualizar) {

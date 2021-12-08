@@ -3,34 +3,39 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <jsp:include page="/WEB-INF/includes/header.jsp"/>
 <c:if test="${not empty pedido}">
-
     <div class="container mt-5">
         <div class="row">
             <div class="col">
                 <h1 class="text-center">Sus productos</h1>
             </div>
             <div class="col">
-                <h1 class="text-danger text-center">¡Confirme su pedido!</h1>
+                <h1 class="text-info text-center">¡Confirme sus datos!</h1>
             </div>
         </div>
         <form:form action="procesarCompra" method="POST" modelAttribute="datosConfirmacion">
             <div class="row">
                 <div class="col">
                     <table class="table table-active table-hover">
+                        <thead class="thead-dark">
                         <tr>
-                            <td>Nombre</td>
-                            <td>Precio</td>
-                            <td>Cantidad</td>
-                            <td>Producto</td>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Precio</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Producto</th>
                         </tr>
+                        </thead>
+                        <tbody>
                         <c:forEach items="${itemsPedido}" var="productos">
                             <tr>
                                 <td>${productos.producto.nombre}</td>
                                 <td>$${productos.producto.precio}</td>
                                 <td>${productos.cantidad}</td>
-                                <td class="col-2"><img class="rounded img-thumbnail img-fluid" src="images/${productos.producto.nombreImagen}" alt="" srcset=""></td>
+                                <td class="col-2"><img class="rounded img-thumbnail img-fluid"
+                                                       src="images/${productos.producto.nombreImagen}" alt="" srcset="">
+                                </td>
                             </tr>
                         </c:forEach>
+                        </tbody>
                     </table>
                     <div class="row">
                         <div class="col">
@@ -77,7 +82,7 @@
                     <div class="row mt-3">
                         <div class="col mb-2">
                             <div class="alert alert-info" role="alert">
-                                <p>Su pedido estará listo en el periodo de ${Math.round(pedido.tiempoPreparacion + viaje.duration)} min</p>
+                                <p class="font-weight-bold">Su pedido será entregado en el período de ${Math.round(pedido.tiempoPreparacion + viaje.duration)} min!</p>
                             </div>
                         </div>
                     </div>
@@ -91,4 +96,5 @@
         </form:form>
     </div>
 </c:if>
+
 <jsp:include page="/WEB-INF/includes/footer.jsp"/>

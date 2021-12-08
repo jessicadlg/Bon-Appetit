@@ -47,15 +47,15 @@ public class ControladorReserva {
     @RequestMapping(value = "/confirmarReserva", method = RequestMethod.POST)
     public ModelAndView confirmarReserva(@ModelAttribute("datosReserva") DatosReserva datosReserva) {
         ModelMap modelMap = new ModelMap();
-        HashMap<String,String> validaciones = validarFormulario(datosReserva);
-        if(validaciones.size()>=1){
-            modelMap.put("validaciones",validaciones);
-            modelMap.put("horaElegida",datosReserva.getHora());
-            modelMap.put("comensalesElegido",datosReserva.getCantidadComensales());
-            modelMap.put("fechaConsulta",datosReserva.getFecha());
-            modelMap.put("celularPuesto",datosReserva.getCelular());
-            modelMap.put("nombrePuesto",datosReserva.getNombre());
-            return new ModelAndView("reservaMesa",modelMap);
+        HashMap<String, String> validaciones = validarFormulario(datosReserva);
+        if (validaciones.size() >= 1) {
+            modelMap.put("validaciones", validaciones);
+            modelMap.put("horaElegida", datosReserva.getHora());
+            modelMap.put("comensalesElegidos", datosReserva.getCantidadComensales());
+            modelMap.put("fechaConsulta", datosReserva.getFecha());
+            modelMap.put("celularPuesto", datosReserva.getCelular());
+            modelMap.put("nombrePuesto", datosReserva.getNombre());
+            return new ModelAndView("reservaMesa", modelMap);
         }
         try {
             servicioReserva.confirmarReserva(datosReserva);
@@ -69,19 +69,17 @@ public class ControladorReserva {
     }
 
     @RequestMapping("consultarDisponibilidad")
-    public ModelAndView consultarDisponibilidad(@RequestParam(defaultValue = "") String fecha, @RequestParam(defaultValue = "") String hora,@RequestParam(defaultValue = "0") Integer cantidadComensales) {
+    public ModelAndView consultarDisponibilidad(@RequestParam(defaultValue = "") String fecha, @RequestParam(defaultValue = "") String hora, @RequestParam(defaultValue = "0") Integer cantidadComensales) {
         ModelMap model = new ModelMap();
 
-        HashMap<String,String> validaciones = validarFormularioConsulta(fecha,hora);
+        HashMap<String, String> validaciones = validarFormularioConsulta(fecha, hora);
 
-        model.put("fechaConsulta",fecha);
-        model.put("horaConsulta",hora);
-        model.put("fechaConsulta",fecha);
-        model.put("horaConsulta",hora);
-        model.put("comensalesConsulta",cantidadComensales);
-        if(validaciones.size()>=1){
-            model.put("validacionesConsulta",validaciones);
-            return new ModelAndView("reservaMesa",model);
+        model.put("fechaConsulta", fecha);
+        model.put("horaElegida", hora);
+        model.put("comensalesElegidos", cantidadComensales);
+        if (validaciones.size() >= 1) {
+            model.put("validacionesConsulta", validaciones);
+            return new ModelAndView("reservaMesa", model);
         }
 
         try {
@@ -97,42 +95,47 @@ public class ControladorReserva {
             model.put("fechaInvalida", "Se ha igresado una Fecha Invalida");
         } catch (CantidadComensalesInvalida e) {
             model.put("mnsjCantidadComensalesInvalida", "La Cantidad de comensales debe ser mayor a cero.");
-        }catch (FechaInvalida e){
-            model.put("fechaPasada","No se puede elegir una fecha pasada");
+        } catch (FechaInvalida e) {
+            model.put("fechaPasada", "No se puede elegir una fecha pasada");
         }
         return new ModelAndView("reservaMesa", model);
     }
 
 
     private HashMap<String, String> validarFormulario(DatosReserva datosReserva) {
-        HashMap<String,String> validaciones = new HashMap<>();
-        if(datosReserva.getNombre()==null||datosReserva.getNombre().trim().equals("")){
-            validaciones.put("nombreIncompleto","Complete este campo");
-        }if(datosReserva.getNombre()==null||datosReserva.getCelular().trim().equals("")){
-            validaciones.put("celularIncompleto","Debe agregar un número de telefono");
-        } if (datosReserva.getNombre()==null||datosReserva.getFecha().trim().equals("")){
-            validaciones.put("fechaIncompleta","Debe agregar una fecha");
-        }if(datosReserva.getNombre()==null||datosReserva.getHora().trim().equals("")){
-            validaciones.put("horaIncompleta","Debe agregar un horario");
-        }if(datosReserva.getNombre()==null||datosReserva.getCantidadComensales()<1){
-            validaciones.put("cantidadIncompleta","Debe agregar un número valido mayor a 0");
+        HashMap<String, String> validaciones = new HashMap<>();
+        if (datosReserva.getNombre() == null || datosReserva.getNombre().trim().equals("")) {
+            validaciones.put("nombreIncompleto", "Debe agregar un nombre");
+        }
+        if (datosReserva.getNombre() == null || datosReserva.getCelular().trim().equals("")) {
+            validaciones.put("celularIncompleto", "Debe agregar un número de telefono");
+        }
+        if (datosReserva.getNombre() == null || datosReserva.getFecha().trim().equals("")) {
+            validaciones.put("fechaIncompleta", "Debe agregar una fecha");
+        }
+        if (datosReserva.getNombre() == null || datosReserva.getHora().trim().equals("")) {
+            validaciones.put("horaIncompleta", "Debe agregar un horario");
+        }
+        if (datosReserva.getNombre() == null || datosReserva.getCantidadComensales() < 1) {
+            validaciones.put("cantidadIncompleta", "Debe agregar un número valido mayor a 0");
         }
         return validaciones;
     }
 
-    private HashMap<String,String> validarFormularioConsulta(String fecha, String hora){
-        HashMap<String,String> validacionesConsulta = new HashMap<>();
-        if(fecha.trim().equals("")||fecha==null){
-            validacionesConsulta.put("fechaConsultaVacia","Debe ingresar una fecha para poder consultar");
-        }if(hora.trim().equals("")||hora==null){
-            validacionesConsulta.put("horaConsultaVacia","Debe ingresar una hora para poder consultar");
+    private HashMap<String, String> validarFormularioConsulta(String fecha, String hora) {
+        HashMap<String, String> validacionesConsulta = new HashMap<>();
+        if (fecha.trim().equals("") || fecha == null) {
+            validacionesConsulta.put("fechaConsultaVacia", "Debe ingresar una fecha para poder consultar");
         }
-    return validacionesConsulta;
+        if (hora.trim().equals("") || hora == null) {
+            validacionesConsulta.put("horaConsultaVacia", "Debe ingresar una hora para poder consultar");
+        }
+        return validacionesConsulta;
     }
 
     private ModelAndView procesarReservar(String mensajeReserva) {
         ModelMap modelMap = new ModelMap();
-        if(mensajeReserva!=null){
+        if (mensajeReserva != null) {
             modelMap.put("mensajeReserva", mensajeReserva);
         }
         modelMap.put("datosReserva", new DatosReserva());

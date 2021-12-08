@@ -48,7 +48,7 @@ public class ControladorRegistrarmeTest {
 
         whenRegistroElUsuario(USUARIO.getEmail(), USUARIO.getPassword(), USUARIO.getPassword());
 
-        thenRegistraFallaPor("usuario ya existe");
+        thenRegistraFallaPor("Este usuario ya existe");
     }
 
     @Test
@@ -57,7 +57,7 @@ public class ControladorRegistrarmeTest {
 
         whenRegistroElUsuario(USUARIO.getEmail(), USUARIO.getPassword(), USUARIO.getPassword() + "356829");
 
-        thenRegistraFallaPor("claves no coinciden");
+        thenRegistraFallaPor("Las claves deben ser iguales");
     }
 
     @Test

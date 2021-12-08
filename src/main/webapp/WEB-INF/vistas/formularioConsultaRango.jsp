@@ -7,7 +7,7 @@
     <div class="card-header bg-white card shadow-lg">
         <div class="row mb-5">
             <div class="col">
-                <h1 class="text-center">¡Ingresa tu direccion!</h1>
+                <h1 class="text-center">¡Ingresa tu dirección!</h1>
             </div>
         </div>
         <form action="consultarRango" method="POST">
@@ -24,7 +24,7 @@
                     </c:if>
                 </div>
                 <div class="col">
-                    <input type="number" maxlength="5" name="altura" pattern="[0-9]" class="form-control" placeholder="Altura" required>
+                    <input type="number" maxlength="5" name="altura" pattern="[0-9]" class="form-control" placeholder="Ingrese una altura">
                     <c:if test="${not empty validacionesRango.get('alturaError')}">
                         <p class="text-danger">${validacionesRango.get('alturaError')}</p>
                     </c:if>
@@ -56,7 +56,7 @@
                                 </div>
                             </div>
                         </div>
-                            <div class="row">
+                            <div class="row my-2">
                                 <div class="col mx-auto">
                                     <a href="home" class="btn btn-block btn btn-secondary">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"

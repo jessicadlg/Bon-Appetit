@@ -1,14 +1,12 @@
 package ar.edu.unlam.tallerweb1.controladoresTest;
 
 import ar.edu.unlam.tallerweb1.AttributeModel.DatosConfirmacion;
-import ar.edu.unlam.tallerweb1.Excepciones.DireccionInexistente;
-import ar.edu.unlam.tallerweb1.Excepciones.PedidoInexistente;
-import ar.edu.unlam.tallerweb1.Excepciones.PedidoVacio;
-import ar.edu.unlam.tallerweb1.Excepciones.RangoInvalido;
+import ar.edu.unlam.tallerweb1.Excepciones.*;
 import ar.edu.unlam.tallerweb1.controladores.ControladorPedido;
 import ar.edu.unlam.tallerweb1.modelo.ItemPedido;
 import ar.edu.unlam.tallerweb1.modelo.Pedido;
 import ar.edu.unlam.tallerweb1.modelo.Producto;
+import ar.edu.unlam.tallerweb1.modelo.Routes;
 import ar.edu.unlam.tallerweb1.servicios.ServicioCategoria;
 import ar.edu.unlam.tallerweb1.servicios.ServicioPedido;
 import ar.edu.unlam.tallerweb1.servicios.ServicioProducto;
@@ -16,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +34,7 @@ public class ControladorPedidoTest {
     private final String CALLE = "Estrada";
     private final String ALTURA = "123";
     private String LOCALIDAD = "06427010014";
-
+    private HttpServletRequest httpServletRequest;
     private DatosConfirmacion datosConfirmacion = new DatosConfirmacion("Calle","Altura","Localidad","Nombre","telefono","400.0","60.0");
     private DatosConfirmacion datosConfirmacionIncompletoNombre = new DatosConfirmacion("Calle","Altura","Localidad",null,"telefono","400.0","60.0");
     private DatosConfirmacion datosConfirmacionIncompletoTelefono = new DatosConfirmacion("Calle","Altura","Localidad","Nombre",null,"400.0","60.0");
@@ -57,7 +56,7 @@ public class ControladorPedidoTest {
         thenPuedoAgregarLosProductos();
     }
     @Test
-    public void quePuedaConsultarSiEstaFueraDelRangoDeEnvios() throws DireccionInexistente {
+    public void quePuedaConsultarSiEstaFueraDelRangoDeEnvios(){
 
         givenUnaCalleYUnaAlturaFueraDelRango();
 
@@ -68,7 +67,7 @@ public class ControladorPedidoTest {
     }
 
     @Test
-    public void queSiIngresoUnaDireccionInvalidaMandeElMsj() throws DireccionInexistente {
+    public void queSiIngresoUnaDireccionInvalidaMandeElMsj()  {
 
         givenQueIngresoUnaDireccionInvalida();
 
@@ -193,6 +192,124 @@ public class ControladorPedidoTest {
         thenMeDiceQueLaCompraEsExitosa();
 
     }
+    
+    @Test
+    public void queSePuedanListarTodosLosPedidos(){
+        
+        givenQueExisteUnaListaDePedidos();
+        
+        whenListoLosPedidos();
+        
+        thenMeDevuelveLaListaDePedidos();
+        
+    }
+
+    @Test
+    public void queSiNoExistenPedidosMeMandeElMsj(){
+
+        givenQueNoExisteUnaListaDePedidos();
+
+        whenListoLosPedidos();
+
+        thenMeMandaElMsjDeListaInexistente();
+
+    }
+
+    @Test
+    public void queSePuedaListarLosPedidosConEstados(){
+
+        givenQueExisteUnaListaDePedidosConUnEstadoEspecifico();
+
+        whenListoLosPedidosEnPreparacion();
+
+        thenMeTraeLaListaDePedidosEnPreparacion();
+    }
+
+    @Test
+    public void queSePuedaCambiarDeEstadoUnPedido(){
+
+        givenQueExisteUnPedidoConUnEstado();
+
+        whenQuieroCambiarElEstadoDelPedido();
+
+        thenElPedidoSeCambiaDeEstado();
+
+    }
+
+    @Test
+    public void queNoSePuedaCambiarDeEstadoUnPedidoFinalizado(){
+        givenQueExisteUnPedidoConUnEstadoFinalizado();
+
+        whenQuieroCambiarElEstadoDelPedido();
+
+        thenNoMeDejaCambiarElEstadoDelPedido();
+
+    }
+
+    private void givenQueExisteUnPedidoConUnEstadoFinalizado() {
+        doThrow(PedidoFinalizado.class).when(servicioPedido).cambiarEstadoDeUnPedido(anyLong(),anyString());
+    }
+
+    private void thenNoMeDejaCambiarElEstadoDelPedido() {
+        assertThat(mav.getViewName()).isEqualTo("lista-pedidos");
+        assertThat(mav.getModel().get("pedidoError")).isEqualTo("No se puede cambiar el estado de un pedido finalizado");
+    }
+
+    private void givenQueExisteUnPedidoConUnEstado() {
+
+    }
+
+    private void whenQuieroCambiarElEstadoDelPedido() {
+        mav = controladorPedido.cambiarEstadoDeUnPedido(1L,"ESTADO");
+    }
+
+    private void thenElPedidoSeCambiaDeEstado() {
+        assertThat(mav.getViewName()).isEqualTo("redirect:lista-pedidos");
+    }
+
+
+    private void givenQueExisteUnaListaDePedidosConUnEstadoEspecifico() {
+        List<Pedido> listaPedidos = new ArrayList<>();
+        Pedido p1 = new Pedido();
+        Pedido p2 = new Pedido();
+        Pedido p3 = new Pedido();
+        when(servicioPedido.listarPedidosPorEstado(any())).thenReturn(listaPedidos);
+    }
+
+    private void whenListoLosPedidosEnPreparacion() {
+        mav = controladorPedido.filtrarPedidoPorEstado("PREPARANDO");
+    }
+
+    private void thenMeTraeLaListaDePedidosEnPreparacion() {
+        assertThat(mav.getViewName()).isEqualTo("lista-pedidos");
+        assertThat(mav.getModel().get("listaPedidos")).isEqualTo(servicioPedido.listarPedidos());
+    }
+    private void givenQueNoExisteUnaListaDePedidos() {
+        when(servicioPedido.listarPedidos()).thenThrow(listaPedidosNoEncontrada.class);
+    }
+
+    private void thenMeMandaElMsjDeListaInexistente() {
+        assertThat(mav.getViewName()).isEqualTo("lista-pedidos");
+        assertThat(mav.getModel().get("listaPedidosVacia")).isEqualTo("No hay pedidos que listar");
+    }
+
+    private void givenQueExisteUnaListaDePedidos() {
+        List<Pedido> listaPedidos = new ArrayList<>();
+        Pedido p1 = new Pedido();
+        Pedido p2 = new Pedido();
+        Pedido p3 = new Pedido();
+        when(servicioPedido.listarPedidos()).thenReturn(listaPedidos);
+    }
+
+    private void whenListoLosPedidos() {
+        mav = controladorPedido.listarPedidos();
+    }
+
+    private void thenMeDevuelveLaListaDePedidos() {
+        assertThat(mav.getViewName()).isEqualTo("lista-pedidos");
+        assertThat(mav.getModel().get("listaPedidos")).isEqualTo(servicioPedido.listarPedidos());
+    }
+
 
     private void givenQueExisteUnaCompraExitosa() {    }
 
@@ -206,7 +323,7 @@ public class ControladorPedidoTest {
     private void thenMeMandaElMsjDeTelefonoIncompleto() {
         Map<String,String> errores = (Map<String, String>) mav.getModel().get("validacionesCompra");
         assertThat(mav.getViewName()).isEqualTo("formularioPedido");
-        assertThat(errores.get("telefonoError")).isEqualTo("Por favor ingrese un número de telefono");
+        assertThat(errores.get("telefonoError")).isEqualTo("Por favor ingrese un número de telefono.");
     }
 
     private void givenQueSeConfirmaUnaCompraSinHaberIngresadoElNombre() {
@@ -219,7 +336,7 @@ public class ControladorPedidoTest {
     private void thenMeMandaElMsjDeNombreIncompleto() {
         Map<String,String> errores = (Map<String, String>) mav.getModel().get("validacionesCompra");
         assertThat(mav.getViewName()).isEqualTo("formularioPedido");
-        assertThat(errores.get("nombreError")).isEqualTo("Por favor ingrese su nombre");
+        assertThat(errores.get("nombreError")).isEqualTo("Por favor ingrese su nombre.");
     }
 
     private void givenQueSeConfirmaUnPedidoInexistente() {
@@ -274,11 +391,17 @@ public class ControladorPedidoTest {
 
     private void thenMeInformaQueSeEncuentraVacio() {
         assertThat(mav.getViewName()).isEqualTo("productos");
-        assertThat(mav.getModel().get("pedidoVacio")).isEqualTo("Su pedido está vacio");
+//        assertThat(mav.getModel().get("pedidoVacio")).isEqualTo("Su pedido está vacio");
     }
 
     private void givenUnPedidoNuevo() {
-        when(servicioPedido.generarPedido()).thenReturn(1L);
+        Routes routes = new Routes();
+        routes.setCalle("Calle");
+        routes.setLocalidad("La Matanza");
+        routes.setAltura("200");
+        routes.setDuration(10.0);
+        routes.setDistance(100.0);
+        when(servicioPedido.generarPedido(routes)).thenReturn(1L);
     }
 
     private void whenQuieroGenerarElPedido() {
@@ -286,7 +409,7 @@ public class ControladorPedidoTest {
     }
 
     private void thenObtengoElIdDelPedidoGenerado() {
-        assertThat(mav.getViewName()).isEqualTo("redirect:pedido?idPedido=1");
+        assertThat(mav.getViewName()).isEqualTo("redirect:pedido?idPedido=0");
     }
 
     private void whenConsultoElRangoSinPonerLaLocalidad() {
@@ -296,7 +419,7 @@ public class ControladorPedidoTest {
     private void thenNoMeDejaConsultarElRangoPorLaLocalidad() {
         Map<String,String> errores = (Map<String, String>) mav.getModel().get("validacionesRango");
         assertThat(mav.getViewName()).isEqualTo("formularioConsultaRango");
-        assertThat(errores.get("localidadError")).isEqualTo("Ingrese una localidad");
+        assertThat(errores.get("localidadError")).isEqualTo("Por favor,ingrese una localidad.");
     }
 
     private void whenConsultoElRangoConUnaAlturaNegativa() {
@@ -307,7 +430,7 @@ public class ControladorPedidoTest {
     private void thenNoMeDejaConsultarElRangoPorLaAlturaNegativa() {
         Map<String,String> errores = (Map<String, String>) mav.getModel().get("validacionesRango");
         assertThat(mav.getViewName()).isEqualTo("formularioConsultaRango");
-        assertThat(errores.get("alturaError")).isEqualTo("La altura debe ser mayor a cero");
+        assertThat(errores.get("alturaError")).isEqualTo("La altura debe ser mayor a cero.");
     }
 
     private void whenConsultoElRangoSinPonerLaAltura() {
@@ -317,7 +440,7 @@ public class ControladorPedidoTest {
     private void thenNoMeDejaConsultarElRangoPorLaAltura() {
         Map<String,String> errores = (Map<String, String>) mav.getModel().get("validacionesRango");
         assertThat(mav.getViewName()).isEqualTo("formularioConsultaRango");
-        assertThat(errores.get("alturaError")).isEqualTo("Ingrese una altura");
+        assertThat(errores.get("alturaError")).isEqualTo("Por favor, ingrese una altura.");
     }
 
     private void whenConsultoElRangoSinPonerLaCalle() {
@@ -327,19 +450,19 @@ public class ControladorPedidoTest {
     private void thenNoMeDejaConsultarElRangoPorLaCalle() {
         Map<String,String> errores = (Map<String, String>) mav.getModel().get("validacionesRango");
         assertThat(mav.getViewName()).isEqualTo("formularioConsultaRango");
-        assertThat(errores.get("calleError")).isEqualTo("Ingrese una calle");
+        assertThat(errores.get("calleError")).isEqualTo("Por favor, ingrese una calle.");
     }
 
-    private void givenQueIngresoUnaDireccionInvalida() throws DireccionInexistente {
+    private void givenQueIngresoUnaDireccionInvalida(){
         when(servicioPedido.consultarRango(anyString(),anyString(),anyString())).thenThrow(DireccionInexistente.class);
     }
 
     private void thenMeMandaElMsjDeDireccionInexistente() {
         assertThat(mav.getViewName()).isEqualTo("formularioConsultaRango");
-        assertThat(mav.getModel().get("errorConsultaRango")).isEqualTo("Direccion inexistente, por favor vuelva a intentar");
+        assertThat(mav.getModel().get("errorConsultaRango")).isEqualTo("Esta dirección no existe, por favor vuelva a intentar!");
     }
 
-    private void givenUnaCalleYUnaAlturaFueraDelRango() throws DireccionInexistente {
+    private void givenUnaCalleYUnaAlturaFueraDelRango(){
         doThrow(RangoInvalido.class).when(servicioPedido).consultarRango(CALLE,ALTURA,LOCALIDAD);
     }
 

@@ -106,4 +106,19 @@ public class RepositorioPedidoImpl implements RepositorioPedido{
         return localidadesRespuesta;
     }
 
+    @Override
+    public List<Pedido> listarPedidos() {
+        final Session session = this.sessionFactory.getCurrentSession();
+        List<Pedido> listaPedidos = session.createCriteria(Pedido.class).list();
+        return listaPedidos;
+    }
+
+    @Override
+    public List<Pedido> listarPedidoPorEstado(EstadoPedido estado) {
+        final Session session = this.sessionFactory.getCurrentSession();
+        List<Pedido> filtroPedido = session.createCriteria(Pedido.class)
+                .add(Restrictions.eq("estadoPedido",estado)).list();
+        return filtroPedido;
+    }
+
 }

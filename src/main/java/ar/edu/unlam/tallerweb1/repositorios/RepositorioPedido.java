@@ -26,4 +26,8 @@ public interface RepositorioPedido {
     Calles listarCalles();
 
     Localidades obtenerLocalidad(String idLocalidad);
+
+    List<Pedido> listarPedidos();
+
+    List<Pedido> listarPedidoPorEstado(EstadoPedido estado);
 }

@@ -3,6 +3,7 @@ package ar.edu.unlam.tallerweb1.repositorios;
 import ar.edu.unlam.tallerweb1.modelo.Producto;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -73,7 +74,7 @@ public class RepositorioProductoImpl implements RepositorioProducto {
     public List<Producto> buscarProductosConMasDe(int cantidad) {
         final Session session = this.sessionFactory.getCurrentSession();
         return  session.createCriteria(Producto.class)
-                .add(Restrictions.gt("cantidadMeGusta",cantidad)).list();    }
+                .add(Restrictions.gt("cantidadMeGusta",cantidad)).addOrder(Order.desc("cantidadMeGusta")).list();    }
 
 
 }

@@ -42,27 +42,25 @@ public class ControladorProducto {
             modelo.put("listaCategorias", listaCategorias);
             modelo.put("destacados",destacados);
         } catch (ListaNoEncontrada e) {
-            modelo.put("msgError", "No hay productos");
-        }catch (ListaCategoriaNoEncontrada f) {
-            modelo.put("categoriasNoEncontradas", "No se encontro ninguna categoria por mostrar");
+            modelo.put("msgError", "Ups! No se encontró ninguna categoría ni productos por mostrar.");
         }
         return new ModelAndView("productos", modelo);
     }
 
-    @RequestMapping("/productos-activos")
-    public ModelAndView listarProductosActivos() {
-
-        ModelMap modelo = new ModelMap();
-
-        try {
-            List<Producto> listaProductos = this.servicioProductos.listarProductosActivos();
-            modelo.put("listaProductos", listaProductos);
-        } catch (ListaNoEncontrada e) {
-            modelo.put("msgError", "No hay productos activos para mostrar");
-            return new ModelAndView("productos", modelo);
-        }
-        return new ModelAndView("productos", modelo);
-    }
+//    @RequestMapping("/productos-activos")
+//    public ModelAndView listarProductosActivos() {
+//
+//        ModelMap modelo = new ModelMap();
+//
+//        try {
+//            List<Producto> listaProductos = this.servicioProductos.listarProductosActivos();
+//            modelo.put("listaProductos", listaProductos);
+//        } catch (ListaNoEncontrada e) {
+//            modelo.put("msgError", "No hay productos activos para mostrar");
+//            return new ModelAndView("productos", modelo);
+//        }
+//        return new ModelAndView("productos", modelo);
+//    }
 
     @RequestMapping("buscar-producto")
     public ModelAndView buscarProductoPorNombre(@RequestParam(value = "nombreProducto") String nombreProducto) {

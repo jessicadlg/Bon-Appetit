@@ -22,10 +22,20 @@ public class Pedido {
     private String calle;
     private String altura;
     private String localidad;
+    @Enumerated(EnumType.STRING)
+    private EstadoPedido estadoPedido;
 
     public Pedido(){
         this.total = 0.0;
         this.tiempoPreparacion= 0.0;
+    }
+
+    public EstadoPedido getEstadoPedido() {
+        return estadoPedido;
+    }
+
+    public void setEstadoPedido(EstadoPedido estadoPedido) {
+        this.estadoPedido = estadoPedido;
     }
 
     public String getLocalidad() {

@@ -2,11 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <jsp:include page="/WEB-INF/includes/header.jsp"/>
-
-<div class="container mask">
+<div class="container py-5">
     <div class="row">
         <div class="col">
-            <div class="modal fade d-block show " id="mimodal">
+            <div class="modal fade d-block show" id="mimodal">
                 <div class="modal-dialog modal-dialog-centered modal-lg  display-4">
                     <div class="modal-content ">
                         <!-- header o cabecera -->

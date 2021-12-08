@@ -38,7 +38,7 @@ public class ServicioProductoImpl implements ServicioProducto {
     public List<Producto> listarProductosActivos() throws ListaNoEncontrada {
 
         if (this.repositorioProducto.listarProductosActivos().size() < 1) {
-            throw new ListaNoEncontrada();
+            throw new ListaNoEncontrada("Ups! No se encontró ninguna categoría ni productos por mostrar.");
         }
         return this.repositorioProducto.listarProductosActivos();
     }
@@ -73,7 +73,15 @@ public class ServicioProductoImpl implements ServicioProducto {
     @Override
     public List<Producto> listarDestacados() {
         List<Producto> listaProductosDestacados = this.repositorioProducto.buscarProductosConMasDe(3);
+        if(listaProductosDestacados.size()>3){
+            for (int i = 0; i < listaProductosDestacados.size(); i++) {
+                listaProductosDestacados.remove(listaProductosDestacados.get((int) (Math.random() * listaProductosDestacados.size())));
+                if(listaProductosDestacados.size()==3)
+                    break;
+            }
+        }
         if (listaProductosDestacados.size() < 3) {
+
             List<Producto> listaProductosTotales = this.repositorioProducto.listarProductos();
             for (int i = 0; i < listaProductosTotales.size(); i++) {
                 listaProductosDestacados.add(listaProductosTotales.get((int) (Math.random() * listaProductosTotales.size())));
@@ -86,21 +94,3 @@ public class ServicioProductoImpl implements ServicioProducto {
     }
 }
 
-//logica q funciona
-       /* for (int i = 0; i < listaProductos.size(); i++) {
-            if (listaProductos.get(i).getCantidadMeGusta() > 3) {
-                destacados.add(listaProductos.get(i));
-                if (destacados.size() == 3) {
-                    break;
-                }
-            }
-        }
-        if (destacados.size() < 3) {
-            for (int i = 0; i < listaProductos.size(); i++) {
-                destacados.add(listaProductos.get((int) (Math.random() * listaProductos.size())));
-                if (destacados.size() == 3) {
-                    break;
-                }
-            }
-        }
-        return destacados;*/

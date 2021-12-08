@@ -265,7 +265,7 @@ public class ControladorProductoTest {
     }
 
     private void thenMeDiceQueNoHayProductosPorListar() {
-        assertThat(mav.getModel().get("msgError")).isEqualTo("No hay productos");
+        assertThat(mav.getModel().get("msgError")).isEqualTo("Ups! No se encontró ninguna categoría ni productos por mostrar.");
         assertThat(mav.getViewName()).isEqualTo("productos");
     }
 
