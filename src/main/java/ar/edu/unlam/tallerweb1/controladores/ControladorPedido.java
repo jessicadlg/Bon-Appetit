@@ -129,14 +129,14 @@ public class ControladorPedido {
         } catch (RangoInvalido e) {
             return new ModelAndView("redirect:consultaRangoError");
         } catch (DireccionInexistente f) {
-            return procesarConsultaRango("Direccion inexistente, por favor vuelva a intentar");
+            return procesarConsultaRango("Esta dirección no existe, por favor vuelva a intentar!");
         }
     }
 
 
     @RequestMapping("consultaRangoError")
     public ModelAndView consultarRangoFallido() {
-        return procesarConsultaRango("Lamentablemente no se encuentra dentro del rango de envios.");
+        return procesarConsultaRango("Lamentablemente no se encuentra dentro del rango de envios!");
     }
 
     private ModelAndView procesarConsultaRango(String mensajeConsulta) {
@@ -245,6 +245,26 @@ public class ControladorPedido {
         }
         return new ModelAndView("lista-pedidos",model);
     }
+//@RequestMapping(path = "lista-pedido")
+//public ModelAndView filtrarPedidoPorEstado(@RequestParam String filtro) {
+//    return redirigirListaPedido(filtro);
+//}
+//
+//    private ModelAndView redirigirListaPedido(String filtro){
+//        ModelMap model = new ModelMap();
+//        List<Pedido> listaPedidos;
+//        try{
+//            if(filtro!=null){
+//                listaPedidos = servicioPedido.listarPedidosPorEstado(filtro);
+//            }else{
+//                listaPedidos = servicioPedido.listarPedidos();
+//            }
+//            model.put("listaPedidos",listaPedidos);
+//        }catch (listaPedidosNoEncontrada e){
+//            model.put("listaPedidosVacia","No hay pedidos que listar");
+//        }
+//        return new ModelAndView("lista-pedidos",model);
+//    }
 
     @RequestMapping(value = "cambiar-estado")
     public ModelAndView cambiarEstadoDeUnPedido(@RequestParam Long idPedido,@RequestParam String estado) {

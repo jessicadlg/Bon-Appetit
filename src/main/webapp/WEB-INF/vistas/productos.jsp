@@ -33,7 +33,7 @@
                         </div>
 
                         <!-- categoria desplegables de productos -->
-                        <div class="row">
+                        <div class="row pb-3">
                             <div class="col">
                                 <div id="${categorias.id}" class="collapse" aria-labelledby="headingThree">
                                     <c:forEach items="${listaProductos}" var="productos">
@@ -208,8 +208,6 @@
 <%--</div>--%>
 <c:if test="${empty pedido}">
     <c:if test="${not empty msgError}">
-        <section class="bg-light pb-5">
-
             <div class=" container-fluid py-3" role="main">
                 <div class="row">
                     <div class="col-md-10 col-sm-12 mx-auto">
@@ -238,7 +236,6 @@
                     </div>
                 </div>
             </div>
-        </section>
     </c:if>
 </c:if>
 

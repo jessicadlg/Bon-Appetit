@@ -17,7 +17,7 @@
           integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <title>Bon Appetite</title>
 </head>
-<body>
+<body class="bg-light pb-5">
 <!-- barra navegacion-->
 <nav class="navbar navbar-expand-lg d-flex justify-content-between col-md-12 bg-dark">
     <div class="">

@@ -6,7 +6,7 @@ public class ClavesNoCoinciden extends RuntimeException {
     }
 
     public ClavesNoCoinciden(){
-        super("Las claves no coinciden");
+        super("Las claves deben ser iguales");
     }
 }
 

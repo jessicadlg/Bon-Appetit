@@ -4,7 +4,7 @@
 <jsp:include page="/WEB-INF/includes/header.jsp"/>
 
 <c:if test="${not empty listaPedidos}">
-    <div class="container mt-5 bg-light py-5">
+    <div class="container mt-5  py-5">
         <div class="row my-2">
             <div class="col-10">
                 <h1 class="">Lista de Pedidos:</h1>
@@ -18,7 +18,6 @@
                         <a href="/Bon_Appetit/lista-pedidos/PREPARANDO" class="dropdown-item">PREPARANDO</a>
                         <a href="/Bon_Appetit/lista-pedidos/VIAJANDO" class="dropdown-item">VIAJANDO</a>
                         <a href="/Bon_Appetit/lista-pedidos/FINALIZADO" class="dropdown-item">FINALIZADO</a>
-                            <%--                        <a href="/Bon_Appetit/lista-pedidos" class="dropdown-item">Quitar filtros</a>--%>
                     </div>
                 </div>
                 <a href="/Bon_Appetit/lista-pedidos" class="btn btn-danger">
@@ -66,16 +65,16 @@
                                     <td class="text-center">$${pedidos.total}</td>
                                 </c:otherwise>
                             </c:choose>
-                            <td class="text-center ">${pedidos.estadoPedido}</td>
-                            <td class="text-center ">${pedidos.localidad}</td>
-                            <td class="text-center ">${pedidos.calle}</td>
-                            <td class="text-center ">${pedidos.altura}</td>
+                            <td class="text-center">${pedidos.estadoPedido}</td>
+                            <td class="text-center">${pedidos.localidad}</td>
+                            <td class="text-center">${pedidos.calle}</td>
+                            <td class="text-center">${pedidos.altura}</td>
                             <c:choose>
                                 <c:when test="${pedidos.estadoPedido == 'FINALIZADO'}">
                                     <td class="text-center">
                                         <form:form action="cambiar-estado" method="post">
                                             <div class="row">
-                                                <div class="col-8 mx-0 px-0">
+                                                <div class="col-9 mx-0 px-0">
                                                     <select name="estado" disabled id="estado" class="form-control">
                                                         <option selected value="">Cambiar a ..</option>
                                                         <option value="PREPARANDO">PREPARANDO</option>
@@ -93,10 +92,10 @@
                                     </td>
                                 </c:when>
                                 <c:otherwise>
-                                    <td>
+                                    <td  class="text-center">
                                         <form:form action="cambiar-estado" method="post">
                                             <div class="row">
-                                                <div class="col-8 mx-0 px-0">
+                                                <div class="col-9 mx-0 px-0">
                                                     <select name="estado" id="estado" class="form-control">
                                                         <option selected value="">Cambiar a ..</option>
                                                         <option value="PREPARANDO">PREPARANDO</option>
@@ -104,7 +103,7 @@
                                                         <option value="FINALIZADO">FINALIZADO</option>
                                                     </select>
                                                 </div>
-                                                <div class="col-4 mx-0 px-0">
+                                                <div class="col mx-0 px-0">
                                                     <input type="hidden" name="idPedido" value="${pedidos.id}">
                                                     <input type="submit" class="btn btn-info" value="Ok">
                                                 </div>

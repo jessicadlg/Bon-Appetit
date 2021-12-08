@@ -8,10 +8,17 @@
             <form:form action="validar-login" method="POST" modelAttribute="datosLogin">
                 <div class="form-group mx-2">
                     <form:input path="email" id="email" type="email" class="form-control" placeholder="Usuario:"/>
+                    <c:if test="${not empty validaciones.get('emailIncompleto')}">
+                        <p class=" text-danger font-weight-bold py-2">${validaciones.get('emailIncompleto')}</p>
+                    </c:if>
                 </div>
                 <div class="form-group mx-2">
                     <form:input path="password" type="text" id="password" class="form-control"
-                                placeholder="Contraseña:"/></div>
+                                placeholder="Contraseña:"/>
+                <c:if test="${not empty validaciones.get('passwordIncompleto')}">
+                    <p class="text-danger font-weight-bold py-2">${validaciones.get('passwordIncompleto')}</p>
+                </c:if>
+                </div>
                 <div class="form-group mx-2">
                     <button class="btn btn-block btn-info " Type="Submit"/>
                     Enviar</button>

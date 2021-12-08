@@ -73,7 +73,15 @@ public class ServicioProductoImpl implements ServicioProducto {
     @Override
     public List<Producto> listarDestacados() {
         List<Producto> listaProductosDestacados = this.repositorioProducto.buscarProductosConMasDe(3);
+        if(listaProductosDestacados.size()>3){
+            for (int i = 0; i < listaProductosDestacados.size(); i++) {
+                listaProductosDestacados.remove(listaProductosDestacados.get((int) (Math.random() * listaProductosDestacados.size())));
+                if(listaProductosDestacados.size()==3)
+                    break;
+            }
+        }
         if (listaProductosDestacados.size() < 3) {
+
             List<Producto> listaProductosTotales = this.repositorioProducto.listarProductos();
             for (int i = 0; i < listaProductosTotales.size(); i++) {
                 listaProductosDestacados.add(listaProductosTotales.get((int) (Math.random() * listaProductosTotales.size())));

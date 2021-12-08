@@ -56,7 +56,7 @@ public class ControladorPedidoTest {
         thenPuedoAgregarLosProductos();
     }
     @Test
-    public void quePuedaConsultarSiEstaFueraDelRangoDeEnvios() throws DireccionInexistente {
+    public void quePuedaConsultarSiEstaFueraDelRangoDeEnvios(){
 
         givenUnaCalleYUnaAlturaFueraDelRango();
 
@@ -67,7 +67,7 @@ public class ControladorPedidoTest {
     }
 
     @Test
-    public void queSiIngresoUnaDireccionInvalidaMandeElMsj() throws DireccionInexistente {
+    public void queSiIngresoUnaDireccionInvalidaMandeElMsj()  {
 
         givenQueIngresoUnaDireccionInvalida();
 
@@ -267,6 +267,7 @@ public class ControladorPedidoTest {
         assertThat(mav.getViewName()).isEqualTo("redirect:lista-pedidos");
     }
 
+
     private void givenQueExisteUnaListaDePedidosConUnEstadoEspecifico() {
         List<Pedido> listaPedidos = new ArrayList<>();
         Pedido p1 = new Pedido();
@@ -283,7 +284,6 @@ public class ControladorPedidoTest {
         assertThat(mav.getViewName()).isEqualTo("lista-pedidos");
         assertThat(mav.getModel().get("listaPedidos")).isEqualTo(servicioPedido.listarPedidos());
     }
-
     private void givenQueNoExisteUnaListaDePedidos() {
         when(servicioPedido.listarPedidos()).thenThrow(listaPedidosNoEncontrada.class);
     }
@@ -453,16 +453,16 @@ public class ControladorPedidoTest {
         assertThat(errores.get("calleError")).isEqualTo("Por favor, ingrese una calle.");
     }
 
-    private void givenQueIngresoUnaDireccionInvalida() throws DireccionInexistente {
+    private void givenQueIngresoUnaDireccionInvalida(){
         when(servicioPedido.consultarRango(anyString(),anyString(),anyString())).thenThrow(DireccionInexistente.class);
     }
 
     private void thenMeMandaElMsjDeDireccionInexistente() {
         assertThat(mav.getViewName()).isEqualTo("formularioConsultaRango");
-        assertThat(mav.getModel().get("errorConsultaRango")).isEqualTo("Direccion inexistente, por favor vuelva a intentar");
+        assertThat(mav.getModel().get("errorConsultaRango")).isEqualTo("Esta dirección no existe, por favor vuelva a intentar!");
     }
 
-    private void givenUnaCalleYUnaAlturaFueraDelRango() throws DireccionInexistente {
+    private void givenUnaCalleYUnaAlturaFueraDelRango(){
         doThrow(RangoInvalido.class).when(servicioPedido).consultarRango(CALLE,ALTURA,LOCALIDAD);
     }
 
